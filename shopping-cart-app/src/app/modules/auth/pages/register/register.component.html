@@ -1,1 +1,27 @@
-<p>register works!</p>
+<div class="form-wrapper">
+    <div class="form-container">
+        <h3 class="text-center">Register</h3>
+        <form>
+            <div class="mb-3">
+                <label for="fullname" class="form-label">Full Name</label>
+                <input type="text" class="form-control" id="fullname" placeholder="Type your name">
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" class="form-control" id="email" placeholder="Type your email">
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" id="password" placeholder="Type your password">
+            </div>
+            <div class="mb-3">
+                <label for="confirm-password" class="form-label">Confirm Password</label>
+                <input type="password" class="form-control" id="confirm-password" placeholder="Confirm Password">
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Register</button>
+            <p class="form-text mt-3 text-center">
+                Already a member? <a routerLink="/auth/login">Login</a>
+            </p>
+        </form>
+    </div>
+</div>
