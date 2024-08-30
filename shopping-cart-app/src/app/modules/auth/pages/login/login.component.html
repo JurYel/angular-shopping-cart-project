@@ -7,17 +7,17 @@
           <input
             type="email"
             class="form-control"
-            [ngClass]="{ 'is-invalid': submitted && email.errors }"
+            [ngClass]="{ 'is-invalid': submitted && f['email'].errors }"
             id="email"
             formControlName="email"
             placeholder="Type your email"
           />
           <small
-            *ngIf="email.invalid && (email.dirty || email.touched)"
+            *ngIf="f['email'].invalid && (f['email'].dirty || f['email'].touched)"
             class="invalid-feedback"
           >
-            <div *ngIf="email.errors?.['required']">Email is required</div>
-            <div *ngIf="email.errors?.['email']">Email should be valid</div>
+            <div *ngIf="f['email'].errors?.['required']">Email is required</div>
+            <div *ngIf="f['email'].errors?.['email']">Email should be valid</div>
           </small>
         </div>
         <div class="mb-3">
@@ -25,16 +25,16 @@
           <input
             type="password"
             class="form-control"
-            [ngClass]="{ 'is-invalid': submitted && email.errors }"
+            [ngClass]="{ 'is-invalid': submitted && f['email'].errors }"
             formControlName="password"
             id="password"
             placeholder="Type your password"
           />
           <small
-            *ngIf="password.invalid && (password.dirty || password.touched)"
+            *ngIf="f['password'].invalid && (f['password'].dirty || f['password'].touched)"
             class="invalid-feedback"
           >
-            <div *ngIf="password.errors?.['required']">Password is required</div>
+            <div *ngIf="f['password'].errors?.['required']">Password is required</div>
           </small>
         </div>
         <button type="submit" class="btn btn-primary w-100">Sign In</button>

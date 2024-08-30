@@ -1,27 +1,119 @@
 <div class="form-wrapper">
-    <div class="form-container">
-        <h3 class="text-center">Register</h3>
-        <form>
-            <div class="mb-3">
-                <label for="fullname" class="form-label">Full Name</label>
-                <input type="text" class="form-control" id="fullname" placeholder="Type your name">
-            </div>
-            <div class="mb-3">
-                <label for="email" class="form-label">Email</label>
-                <input type="email" class="form-control" id="email" placeholder="Type your email">
-            </div>
-            <div class="mb-3">
-                <label for="password" class="form-label">Password</label>
-                <input type="password" class="form-control" id="password" placeholder="Type your password">
-            </div>
-            <div class="mb-3">
-                <label for="confirm-password" class="form-label">Confirm Password</label>
-                <input type="password" class="form-control" id="confirm-password" placeholder="Confirm Password">
-            </div>
-            <button type="submit" class="btn btn-primary w-100">Register</button>
-            <p class="form-text mt-3 text-center">
-                Already a member? <a routerLink="/auth/login">Login</a>
-            </p>
-        </form>
-    </div>
+  <div class="form-container">
+    <h3 class="text-center">Register</h3>
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+      <div class="fullname form-group">
+        <div class="mb-3">
+          <label for="firstname" class="form-label">First</label>
+          <input
+            type="text"
+            class="form-control"
+            [ngClass]="{ 'is-invalid': submitted && f['first_name'].errors}"
+            formControlName="first_name"
+            id="firstname"
+            placeholder="Type your first name"
+          />
+          <small *ngIf="f['first_name'].invalid && (f['first_name'].dirty || f['last_name'].touched)" class="invalid-feedback">
+            <div *ngIf="f['first_name'].errors?.['required']">First name is required</div>
+          </small>
+        </div>
+        <div class="mb-3">
+          <label for="lastname" class="form-label">Last Name</label>
+          <input
+            type="text"
+            class="form-control"
+            [ngClass]="{ 'is-invalid': submitted && f['last_name'].errors}"
+            formControlName="last_name"
+            id="lastname"
+            placeholder="Type your last name"
+          />
+          <small *ngIf="f['last_name'].invalid && (f['last_name'].dirty || f['last_name'].touched)" class="invalid-feedback">
+            <div *ngIf="f['last_name'].errors?.['required']">Last name is required</div>
+          </small>
+        </div>
+      </div>
+      <div class="mb-3 form-group">
+        <label for="username" class="form-label">User Name</label>
+        <input
+          type="text"
+          class="form-control"
+          [ngClass]="{ 'is-invalid': submitted && f['username'].errors}"
+          formControlName="username"
+          id="username"
+          placeholder="Type your user name"
+        />
+        <small *ngIf="f['username'].invalid && (f['username'].dirty || f['username'].touched)" class="invalid-feedback">
+            <div *ngIf="f['username'].errors?.['required']">User name is required</div>
+        </small>
+      </div>
+      <div class="contacts form-group">
+        <div class="mb-3">
+          <label for="email" class="form-label">Email</label>
+          <input
+            type="email"
+            class="form-control"
+            [ngClass]="{ 'is-invalid': submitted && f['email'].errors}"
+            formControlName="email"
+            id="email"
+            placeholder="Type your email"
+          />
+          <small *ngIf="f['email'].invalid && (f['email'].dirty || f['email'].touched)" class="invalid-feedback">
+            <div *ngIf="f['email'].errors?.['required']">Email is required</div>
+            <div *ngIf="f['email'].errors?.['email']">Email should be valid</div>
+          </small>
+        </div>
+        <div class="mb-3">
+          <label for="mobile-number" class="form-label">Mobile Number</label>
+          <div class="input-group">
+            <span class="input-group-text">+63</span>
+            <input
+              type="text"
+              id="mobile-number"
+              formControlName="mobile_num"
+              class="form-control"
+              [ngClass]="{ 'is-invalid': submitted && f['mobile_num'].errors}"
+              placeholder="Enter mobile number"
+            />
+            <small *ngIf="f['mobile_num'].invalid && (f['mobile_num'].dirty || f['mobile_num'].touched)" class="invalid-feedback">
+                <div *ngIf="f['mobile_num'].errors?.['required']">Mobile number is required</div>
+             </small>
+          </div>
+        </div>
+      </div>
+      <div class="mb-3 form-group">
+        <label for="password" class="form-label">Password</label>
+        <input
+          type="password"
+          class="form-control"
+          [ngClass]="{ 'is-invalid': submitted && f['password'].errors}"
+          formControlName="password"
+          id="password"
+          placeholder="Type your password"
+        />
+        <small *ngIf="f['password'].invalid && (f['password'].dirty || f['password'].touched)" class="invalid-feedback">
+            <div *ngIf="f['password'].errors?.['required']">Password is required</div>
+        </small>
+      </div>
+      <div class="mb-3 form-group">
+        <label for="confirm-password" class="form-label"
+          >Confirm Password</label
+        >
+        <input
+          type="password"
+          class="form-control"
+          [ngClass]="{ 'is-invalid': submitted && f['confirm_password'].errors}"
+          formControlName="confirm_password"
+          id="confirm-password"
+          placeholder="Confirm Password"
+        />
+        <small *ngIf="f['confirm_password'].invalid && (f['confirm_password'].dirty || f['confirm_password'].touched)" class="invalid-feedback">
+            <div *ngIf="f['confirm_password'].errors?.['required']">Please confirm your password</div>
+        </small>
+      </div>
+      <button type="submit" class="btn btn-primary w-100">Register</button>
+      <p class="form-text mt-3 text-center">
+        Already a member? <a routerLink="/auth/login">Login</a>
+      </p>
+    </form>
+  </div>
 </div>

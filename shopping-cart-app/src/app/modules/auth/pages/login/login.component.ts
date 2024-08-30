@@ -19,14 +19,10 @@ export class LoginComponent {
     }); 
   }
 
-  get email() {
-    return this.loginForm.controls['email'];
+  get f() {
+    return this.loginForm.controls;
   }
-
-  get password() {
-    return this.loginForm.controls['password'];
-  }
-
+  
   onSubmit = () => {
     this.submitted = true;
 
