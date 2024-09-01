@@ -3,10 +3,12 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { PasswordMatchDirective } from './shared/directives/password-match.directive';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    PasswordMatchDirective
   ],
   imports: [
     BrowserModule,

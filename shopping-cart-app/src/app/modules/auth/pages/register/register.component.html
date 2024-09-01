@@ -101,13 +101,16 @@
         <input
           type="password"
           class="form-control"
-          [ngClass]="{ 'is-invalid': submitted && f['confirm_password'].errors}"
+          [ngClass]="{ 'is-invalid': (submitted && f['confirm_password'].errors) || (f['confirm_password'].touched && registerForm.errors?.['passwordMismatch']) }"
           formControlName="confirm_password"
           id="confirm-password"
           placeholder="Confirm Password"
         />
         <small *ngIf="f['confirm_password'].invalid && (f['confirm_password'].dirty || f['confirm_password'].touched)" class="invalid-feedback">
             <div *ngIf="f['confirm_password'].errors?.['required']">Please confirm your password</div>
+        </small>
+        <small *ngIf="registerForm.errors?.['passwordMismatch'] && f['confirm_password'].valid && f['password'].valid" class="invalid-feedback">
+            Password should match
         </small>
       </div>
       <button type="submit" class="btn btn-primary w-100">Register</button>

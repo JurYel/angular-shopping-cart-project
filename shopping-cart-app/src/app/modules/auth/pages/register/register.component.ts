@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { passwordMatchValidator } from 'src/app/shared/validators/password-match.validator';
 
 @Component({
   selector: 'app-register',
@@ -16,6 +17,7 @@ export class RegisterComponent {
               private router: Router
   ) {
     this.registerForm = this.fb.group({
+      // Validators.patterns(/^[a-zA-Z]+(?: [a-zA-Z]+)*$/) full name regex
       first_name: ['', Validators.required],
       last_name: ['', Validators.required],
       username: ['', Validators.required],
@@ -23,6 +25,8 @@ export class RegisterComponent {
       mobile_num: ['', Validators.required], // add regex validation for mobile num
       password: ['', Validators.required],
       confirm_password: ['', Validators.required]
+    }, {
+      validators: passwordMatchValidator
     });
   }
 
