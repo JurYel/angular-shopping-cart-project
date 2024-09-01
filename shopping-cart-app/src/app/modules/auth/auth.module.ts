@@ -20,7 +20,7 @@ import { MessageService } from 'primeng/api';
     CommonModule,
     AuthRoutingModule,
     ReactiveFormsModule,
-    SharedModule,
+    SharedModule
     // HttpClientModule,
     // ToastModule,
     // BrowserAnimationsModule
