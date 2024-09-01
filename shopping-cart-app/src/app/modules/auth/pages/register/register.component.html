@@ -71,11 +71,13 @@
               id="mobile-number"
               formControlName="mobile_num"
               class="form-control"
-              [ngClass]="{ 'is-invalid': submitted && f['mobile_num'].errors}"
+              [ngClass]="{ 'is-invalid': (submitted && f['mobile_num'].errors) || (f['mobile_num'].touched && (f['mobile_num'].errors?.['pattern'] || f['mobile_num'].errors?.['maxlength']))}"
               placeholder="Enter mobile number"
             />
             <small *ngIf="f['mobile_num'].invalid && (f['mobile_num'].dirty || f['mobile_num'].touched)" class="invalid-feedback">
                 <div *ngIf="f['mobile_num'].errors?.['required']">Mobile number is required</div>
+                <div *ngIf="f['mobile_num'].errors?.['pattern'] || f['mobile_num'].errors?.['maxlength']">Mobile number is invalid</div>
+                <!-- <div *ngIf="f['mobile_num'].errors?.['maxlength']">Mobile number exceeds max length</div> -->
              </small>
           </div>
         </div>
