@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { passwordMatchValidator } from '../../../../shared/validators/password-match.validator';
 
 @Component({
   selector: 'app-register',
@@ -26,7 +27,7 @@ export class RegisterComponent {
       password: ['', Validators.required],
       confirm_password: ['', Validators.required]
     }, {
-      // validators: passwordMatchValidator
+      validators: passwordMatchValidator
     });
   }
 
