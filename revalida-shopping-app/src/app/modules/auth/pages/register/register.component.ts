@@ -2,6 +2,9 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { passwordMatchValidator } from '../../../../shared/validators/password-match.validator';
+import { AuthService } from '../../services/auth.service';
+import { MessageService } from 'primeng/api';
+import { AuthUser } from '../../../models/auth-user.interface';
 
 @Component({
   selector: 'app-register',
@@ -14,7 +17,9 @@ export class RegisterComponent {
   submitted = false;
 
   constructor(private fb: FormBuilder,
-              private router: Router
+              private router: Router,
+              private authService: AuthService,
+              private messageService: MessageService
   ) {
     this.registerForm = this.fb.group({
       // Validators.patterns(/^[a-zA-Z]+(?: [a-zA-Z]+)*$/) full name regex
@@ -37,9 +42,23 @@ export class RegisterComponent {
 
   onSubmit = () => {
     this.submitted = true;
+    const postData = {...this.registerForm.getRawValue()};
+    delete postData.confirm_password; // do not need to pass confirm_password to backend
     
     if(this.registerForm.invalid) {
       return;
     }
+
+    this.authService.registerUser(postData as AuthUser).subscribe(
+      response => {
+        console.log("Registered user: ", response);
+        this.messageService.add({ severity:'success', summary: 'Success', detail: 'Registered successfully!' });
+        this.router.navigate(['/auth/login']);
+      },
+      error => {
+        console.log("Error Registration: ", error);
+        this.messageService.add({ severity:'error', summary: 'Error', detail: 'Error registering user' });
+      }
+    )
   }
 }
