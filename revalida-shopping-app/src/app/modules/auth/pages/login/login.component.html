@@ -1,1 +1,60 @@
-<p>login works!</p>
+<div class="form-wrapper">
+    <div class="form-container">
+      <h3 class="text-center">Login</h3>
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <div class="mb-3">
+          <label for="username" class="form-label">User Name</label>
+          <input
+            type="text"
+            class="form-control"
+            [ngClass]="{ 'is-invalid': submitted && f['username'].errors }"
+            id="username"
+            formControlName="username"
+            placeholder="Type your user name"
+          />
+          <small
+            *ngIf="f['username'].invalid && (f['username'].dirty || f['username'].touched)"
+            class="invalid-feedback"
+          >
+            <div *ngIf="f['username'].errors?.['required']">Username is required</div>
+            <!-- <div *ngIf="f['email'].errors?.['email']">Email should be valid</div> -->
+          </small>
+        </div>
+        <div class="mb-3">
+          <label for="password" class="form-label">Password</label>
+          <input
+            type="password"
+            class="form-control"
+            [ngClass]="{ 'is-invalid': submitted && f['password'].errors }"
+            formControlName="password"
+            id="password"
+            placeholder="Type your password"
+          />
+          <small
+            *ngIf="f['password'].invalid && (f['password'].dirty || f['password'].touched)"
+            class="invalid-feedback"
+          >
+            <div *ngIf="f['password'].errors?.['required']">Password is required</div>
+          </small>
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-6 d-flex justify-content-center">
+              <div class="form-check mb-3 mb-md-0">
+                <input class="form-check-input" type="checkbox" value="" id="loginCheck" checked />
+                <label class="form-check-label" for="loginCheck"> Remember me </label>
+              </div>
+            </div>
+    
+            <div class="col-md-6 d-flex justify-content-center">
+              <a routerLink="/auth/forgot-password">Forgot password?</a>
+            </div>
+          </div>
+    
+        <button type="submit" class="btn btn-primary w-100">Sign In</button>
+        <p class="form-text mt-3 text-center">
+          Not a member? <a routerLink="/auth/register">Register</a>
+        </p>
+      </form>
+    </div>
+  </div>
+  
