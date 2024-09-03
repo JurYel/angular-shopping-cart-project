@@ -1,0 +1,82 @@
+body {
+  background-color: #f8f9fa;
+}
+
+.profile-container {
+  background-color: white;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.side-menu {
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  height: 100%;
+}
+
+.side-menu a {
+  color: #000;
+  text-decoration: none;
+  display: block;
+  padding: 10px 0;
+  border-bottom: 1px solid #f1f1f1;
+}
+
+.side-menu a:hover {
+  color: #ff5722;
+}
+
+.dropdown-container {
+  display: none;
+  padding-left: 15px;
+}
+
+.account-form {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+form {
+    width: 100%;
+    padding: 0 20px;
+    max-width: 700px;
+}
+
+
+.btn-save {
+  background-color: #ff5722;
+  border: none;
+}
+
+.btn-save:hover {
+  background-color: #e64a19;
+}
+
+.profile-image {
+  text-align: center;
+  margin-top: 150px;
+  max-width: 300px;
+  width: 100%;
+}
+
+.profile-image img {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #e9ecef;
+}
+
+.profile-image button {
+  margin-top: 10px;
+}
+
+.form-text-muted {
+  color: #6c757d;
+  font-size: 12px;
+}
+
