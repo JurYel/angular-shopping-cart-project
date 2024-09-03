@@ -49,6 +49,7 @@ export class RegisterComponent {
       return;
     }
 
+    // check if username already exists (must be unique)
     this.authService.registerUser(postData as AuthUser).subscribe(
       response => {
         console.log("Registered user: ", response);
