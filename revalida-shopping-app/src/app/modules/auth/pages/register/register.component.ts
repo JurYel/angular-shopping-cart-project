@@ -44,7 +44,8 @@ export class RegisterComponent {
     this.submitted = true;
     const postData = {...this.registerForm.getRawValue()};
     delete postData.confirm_password; // do not need to pass confirm_password to backend
-    
+    console.log(postData);
+    // console.log(postData['username']);
     if(this.registerForm.invalid) {
       return;
     }

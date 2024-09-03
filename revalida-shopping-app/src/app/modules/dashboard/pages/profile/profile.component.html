@@ -18,17 +18,41 @@
                         <img src="https://via.placeholder.com/50" class="rounded-circle" alt="User Avatar">
                         <p class="mt-2">John Doe</p>
                     </div>
-                    <a href="#" class="dropdown-toggle" onclick="toggleDropdown()">Profile</a>
-                    <div class="dropdown-container">
-                        <a href="#">Banks & Cards</a>
-                        <a href="#">Addresses</a>
-                        <a href="#">Change Password</a>
-                        <a href="#">Privacy Settings</a>
-                        <a href="#">Notification Settings</a>
-                    </div>
-                    <a href="#">My Purchase</a>
-                    <a href="#">Notifications</a>
-                    <a href="#">My Vouchers</a>
+                    <hr>
+                    <ul class="nav nav-pills flex-column mb-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" id="my-account" (click)="toggleSubmenu()">
+                                <i class="bi bi-person-circle"></i>
+                                My Account
+                            </a>
+                            <div class="submenu" *ngIf="isSubMenuVisible">
+                                <a href="#" class="nav-link">Profile</a>
+                                <a href="#" class="nav-link">Banks & Cards</a>
+                                <a href="#" class="nav-link">Addresses</a>
+                                <a href="#" class="nav-link">Change Password</a>
+                                <a href="#" class="nav-link">Privacy Settings</a>
+                                <a href="#" class="nav-link">Notification Settings</a>
+                            </div>
+                        </li>
+                        <li>
+                            <a href="#" class="nav-link">
+                                <i class="bi bi-cart"></i>
+                                My Purchase
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="nav-link">
+                                <i class="bi bi-bell"></i>
+                                Notifications
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="nav-link">
+                                <i class="bi bi-ticket"></i>
+                                My Vouchers
+                            </a>
+                        </li>
+                    </ul>
                 </div>
             </div>
 
@@ -38,23 +62,47 @@
                     <h4>My Profile</h4>
                     <p>Manage and protect your account</p>
                     <div class="account-form">
-                        <form>
+                        <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
                             <div class="mb-3">
                                 <label for="username" class="form-label">Username</label>
-                                <input type="text" id="username" class="form-control" value="johndoe" disabled>
+                                <input type="text" id="username" formControlName="username" class="form-control" value="johndoe">
                                 <small class="form-text-muted">Username can only be changed once.</small>
                             </div>
-                            <div class="mb-3">
-                                <label for="name" class="form-label">Name</label>
-                                <input type="text" id="name" class="form-control" placeholder="Enter your name">
-                            </div>
+                            <div class="fullname form-group">
+                                <div class="mb-3">
+                                  <label for="firstname" class="form-label">First Name</label>
+                                  <input
+                                    type="text"
+                                    class="form-control"
+                                    formControlName="first_name"
+                                    id="firstname"
+                                    placeholder="Type your first name"
+                                  />
+                                  <!-- <small *ngIf="f['first_name'].invalid && (f['first_name'].dirty || f['last_name'].touched)" class="invalid-feedback">
+                                    <div *ngIf="f['first_name'].errors?.['required']">First name is required</div>
+                                  </small> -->
+                                </div>
+                                <div class="mb-3">
+                                  <label for="lastname" class="form-label">Last Name</label>
+                                  <input
+                                    type="text"
+                                    class="form-control"
+                                    formControlName="last_name"
+                                    id="lastname"
+                                    placeholder="Type your last name"
+                                  />
+                                  <!-- <small *ngIf="f['last_name'].invalid && (f['last_name'].dirty || f['last_name'].touched)" class="invalid-feedback">
+                                    <div *ngIf="f['last_name'].errors?.['required']">Last name is required</div>
+                                  </small> -->
+                                </div>
+                              </div>
                             <div class="mb-3">
                                 <label for="email" class="form-label">Email</label>
-                                <input type="email" id="email" class="form-control" placeholder="Add">
+                                <input type="email" id="email" formControlName="email" class="form-control" placeholder="john.doe@gmail.com">
                             </div>
                             <div class="mb-3">
                                 <label for="phone" class="form-label">Phone Number</label>
-                                <input type="text" id="phone" class="form-control" value="********50" disabled>
+                                <input type="text" id="phone" formControlName="mobile_num" class="form-control" value="********50">
                                 <a href="#" class="form-text">Change</a>
                             </div>
                             <div class="mb-3">
@@ -79,7 +127,7 @@
                                 <input type="text" id="dob" class="form-control" value="**/10/19**" disabled>
                                 <small class="form-text-muted">You have already done KYC. Changing your birthday is not permitted.</small>
                             </div>
-                            <button type="submit" class="btn btn-save">Save</button>
+                            <button type="submit" class="btn btn-save btn-primary">Save</button>
                         </form>
     
                         <div class="profile-image">
@@ -97,10 +145,14 @@
 
     <!-- Bootstrap JS -->
     <script>
-        function toggleDropdown() {
-            var dropdown = document.querySelector('.dropdown-container');
-            dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
-        }
+        // function toggleDropdown() {
+        //     var dropdown = document.querySelector('.dropdown-container');
+        //     dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+        // }
+        // document.getElementById('my-account').addEventListener('click', function () {
+        //     var submenu = document.querySelector('.submenu');
+        //     submenu.style.display = submenu.style.display === 'block' ? 'none' : 'block';
+        // });
     </script>
 </body>
 
