@@ -9,6 +9,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 
+
 @NgModule({
   declarations: [
     AppComponent
@@ -20,7 +21,7 @@ import { MessageService } from 'primeng/api';
     ReactiveFormsModule,
     SharedModule,
     ToastModule,
-    BrowserAnimationsModule,
+    BrowserAnimationsModule
   ],
   providers: [MessageService],
   bootstrap: [AppComponent]
