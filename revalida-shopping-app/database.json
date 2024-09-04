@@ -1,14 +1,12 @@
 {
   "users": [
     {
-      "id": "f947",
-      "first_name": "jur",
-      "last_name": "yel",
-      "username": "juryel",
-      "email": "juryel@gmail.com",
-      "is_admin": false,
-      "mobile_num": "9155671750",
-      "password": "1234"
+      "username": "juryel1",
+      "first_name": "jur1",
+      "last_name": "yel1",
+      "email": "juryel@gmail.com1",
+      "mobile_num": "9155671751",
+      "id": "f947"
     },
     {
       "id": "7068",
@@ -18,6 +16,16 @@
       "email": "alex.gonzaga@gmail.com",
       "is_admin": false,
       "mobile_num": "9122378472",
+      "password": "1234"
+    },
+    {
+      "id": "16c5",
+      "first_name": "Jason",
+      "last_name": "Silver",
+      "username": "jason.silver",
+      "email": "jason.silver@gmail.com",
+      "is_admin": false,
+      "mobile_num": "9123456789",
       "password": "1234"
     }
   ]

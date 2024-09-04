@@ -11,6 +11,7 @@ import { AuthService } from '../../../auth/services/auth.service';
 import { MessageService } from 'primeng/api';
 import { UniqueUsernameValidator } from '../../../../shared/validators/unique-username.validator';
 import { map, Observable, of } from 'rxjs';
+import { AuthUser } from '../../../models/auth-user.interface';
 
 @Component({
   selector: 'app-profile',
@@ -22,6 +23,7 @@ export class ProfileComponent implements OnInit, AfterViewChecked {
   profileForm: FormGroup;
   username: string | null;
   userExists = false;
+  submitted = false;
 
   constructor(
     private fb: FormBuilder,
@@ -30,16 +32,14 @@ export class ProfileComponent implements OnInit, AfterViewChecked {
     private usernameValidator: UniqueUsernameValidator
   ) {
     this.profileForm = this.fb.group({
-      username: ['', []],
-      first_name: [''],
-      last_name: [''],
-      email: [''],
+      username: ['', Validators.required],
+      first_name: ['', Validators.required],
+      last_name: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
       mobile_num: [
         '',
-        [Validators.pattern(/^(9)\d{9}/), Validators.maxLength(10)],
-      ],
-      gender: [''],
-      birthdate: [''],
+        [Validators.required, Validators.pattern(/^(9)\d{9}/), Validators.maxLength(10)],
+      ]
     });
 
     this.username = sessionStorage.getItem('username');
@@ -121,6 +121,29 @@ export class ProfileComponent implements OnInit, AfterViewChecked {
   };
 
   onSubmit = () => {
+    this.submitted = true;
+    const postData = {...this.profileForm.getRawValue()};
 
+    console.log(postData);
+    if(this.profileForm.invalid) {
+      return;
+    }
+    
+    this.authService.getIdByUsername(this.username as string).subscribe(
+      user => {
+        if(user.length > 0){
+            this.authService.updateUser(user[0].id, postData as AuthUser).subscribe(
+              response => {
+                console.log("Updated user: ", response);
+                this.messageService.add({ severity:'success', summary: 'Success', detail: 'Information has been updated' });
+              },
+              error => {
+                this.messageService.add({ severity:'error', summary: 'Error', detail: 'Error in updating profile information' });
+              }
+            );
+          }
+        }
+    );
+    
   };
 }

@@ -73,12 +73,15 @@
                     id="username"
                     formControlName="username"
                     class="form-control"
-                    [ngClass]="{ 'is-invalid': usernameAlreadyTaken && f['username'].touched }"
+                    [ngClass]="{ 'is-invalid': (submitted && f['username'].errors) || (usernameAlreadyTaken && f['username'].touched)}"
                     value="johndoe"
                   />
                   <small class="form-text-muted"
                     >Username can only be changed once.</small
                   >
+                  <small *ngIf="f['username'].invalid && (f['username'].dirty || f['username'].touched)" class="invalid-feedback">
+                    <div *ngIf="f['username'].errors?.['required']">User name is required</div>
+                </small>
                   <small class="invalid-feedback" *ngIf="usernameAlreadyTaken">
                     Username already exists
                   </small>
@@ -89,26 +92,28 @@
                     <input
                       type="text"
                       class="form-control"
+                      [ngClass]="{ 'is-invalid': submitted && f['first_name'].errors}"
                       formControlName="first_name"
                       id="firstname"
                       placeholder="Type your first name"
                     />
-                    <!-- <small *ngIf="f['first_name'].invalid && (f['first_name'].dirty || f['last_name'].touched)" class="invalid-feedback">
-                                    <div *ngIf="f['first_name'].errors?.['required']">First name is required</div>
-                                  </small> -->
+                    <small *ngIf="f['first_name'].invalid && (f['first_name'].dirty || f['last_name'].touched)" class="invalid-feedback">
+                        <div *ngIf="f['first_name'].errors?.['required']">First name is required</div>
+                    </small>
                   </div>
                   <div class="mb-3">
                     <label for="lastname" class="form-label">Last Name</label>
                     <input
                       type="text"
                       class="form-control"
+                      [ngClass]="{ 'is-invalid': submitted && f['last_name'].errors}"
                       formControlName="last_name"
                       id="lastname"
                       placeholder="Type your last name"
                     />
-                    <!-- <small *ngIf="f['last_name'].invalid && (f['last_name'].dirty || f['last_name'].touched)" class="invalid-feedback">
-                                    <div *ngIf="f['last_name'].errors?.['required']">Last name is required</div>
-                                  </small> -->
+                    <small *ngIf="f['last_name'].invalid && (f['last_name'].dirty || f['last_name'].touched)" class="invalid-feedback">
+                        <div *ngIf="f['last_name'].errors?.['required']">Last name is required</div>
+                    </small>
                   </div>
                 </div>
                 <div class="mb-3">
@@ -118,8 +123,13 @@
                     id="email"
                     formControlName="email"
                     class="form-control"
+                    [ngClass]="{ 'is-invalid': submitted && f['email'].errors}"
                     placeholder="john.doe@gmail.com"
                   />
+                  <small *ngIf="f['email'].invalid && (f['email'].dirty || f['email'].touched)" class="invalid-feedback">
+                    <div *ngIf="f['email'].errors?.['required']">Email is required</div>
+                    <div *ngIf="f['email'].errors?.['email']">Email should be valid</div>
+                  </small>
                 </div>
                 <div class="mb-3">
                   <label for="phone" class="form-label">Phone Number</label>
@@ -128,9 +138,15 @@
                     id="phone"
                     formControlName="mobile_num"
                     class="form-control"
+                    [ngClass]="{ 'is-invalid': (submitted && f['mobile_num'].errors) || (f['mobile_num'].touched && (f['mobile_num'].errors?.['pattern'] || f['mobile_num'].errors?.['maxlength']))}"
                     value="********50"
                   />
                   <a href="#" class="form-text">Change</a>
+                  <small *ngIf="f['mobile_num'].invalid && (f['mobile_num'].dirty || f['mobile_num'].touched)" class="invalid-feedback">
+                    <div *ngIf="f['mobile_num'].errors?.['required']">Mobile number is required</div>
+                    <div *ngIf="f['mobile_num'].errors?.['pattern'] || f['mobile_num'].errors?.['maxlength']">Mobile number is invalid</div>
+                    <!-- <div *ngIf="f['mobile_num'].errors?.['maxlength']">Mobile number exceeds max length</div> -->
+                 </small>
                 </div>
                 <div class="mb-3">
                   <label class="form-label">Gender</label>

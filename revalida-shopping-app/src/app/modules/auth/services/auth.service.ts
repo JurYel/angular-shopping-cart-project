@@ -36,9 +36,13 @@ export class AuthService {
     return this.http.get<AuthUser[]>(`${this.serverUrl}/users?username=${username}`);
   }
 
+  getIdByUsername = (username: string): Observable<AuthUser[]> => {
+    return this.http.get<AuthUser[]>(`${this.serverUrl}/users?username=${username}`);
+  }
+
   // Getting ERROR TypeError: Failed to fetch dynamically imported module:
-  updateUser = (user: AuthUser) => {
-    return this.http.put<AuthUser>(`${this.serverUrl}/users/${user.id}`, user).pipe(
+  updateUser = (id: string, user: AuthUser) => {
+    return this.http.put<AuthUser>(`${this.serverUrl}/users/${id}`, user).pipe(
       tap(x => console.log("updating: ", x))
     );
   }
