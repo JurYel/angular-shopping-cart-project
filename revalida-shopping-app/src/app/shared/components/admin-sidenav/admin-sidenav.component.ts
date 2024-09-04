@@ -7,14 +7,14 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class AdminSidenavComponent implements OnInit {
 
-  @Input('adminSidenavInput') adminSidenav: HTMLBodyElement | undefined;
+  @Input('adminSidenavInput') adminSidenav: HTMLElement | undefined;
   @Input('sidebarToggleInput') sidebarToggleBtn: HTMLElement | undefined;
 
   ngOnInit(): void {
     // Access the sidebarToggle button
     // const sidebarToggle = document.querySelector('#sidebarToggle') as HTMLElement;
     const sidebarToggle = this.sidebarToggleBtn;
-    
+    console.log("sidenav: ", sidebarToggle);
     if(sidebarToggle) {
         // Uncomment the following block to persist sidebar toggle between refreshes
         // if(localStorage.getItem('sb|sidebar-toggle') === 'true') {

@@ -1,3 +1,10 @@
+.sb-sidenav {
+  padding-top: 56px;
+}
+.sb-sidenav .sb-sidenav-menu {
+  overflow-y: auto;
+}
+
 #layoutError {
   display: flex;
   flex-direction: column;

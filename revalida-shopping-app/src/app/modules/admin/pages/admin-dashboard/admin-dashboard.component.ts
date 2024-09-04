@@ -12,36 +12,37 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
 
   @ViewChild('datatablesSimple', { static: false }) datatablesSimple!: ElementRef;
   // @ViewChild('areaChartCanvas', { static: false}) areaChartCanvas!: ElementRef;
-  adminSection: HTMLBodyElement;
+  adminSection: HTMLDivElement;
   sideToggleBtn: HTMLElement;
 
   constructor(private router: Router) {
     // Set new default font family and font color to mimic Bootstrap's default styling
     Chart.defaults.global.defaultFontFamily = '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
     Chart.defaults.global.defaultFontColor = '#292b2c';
-    this.adminSection = document.querySelector(".sb-nav-fixed") as HTMLBodyElement;
+    this.adminSection = document.querySelector(".sb-nav-fixed") as HTMLDivElement;
     this.sideToggleBtn = document.querySelector('#sidebarToggle') as HTMLElement;
+    console.log(this.adminSection)
   }
 
   ngOnInit(): void {
       // Has been moved to admin-sidenav in shared
       // Access the sidebarToggle button
-      // const sidebarToggle = document.querySelector('#sidebarToggle') as HTMLElement;
+      const sidebarToggle = document.querySelector('#sidebarToggle') as HTMLElement;
 
-      // if(sidebarToggle) {
-      //     // Uncomment the following block to persist sidebar toggle between refreshes
-      //     // if(localStorage.getItem('sb|sidebar-toggle') === 'true') {
-      //     //   document.querySelector(".sb-nav-fixed")?.classList.toggle('sb-sidenav-toggled');
-      //     // }
+      if(sidebarToggle) {
+          // Uncomment the following block to persist sidebar toggle between refreshes
+          // if(localStorage.getItem('sb|sidebar-toggle') === 'true') {
+          //   document.querySelector(".sb-nav-fixed")?.classList.toggle('sb-sidenav-toggled');
+          // }
 
-      //     sidebarToggle.addEventListener('click', (event) => {
-      //       event.preventDefault();
-      //       // Toggle the class to show/hide sidebar
-      //       document.querySelector(".sb-nav-fixed")?.classList.toggle('sb-sidenav-toggled');
-      //       // Persist the state in localStorage
-      //       localStorage.setItem('sb|sidebar-toggle', document.querySelector('.sb-nav-fixed')?.classList.contains('sb-sidenav-toggled').toString() as string);
-      //     })
-      // }
+          sidebarToggle.addEventListener('click', (event) => {
+            event.preventDefault();
+            // Toggle the class to show/hide sidebar
+            document.querySelector(".sb-nav-fixed")?.classList.toggle('sb-sidenav-toggled');
+            // Persist the state in localStorage
+            localStorage.setItem('sb|sidebar-toggle', document.querySelector('.sb-nav-fixed')?.classList.contains('sb-sidenav-toggled').toString() as string);
+          })
+      }
   }
 
   ngAfterViewInit(): void {
@@ -192,10 +193,5 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
 
     // Load the configuration to the canvas
     new Chart(ctx, config);
-  }
-
-  logOut = () => {
-    sessionStorage.clear();
-    this.router.navigate(['/auth/login'])
   }
 }
