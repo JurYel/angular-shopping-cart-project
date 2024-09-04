@@ -1,4 +1,5 @@
 {
+ 
   "users": [
     {
       "id": "dbc2",
@@ -110,5 +111,21 @@
       "mobile_num": "9188757261",
       "password": "1234"
     }
-  ]
+  ],
+  "Dishes": [
+    {
+        "food_id": 1,
+        "food_type": "snacks",
+        "quantity": 25,
+        "food_name": "Piattos"
+    }
+],
+"Drinks": [
+    {
+       "drink_id": 1,
+       "drink_type": "juices",
+       "quantity": 50,
+       "drink_name": "Zest-O"
+    }
+] 
 }

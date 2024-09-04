@@ -1,0 +1,19 @@
+<!-- <p>cart works!</p> -->
+
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Shopping Cart</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <mat-list *ngIf="cartItems.length > 0">
+      <mat-list-item *ngFor="let item of cartItems">
+        {{ item.food_name }} - {{ item.quantity }} x {{ item.price | currency }}
+      </mat-list-item>
+    </mat-list>
+    <p *ngIf="cartItems.length === 0">Your cart is empty.</p>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-raised-button color="primary" routerLink="/checkout">Proceed to Checkout</button>
+    <button mat-raised-button color="warn" (click)="clearCart()">Clear Cart</button>
+  </mat-card-actions>
+</mat-card>
