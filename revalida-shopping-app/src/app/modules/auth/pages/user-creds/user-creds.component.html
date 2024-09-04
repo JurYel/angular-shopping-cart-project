@@ -1,0 +1,57 @@
+<div class="form-wrapper">
+    <div class="form-container">
+      <div class="back">
+        <a routerLink="/auth/login"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M512 256A256 256 0 1 0 0 256a256 256 0 1 0 512 0zM215 127c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-71 71L392 232c13.3 0 24 10.7 24 24s-10.7 24-24 24l-214.1 0 71 71c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0L103 273c-9.4-9.4-9.4-24.6 0-33.9L215 127z"/></svg></a>
+      </div>
+      <h3 class="text-center">User Credentials</h3>
+      <form [formGroup]="userCredsForm">
+        <div class="profile">
+          <img src="profile.png" alt="">
+        </div>
+        <div class="mb-3">
+          <label for="username" class="form-label">User Name</label>
+          <input
+            type="text"
+            class="form-control"
+            id="username"
+            formControlName="username"
+            placeholder="Type your user name"
+          />
+        </div>
+        <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input
+              type="email"
+              class="form-control"
+              formControlName="email"
+              id="email"
+              placeholder="Type your email"
+            />
+        </div>
+        <div class="mb-3">
+            <label for="mobile-number" class="form-label">Mobile Number</label>
+            <div class="input-group">
+              <span class="input-group-text">+63</span>
+              <input
+                type="text"
+                id="mobile-number"
+                formControlName="mobile_num"
+                class="form-control"
+                placeholder="Enter mobile number"
+              />
+            </div>
+        </div>
+        <div class="mb-3">
+          <label for="password" class="form-label">Password</label>
+          <input
+            type="text"
+            class="form-control"
+            formControlName="password"
+            id="password"
+            placeholder="Type your password"
+          />
+        </div>
+      </form>
+    </div>
+  </div>
+  

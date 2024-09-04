@@ -2,7 +2,6 @@ import { Component, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
 import { AppRoutingModule } from './app-routing.module';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatCardModule } from '@angular/material/card';
@@ -16,6 +15,11 @@ import { HomeComponent } from './dashboard/home/home.component';
 import { ShoppingCartComponent } from './dashboard/shoppingcart/shoppingcart.component';
 import { ProductitemsComponent } from './dashboard/productitems/productitems.component';
 import { CheckoutComponent } from './dashboard/checkout/checkout.component';
+import { PasswordMatchDirective } from './shared/directives/password-match.directive';
+import { HttpClientModule } from '@angular/common/http';
+import { ReactiveFormsModule } from '@angular/forms';
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
 
 @NgModule({
   declarations: [
@@ -25,11 +29,11 @@ import { CheckoutComponent } from './dashboard/checkout/checkout.component';
     ProductitemsComponent,
     CheckoutComponent,
 
+    PasswordMatchDirective
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    NgbModule,
     RouterModule.forRoot([
       { path: 'home', component: HomeComponent },
       { path: 'cart', component: ShoppingCartComponent},
@@ -42,9 +46,13 @@ import { CheckoutComponent } from './dashboard/checkout/checkout.component';
     MatButtonModule,
     MatToolbarModule,
     MatIconModule,
-    MatListModule
+    MatListModule,
+    ToastModule,
+    BrowserAnimationsModule,
+    HttpClientModule,
+    ReactiveFormsModule
   ],
-  providers: [],
+  providers: [MessageService], //MessageService
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,0 +1,14 @@
+{
+  "users": [
+    {
+      "id": "f947",
+      "first_name": "jur",
+      "last_name": "yel",
+      "username": "juryel",
+      "email": "juryel@gmail.com",
+      "is_admin": false,
+      "mobile_num": "9155671750",
+      "password": "1234"
+    }
+  ]
+}
