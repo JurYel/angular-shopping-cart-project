@@ -20,7 +20,7 @@
                     <li><a class="dropdown-item" href="#!">Settings</a></li>
                     <li><a class="dropdown-item" href="#!">Activity Log</a></li>
                     <li><hr class="dropdown-divider" /></li>
-                    <li><a class="dropdown-item" href="#!">Logout</a></li>
+                    <li><a class="dropdown-item" (click)="logOut()">Logout</a></li>
                 </ul>
             </li>
         </ul>
@@ -36,6 +36,18 @@
                             Dashboard
                         </a>
                         <div class="sb-sidenav-menu-heading">Interface</div>
+                        <a class="nav-link" href="#">
+                            <div class="sb-nav-link-icon"><i class="fa-solid fa-boxes-stacked"></i></div>
+                            Products
+                        </a>
+                        <a class="nav-link" href="#">
+                            <div class="sb-nav-link-icon"><i class="fa-solid fa-truck-fast"></i></div>
+                            Orders
+                        </a>
+                        <a class="nav-link" href="#">
+                            <div class="sb-nav-link-icon"><i class="fa-solid fa-user-gear"></i></div>
+                            Admin
+                        </a>
                         <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
                             <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
                             Layouts
@@ -166,7 +178,7 @@
                             DataTable Example
                         </div>
                         <div class="card-body">
-                            <table #datatablesSimple id="datatablesSimple">
+                            <table #datatablesSimple class="table" id="datatablesSimple">
                                 <thead>
                                     <tr>
                                         <th>Name</th>

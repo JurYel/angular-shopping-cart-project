@@ -2,6 +2,10 @@ section {
   height: 100%;
 }
 
+.navbar-nav ul > li {
+    cursor: pointer;
+}
+
 #layoutAuthentication {
   display: flex;
   flex-direction: column;

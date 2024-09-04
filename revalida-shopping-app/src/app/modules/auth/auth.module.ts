@@ -6,11 +6,10 @@ import { AuthRoutingModule } from './auth-routing.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { SharedModule } from '../../shared/shared.module';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ToastModule } from 'primeng/toast';
-import { MessageService } from 'primeng/api';
 import { ForgotPasswordComponent } from './pages/forgot-password/forgot-password.component';
 import { UserCredsComponent } from './pages/user-creds/user-creds.component';
+import { UniqueUsernameValidator } from '../../shared/validators/unique-username.validator';
+
 
 
 @NgModule({
@@ -26,6 +25,7 @@ import { UserCredsComponent } from './pages/user-creds/user-creds.component';
     ReactiveFormsModule,
     HttpClientModule,
     SharedModule
-  ]
+  ],
+  providers: [UniqueUsernameValidator]
 })
 export class AuthModule { }

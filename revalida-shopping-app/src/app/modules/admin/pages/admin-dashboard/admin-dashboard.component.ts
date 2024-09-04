@@ -1,4 +1,5 @@
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
 import { Chart, ChartConfiguration } from 'chart.js';
 import { DataTable } from 'simple-datatables';  
 
@@ -12,7 +13,7 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
   @ViewChild('datatablesSimple', { static: false }) datatablesSimple!: ElementRef;
   // @ViewChild('areaChartCanvas', { static: false}) areaChartCanvas!: ElementRef;
 
-  constructor() {
+  constructor(private router: Router) {
     // Set new default font family and font color to mimic Bootstrap's default styling
     Chart.defaults.global.defaultFontFamily = '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
     Chart.defaults.global.defaultFontColor = '#292b2c';
@@ -50,7 +51,33 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
       console.log(this.datatablesSimple);
       if(this.datatablesSimple) {
         new DataTable(this.datatablesSimple.nativeElement, {
-          searchable: true
+          searchable: true,
+          columns: [
+             // Sort the first column in ascending order
+            // { select: 0, sort: "asc" },
+            // { select: 1, sort: "asc" },
+
+            // Set the second column as datetime string matching the format "DD/MM/YYY"
+            // { select: 2 },
+
+            // Disable sorting on the third and fourth columns
+            // { select: [3, 4], sortable: false },
+            
+            // Set the fourth column as datetime string matching the format "DD/MM/YYY"
+            // { select: 4, type: "date", format: "DD/MM/YYYY" },
+           
+            // Hide the fifth column
+            // { select: 4, hidden: true },
+
+            // Append a button to the sixth column
+            // {
+            //     select: 5,
+            //     type: 'string',
+            //     render: function(data, td, rowIndex, cellIndex) {
+            //         return `${data}<button type='button' data-row='${rowIndex}'>Select</button>`;
+            //     }
+            // }
+          ]
         });
       }
   }
@@ -161,5 +188,10 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
 
     // Load the configuration to the canvas
     new Chart(ctx, config);
+  }
+
+  logOut = () => {
+    sessionStorage.clear();
+    this.router.navigate(['/auth/login'])
   }
 }
