@@ -8,6 +8,7 @@ import { SharedModule } from './shared/shared.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
+import { UniqueUsernameValidator } from './shared/validators/unique-username.validator';
 
 
 @NgModule({
@@ -23,7 +24,7 @@ import { MessageService } from 'primeng/api';
     ToastModule,
     BrowserAnimationsModule
   ],
-  providers: [MessageService],
+  providers: [MessageService, UniqueUsernameValidator],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -30,15 +30,15 @@ body {
 }
 
 .side-menu .submenu {
-    // display: none;
-    padding-left: 20px;
+  // display: none;
+  padding-left: 20px;
 }
 .side-menu .submenu .nav-link {
-    padding-left: 30px;
+  padding-left: 30px;
 }
 
 .side-menu #my-account {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .dropdown-container {
@@ -47,33 +47,42 @@ body {
 }
 
 .account-form {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
 }
 
 form {
-    width: 100%;
-    padding: 0 20px;
-    max-width: 700px;
+  width: 100%;
+  padding: 0 20px;
+  max-width: 700px;
+}
+
+.form-control.is-invalid {
+  border-color: #dc3545;
+}
+
+.invalid-feedback {
+  color: #dc3545;
+  font-size: 0.875rem;
 }
 
 .fullname {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-  }
-  
-  .fullname > div {
-    width: 100%;
-  }
-  
-  .fullname div:first-child {
-    margin-right: 20px;
-  }
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.fullname > div {
+  width: 100%;
+}
+
+.fullname div:first-child {
+  margin-right: 20px;
+}
 
 .btn-save {
-//   background-color: #ff5722;
+  //   background-color: #ff5722;
   border: none;
 }
 
@@ -104,4 +113,3 @@ form {
   color: #6c757d;
   font-size: 12px;
 }
-

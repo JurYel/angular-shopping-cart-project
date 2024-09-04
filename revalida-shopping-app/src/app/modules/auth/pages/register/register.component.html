@@ -37,7 +37,7 @@
           <input
             type="text"
             class="form-control"
-            [ngClass]="{ 'is-invalid': submitted && f['username'].errors}"
+            [ngClass]="{ 'is-invalid': (submitted && f['username'].errors) || (usernameAlreadyTaken && f['username'].touched)}"
             formControlName="username"
             id="username"
             placeholder="Type your user name"
@@ -45,6 +45,12 @@
           <small *ngIf="f['username'].invalid && (f['username'].dirty || f['username'].touched)" class="invalid-feedback">
               <div *ngIf="f['username'].errors?.['required']">User name is required</div>
           </small>
+          <small class="invalid-feedback" *ngIf="usernameAlreadyTaken">
+                Username already exists
+          </small>
+          <!-- <small *ngIf="registerForm.errors?.['usernameExists'] && f['username'].valid" class="invalid-feedback">
+                Username already exists
+          </small> -->
         </div>
         <div class="contacts form-group">
           <div class="mb-3">
