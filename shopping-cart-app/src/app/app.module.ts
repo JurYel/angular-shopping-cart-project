@@ -4,32 +4,45 @@ import { RouterModule } from '@angular/router';
 import { AppRoutingModule } from './app-routing.module';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatIconModule } from '@angular/material/icon';
+import { MatListModule } from '@angular/material/list';
+
 import { AppComponent } from './app.component';
-import { BsNavbarComponent } from './bs-navbar/bs-navbar.component';
-import { DashboardComponent } from './dashboard/dashboard.component';
-import { CartComponent } from './cart/cart.component';
-import { CheckoutComponent } from './checkout/checkout.component';
-import { PendingordersComponent } from './pendingorders/pendingorders.component';
+import { HomeComponent } from './dashboard/home/home.component';
+import { ShoppingCartComponent } from './dashboard/shoppingcart/shoppingcart.component';
+import { ProductitemsComponent } from './dashboard/productitems/productitems.component';
+import { CheckoutComponent } from './dashboard/checkout/checkout.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    BsNavbarComponent,
-    DashboardComponent,
-    CartComponent,
+    HomeComponent,
+    ShoppingCartComponent,
+    ProductitemsComponent,
     CheckoutComponent,
-    PendingordersComponent
+
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     NgbModule,
     RouterModule.forRoot([
-      { path: '', component: DashboardComponent },
-      { path: 'cart-page', component: CartComponent},
-      { path: 'checkout-page', component: CheckoutComponent},
-      { path: 'pending-orders', component: PendingordersComponent}
-    ])
+      { path: 'home', component: HomeComponent },
+      { path: 'cart', component: ShoppingCartComponent},
+      { path: 'checkout', component: CheckoutComponent},
+      { path: '', redirectTo: '/home', pathMatch: 'full'}
+    ]),
+
+    BrowserAnimationsModule,
+    MatCardModule,
+    MatButtonModule,
+    MatToolbarModule,
+    MatIconModule,
+    MatListModule
   ],
   providers: [],
   bootstrap: [AppComponent]

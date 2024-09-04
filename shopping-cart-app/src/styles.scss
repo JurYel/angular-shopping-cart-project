@@ -3,5 +3,43 @@
 
 /* Importing Bootstrap SCSS file. */
 @import 'bootstrap/scss/bootstrap';
+@import '~@angular/material/prebuilt-themes/indigo-pink.css';
 
-body {padding-top: 80px;}
+
+// body {padding-top: 80px;}
+
+// html, body { height: 100%; }
+// body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+  
+  mat-toolbar {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+  
+  mat-card {
+    margin: 64px;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 600px) {
+    .product-card {
+      width: 100% !important;
+    }
+  }
+
+/* Custom theme overrides */
+.mat-toolbar.mat-primary {
+  background: #55cd69;
+  color: #fff;
+}
+
+.mat-card-title {
+  font-weight: bold;
+}

@@ -1,6 +1,7 @@
-<bs-navbar></bs-navbar>
-<div class="container">
-
-  <div class="starter-template">
-    <router-outlet></router-outlet>
-</div>
+<mat-toolbar color="primary">
+  <span mat-button routerLink="/">Food Shop</span>
+  <span class="spacer"></span>
+  <a mat-button routerLink="/">Products</a>
+  <a mat-button routerLink="/cart">Cart</a>
+</mat-toolbar>
+<router-outlet></router-outlet>
