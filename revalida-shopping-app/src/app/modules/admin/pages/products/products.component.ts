@@ -1,11 +1,10 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Grid, h, html } from 'gridjs';
 import 'gridjs/dist/theme/mermaid.css';
 import { ProductsService } from '../../services/products.service';
 import { Observable } from 'rxjs';
 import { Product } from '../../../models/product.interface';
-import * as $ from 'jquery';
-import 'datatables.net';
+import { DataTable } from 'simple-datatables';
 
 @Component({
   selector: 'app-products',
@@ -13,7 +12,8 @@ import 'datatables.net';
   styleUrl: './products.component.scss'
 })
 export class ProductsComponent implements OnInit, AfterViewInit {
-
+  
+  @ViewChild('datatablesSimple', { static: false }) datatablesSimple!: ElementRef;
   adminSection: HTMLDivElement;
   sideToggleBtn: HTMLElement;
   productsList$: Observable<Product[]>;
@@ -50,6 +50,37 @@ export class ProductsComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
+    if(this.datatablesSimple) {
+      // new DataTable(this.datatablesSimple.nativeElement, {
+      //   searchable: true,
+      //   columns: [
+      //      // Sort the first column in ascending order
+      //     // { select: 0, sort: "asc" },
+      //     // { select: 1, sort: "asc" },
+
+      //     // Set the second column as datetime string matching the format "DD/MM/YYY"
+      //     // { select: 2 },
+
+      //     // Disable sorting on the third and fourth columns
+      //     // { select: [3, 4], sortable: false },
+          
+      //     // Set the fourth column as datetime string matching the format "DD/MM/YYY"
+      //     // { select: 4, type: "date", format: "DD/MM/YYYY" },
+         
+      //     // Hide the fifth column
+      //     // { select: 4, hidden: true },
+
+      //     // Append a button to the sixth column
+      //     // {
+      //     //     select: 5,
+      //     //     type: 'string',
+      //     //     render: function(data, td, rowIndex, cellIndex) {
+      //     //         return `${data}<button type='button' data-row='${rowIndex}'>Select</button>`;
+      //     //     }
+      //     // }
+      //   ]
+      // });
+    }
     // new Grid({
     //   from: document.getElementById("myTable") as HTMLTableElement,
     //   columns: [

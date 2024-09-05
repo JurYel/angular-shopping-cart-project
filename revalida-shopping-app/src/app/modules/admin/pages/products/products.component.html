@@ -9,36 +9,44 @@
                 <div id="myProductsTable" class="me-5">
 
                 </div>
-                <div id="productsTable" class="me-5">
-                    <table id="myTable" class="table table-striped">
-                        <thead>
-                          <tr>
-                            <th>Item Image</th>
-                            <th>Item Name</th>
-                            <th>Category</th>
-                            <th>Quantity</th>
-                            <th>Unit Price</th>
-                            <th>Actions</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor="let product of productsList$ | async">
-                                <td><img src="assets/img/{{product.item_image}}" alt=""></td>
-                                <td>{{product.item_name}}</td>
-                                <td>{{product.category}}</td>
-                                <td>{{product.quantity}}</td>
-                                <td>{{product.unit_price}}</td>
-                                <td>
-                                    <button class="btn btn-sm btn-primary me-1">
-                                    <i class="fa fa-pencil"></i> 
-                                    </button>
-                                    <button class="btn btn-sm btn-danger">
-                                    <i class="fa fa-trash"></i> 
-                                    </button>
-                                </td>
-                            </tr>                           
-                        </tbody>
-                      </table>
+                <div class="card mb-4" id="cardTable">
+                    <div class="card-header">
+                        <i class="fas fa-table me-1"></i>
+                        Store Products
+                    </div>
+                    <div class="card-body">
+                        <div id="productsTable" class="me-5">
+                            <table id="myTable" #datatablesSimple class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th>Item Image</th>
+                                    <th>Item Name</th>
+                                    <th>Category</th>
+                                    <th>Quantity</th>
+                                    <th>Unit Price</th>
+                                    <th>Actions</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let product of productsList$ | async">
+                                        <td><img src="assets/img/{{product.item_img}}" class="table-item-img" alt=""></td>
+                                        <td>{{product.item_name}}</td>
+                                        <td>{{product.category}}</td>
+                                        <td>{{product.quantity}}</td>
+                                        <td>{{product.unit_price}}</td>
+                                        <td>
+                                            <button class="btn btn-sm btn-primary me-1">
+                                            <i class="fa fa-pencil"></i> 
+                                            </button>
+                                            <button class="btn btn-sm btn-danger">
+                                            <i class="fa fa-trash"></i> 
+                                            </button>
+                                        </td>
+                                    </tr>                           
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
                 <div class="form-wrapper">
                     <div class="form-container">
@@ -96,4 +104,5 @@
             </main>
         </div>
     </div>
+    <app-footer></app-footer>
 </section>

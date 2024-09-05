@@ -3,11 +3,13 @@
 // }
 
 .navbar {
-  background-color: #6c757d;
+  // background-color: #6c757d;
   // border-color: #6c757d;
   // background: linear-gradient(to bottom, #a7b3c0, #c6cacd);
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.236);
-  color: white;
+  // color: white;
+  background-color: #212529;
+  color: rgba(255, 255, 255, 0.5);
 }
 .navbar-brand {
   font-weight: bold;
@@ -67,12 +69,12 @@
 }
 
 .cart:hover {
-  color: #6c757d;
+  color: #212529;
   background-color: #fff;
 }
 
 .cart:hover svg {
-  fill: #6c757d;
+  fill: #212529;
 }
 
 .cart svg {

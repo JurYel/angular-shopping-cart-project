@@ -141,8 +141,13 @@ main {
     width: 100%;
 }
 
-main #productsTable {
+// main #productsTable {
+//     grid-area: productsTable;
+// }
+
+main #cardTable {
     grid-area: productsTable;
+    width: 100%;
 }
 
 // main #myProductsTable {
@@ -222,4 +227,12 @@ main #productsTable {
 
 .btn-img {
     height: 10px;
+}
+
+.table-item-img {
+    height: 50px;
+}
+
+table tr td{
+    vertical-align: middle;
 }

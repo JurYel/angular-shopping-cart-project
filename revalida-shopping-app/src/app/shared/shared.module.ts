@@ -4,6 +4,7 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { RouterModule } from '@angular/router';
 import { AdminSidenavComponent } from './components/admin-sidenav/admin-sidenav.component';
 import { AdminTopnavComponent } from './components/admin-topnav/admin-topnav.component';
+import { FooterComponent } from './components/footer/footer.component';
 
 
 
@@ -11,12 +12,18 @@ import { AdminTopnavComponent } from './components/admin-topnav/admin-topnav.com
   declarations: [
     NavbarComponent,
     AdminSidenavComponent,
-    AdminTopnavComponent
+    AdminTopnavComponent,
+    FooterComponent
   ],
   imports: [
     CommonModule,
     RouterModule
   ],
-  exports: [NavbarComponent, AdminSidenavComponent, AdminTopnavComponent]
+  exports: [
+    NavbarComponent, 
+    AdminSidenavComponent, 
+    AdminTopnavComponent,
+    FooterComponent
+  ]
 })
 export class SharedModule { }
