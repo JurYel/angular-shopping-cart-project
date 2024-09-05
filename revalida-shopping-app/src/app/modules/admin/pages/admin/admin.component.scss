@@ -1,0 +1,217 @@
+section {
+    height: 100%;
+  }
+  
+  // Side Navbar styles
+  #layoutSidenav {
+    display: flex;
+  }
+  #layoutSidenav #layoutSidenav_nav {
+    flex-basis: 225px;
+    flex-shrink: 0;
+    transition: transform 0.15s ease-in-out;
+    z-index: 1038;
+    transform: translateX(-225px);
+  }
+  #layoutSidenav #layoutSidenav_content {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-width: 0;
+    flex-grow: 1;
+    min-height: calc(100vh - 56px);
+    margin-left: -225px;
+  }
+  
+  .fixed-top,
+  .sb-nav-fixed #layoutSidenav #layoutSidenav_nav,
+  .sb-nav-fixed .sb-topnav {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    z-index: 1030;
+  }
+  
+  .sb-sidenav-toggled #layoutSidenav #layoutSidenav_nav {
+    transform: translateX(0);
+  }
+  .sb-sidenav-toggled #layoutSidenav #layoutSidenav_content:before {
+    content: "";
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    z-index: 1037;
+    opacity: 0.5;
+    transition: opacity 0.3s ease-in-out;
+  }
+  
+  @media (min-width: 992px) {
+    #layoutSidenav #layoutSidenav_nav {
+      transform: translateX(0);
+    }
+    #layoutSidenav #layoutSidenav_content {
+      margin-left: 0;
+      transition: margin 0.15s ease-in-out;
+    }
+    .sb-sidenav-toggled #layoutSidenav #layoutSidenav_nav {
+      transform: translateX(-225px);
+    }
+    .sb-sidenav-toggled #layoutSidenav #layoutSidenav_content {
+      margin-left: -225px;
+    }
+    .sb-sidenav-toggled #layoutSidenav #layoutSidenav_content:before {
+      display: none;
+    }
+  }
+  
+  .sb-nav-fixed #layoutSidenav #layoutSidenav_nav {
+    width: 225px;
+    height: 100vh;
+    z-index: 1038;
+  }
+  
+  .sb-nav-fixed #layoutSidenav #layoutSidenav_content {
+    padding-left: 225px;
+    top: 56px;
+  }
+  
+  #layoutError {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+  #layoutError #layoutError_content {
+    min-width: 0;
+    flex-grow: 1;
+  }
+  #layoutError #layoutError_footer {
+    min-width: 0;
+  }
+  
+  .img-error {
+    max-width: 20rem;
+  }
+  
+  .nav .nav-link .sb-nav-link-icon,
+  .sb-sidenav-menu .nav-link .sb-nav-link-icon {
+    margin-right: 0.5rem;
+  }
+  
+  // Gridjs table
+  .gridjs-container {
+    font-family: Arial, sans-serif;
+  }
+  
+  .gridjs-pagination {
+    display: flex;
+    justify-content: flex-end;
+    padding: 0.5rem 1rem;
+  }
+  
+  .btn-group .btn {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+  }
+  
+  .btn-group .btn i {
+    margin-right: 0.25rem;
+  }
+  
+  // Main Content Styles
+  main {
+      display: grid;
+      grid-template-columns: auto;
+      grid-template-rows: auto;
+      grid-template-areas: 
+          "productsTable formWrapper";
+      // flex-direction: row;
+      // justify-content: center;
+      // align-items: center;
+      padding: 0 50px;
+      column-gap: 60px;
+  }
+  
+  #myProductsTable,  #productsTable, #myTable, main .form-wrapper {
+      width: 100%;
+  }
+  
+  main #myProductsTable {
+      grid-area: productsTable;
+      // margin-right: 20px;
+  }
+  
+  // Form Styles
+  
+  .form-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+  //   background-color: #f8f9fa;
+    grid-area: formWrapper;
+  
+  }
+  .form-container {
+    width: 400px;
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+  }
+  
+  .form-control.is-invalid {
+    border-color: #dc3545;
+  }
+  
+  .invalid-feedback {
+    color: #dc3545;
+    font-size: 0.875rem;
+  }
+  
+  .btn-primary {
+    background-color: #007bff;
+    border: none;
+  }
+  .btn-primary:disabled {
+    background-color: #d1e7fd;
+  }
+  .form-text a {
+    text-decoration: none;
+    color: #6c757d;
+  }
+  .form-text a:hover {
+    text-decoration: underline;
+  }
+  
+  .item-img {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 15px;
+  }
+  
+  .item-img img {
+    height: 200px;
+  }
+  
+  .item-qty-price {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+  }
+  
+  .item-qty-price > div {
+      width: 100%;
+  }
+  
+  .item-qty-price div:first-child {
+      margin-right: 20px;
+  }
