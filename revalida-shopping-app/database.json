@@ -29,15 +29,31 @@
       "password": "1234"
     }
   ],
-  "inventory": {
-    "foods": [
-      {
-        "id": "90f2",
-        "item_img": "pancit_canton.jpg",
-        "item_name": "Pancit Canton",
-        "quantity": 50,
-        "unit_price": 15.5
-      }
-    ]
-  }
+  "inventory": [
+    {
+      "id": "90f2",
+      "item_img": "pancit_canton.jpg",
+      "item_name": "Pancit Canton",
+      "category": "Food",
+      "quantity": 50,
+      "unit_price": 15.5
+    },
+    {
+      "id": "16c5",
+      "item_img": "magic-flakes.jpg",
+      "item_name": "Magic Flakes",
+      "category": "Food",
+      "quantity": 100,
+      "unit_price": 8.5
+    },
+    {
+      "id": "7068",
+      "item_img": "beef_load.jpg",
+      "item_name": "Beef Loaf",
+      "category": "Food",
+      "quantity": 50,
+      "unit_price": 28.5
+    }
+  ]
+  
 }

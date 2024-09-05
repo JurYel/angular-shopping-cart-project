@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-admin-sidenav',
@@ -9,6 +10,8 @@ export class AdminSidenavComponent implements OnInit {
 
   @Input('adminSidenavInput') adminSidenav: HTMLElement | undefined;
   @Input('sidebarToggleInput') sidebarToggleBtn: HTMLElement | undefined;
+
+  constructor(private router: Router){}
 
   ngOnInit(): void {
     // Access the sidebarToggle button
@@ -30,6 +33,11 @@ export class AdminSidenavComponent implements OnInit {
           localStorage.setItem('sb|sidebar-toggle', this.adminSidenav?.classList.contains('sb-sidenav-toggled').toString() as string);
         })
     }
+  }
+
+  redirectTo(uri: string) {
+    this.router.navigateByUrl('/', { skipLocationChange: false }).then(() => {
+      this.router.navigate([uri])});
   }
 
 }
