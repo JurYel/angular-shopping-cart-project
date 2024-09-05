@@ -149,7 +149,17 @@ main #cardTable {
 
 main #accountsTable {
 //   overflow-x: auto;
+  
   font-size: 12px;
+  width: 100%;
+}
+
+// .table-card.table-adjusted {
+//     font-size: 15px;
+// }
+
+.card {
+    width: 100%;
 }
 
 //   main #myProductsTable {
@@ -224,4 +234,8 @@ main #accountsTable {
 
 .item-qty-price div:first-child {
   margin-right: 20px;
+}
+
+table tr td {
+    vertical-align: middle;
 }

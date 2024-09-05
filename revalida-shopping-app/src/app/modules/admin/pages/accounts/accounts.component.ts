@@ -39,6 +39,7 @@ export class AccountsComponent implements OnInit, AfterViewInit{
             event.preventDefault();
             // Toggle the class to show/hide sidebar
             document.querySelector(".sb-nav-fixed")?.classList.toggle('sb-sidenav-toggled');
+            document.querySelector("#accountsTable")?.classList.toggle('table-adjusted');
             // Persist the state in localStorage
             localStorage.setItem('sb|sidebar-toggle', document.querySelector('.sb-nav-fixed')?.classList.contains('sb-sidenav-toggled').toString() as string);
           })
