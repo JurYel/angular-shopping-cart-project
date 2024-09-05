@@ -3,11 +3,11 @@ import { Grid, h } from 'gridjs';
 import 'gridjs/dist/theme/mermaid.css';
 
 @Component({
-  selector: 'app-admin',
-  templateUrl: './admin.component.html',
-  styleUrl: './admin.component.scss'
+  selector: 'app-accounts',
+  templateUrl: './accounts.component.html',
+  styleUrl: './accounts.component.scss'
 })
-export class AdminComponent implements OnInit, AfterViewInit{
+export class AccountsComponent implements OnInit, AfterViewInit{
 
   adminSection: HTMLDivElement;
   sideToggleBtn: HTMLElement;

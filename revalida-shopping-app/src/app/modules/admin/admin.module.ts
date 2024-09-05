@@ -4,7 +4,7 @@ import { AdminDashboardComponent } from './pages/admin-dashboard/admin-dashboard
 import { AdminRoutingModule } from './admin-routing.module';
 import { ProductsComponent } from './pages/products/products.component';
 import { SharedModule } from '../../shared/shared.module';
-import { AdminComponent } from './pages/admin/admin.component';
+import { AccountsComponent } from './pages/accounts/accounts.component';
 
 
 
@@ -12,7 +12,7 @@ import { AdminComponent } from './pages/admin/admin.component';
   declarations: [
     AdminDashboardComponent,
     ProductsComponent,
-    AdminComponent
+    AccountsComponent
   ],
   imports: [
     CommonModule,
