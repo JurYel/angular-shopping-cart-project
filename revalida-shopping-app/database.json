@@ -28,5 +28,16 @@
       "mobile_num": "9123456789",
       "password": "1234"
     }
-  ]
+  ],
+  "inventory": {
+    "foods": [
+      {
+        "id": "90f2",
+        "item_img": "pancit_canton.jpg",
+        "item_name": "Pancit Canton",
+        "quantity": 50,
+        "unit_price": 15.5
+      }
+    ]
+  }
 }
