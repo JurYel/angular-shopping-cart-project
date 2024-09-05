@@ -1,11 +1,12 @@
 
 <section class="sb-nav-fixed">
     <!-- Top Nav -->
-    <app-admin-topnav></app-admin-topnav>
+    <app-admin-topnav [adminSidenavInput]=""></app-admin-topnav>
     <div id="layoutSidenav">
         <div id="layoutSidenav_nav">
             <!-- Side Nav -->
-            <app-admin-sidenav  [sidebarToggleInput]="sideToggleBtn" [adminSidenavInput]="adminSection"></app-admin-sidenav>
+             <app-admin-sidenav></app-admin-sidenav>
+        <!-- <app-admin-sidenav  [sidebarToggleInput]="sideToggleBtn" [adminSidenavInput]="adminSection"></app-admin-sidenav> -->
         </div>
         <div id="layoutSidenav_content">
             <main>
@@ -562,10 +563,10 @@
                     </div>
                 </div>
             </main>
-            <footer class="py-4 bg-light mt-auto">
+            <!-- <footer class="py-4 bg-light mt-auto">
                 <div class="container-fluid px-4">
                     <div class="d-flex align-items-center justify-content-between small">
-                        <div class="text-muted">Copyright &copy; Your Website 2023</div>
+                        <div class="text-muted">Copyright &copy; Click&Get Convenience Store 2024</div>
                         <div>
                             <a href="#">Privacy Policy</a>
                             &middot;
@@ -573,8 +574,9 @@
                         </div>
                     </div>
                 </div>
-            </footer>
+            </footer> -->
+            <app-admin-footer></app-admin-footer>
         </div>
     </div>
-    <app-footer></app-footer>
+    <!-- <app-footer></app-footer> -->
 </section>

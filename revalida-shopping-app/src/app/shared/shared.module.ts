@@ -5,6 +5,7 @@ import { RouterModule } from '@angular/router';
 import { AdminSidenavComponent } from './components/admin-sidenav/admin-sidenav.component';
 import { AdminTopnavComponent } from './components/admin-topnav/admin-topnav.component';
 import { FooterComponent } from './components/footer/footer.component';
+import { AdminFooterComponent } from './components/admin-footer/admin-footer.component';
 
 
 
@@ -13,7 +14,8 @@ import { FooterComponent } from './components/footer/footer.component';
     NavbarComponent,
     AdminSidenavComponent,
     AdminTopnavComponent,
-    FooterComponent
+    FooterComponent,
+    AdminFooterComponent
   ],
   imports: [
     CommonModule,
@@ -23,7 +25,8 @@ import { FooterComponent } from './components/footer/footer.component';
     NavbarComponent, 
     AdminSidenavComponent, 
     AdminTopnavComponent,
-    FooterComponent
+    FooterComponent,
+    AdminFooterComponent
   ]
 })
 export class SharedModule { }

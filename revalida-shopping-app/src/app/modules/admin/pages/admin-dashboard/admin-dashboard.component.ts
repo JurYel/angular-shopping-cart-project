@@ -12,16 +12,14 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
 
   @ViewChild('datatablesSimple', { static: false }) datatablesSimple!: ElementRef;
   // @ViewChild('areaChartCanvas', { static: false}) areaChartCanvas!: ElementRef;
-  adminSection: HTMLDivElement;
-  sideToggleBtn: HTMLElement;
+  adminSection: HTMLElement;
 
   constructor(private router: Router) {
     // Set new default font family and font color to mimic Bootstrap's default styling
     Chart.defaults.global.defaultFontFamily = '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
     Chart.defaults.global.defaultFontColor = '#292b2c';
-    this.adminSection = document.querySelector(".sb-nav-fixed") as HTMLDivElement;
-    this.sideToggleBtn = document.querySelector('#sidebarToggle') as HTMLElement;
-    console.log(this.adminSection)
+    this.adminSection = document.querySelector(".sb-nav-fixed") as HTMLElement;
+    console.log("nav: ", this.adminSection);
   }
 
   ngOnInit(): void {

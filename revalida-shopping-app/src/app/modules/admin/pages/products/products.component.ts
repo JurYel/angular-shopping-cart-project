@@ -15,12 +15,10 @@ export class ProductsComponent implements OnInit, AfterViewInit {
   
   @ViewChild('datatablesSimple', { static: false }) datatablesSimple!: ElementRef;
   adminSection: HTMLDivElement;
-  sideToggleBtn: HTMLElement;
   productsList$: Observable<Product[]>;
 
   constructor(private productsService: ProductsService) {
     this.adminSection = document.querySelector(".sb-nav-fixed") as HTMLDivElement;
-    this.sideToggleBtn = document.querySelector('#sidebarToggle') as HTMLElement;
     
     this.productsList$ = this.productsService.getProducts();
     this.productsList$.subscribe(
