@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { Product } from '../../models/product.interface';
 
 @Injectable({
@@ -15,4 +15,30 @@ export class ProductsService {
   getProducts = (): Observable<Product[]> => {
     return this.http.get<Product[]>(`${this.serverUrl}/inventory`);
   }
+
+  getProductIdByName = (name: string): Observable<Product[]> => {
+    return this.http.get<Product[]>(`${this.serverUrl}/inventory?item_name=${name}`);
+  }
+
+  checkIfProductExists = (name: string): Observable<boolean> => {
+    const products$: Observable<Product[]> = this.getProducts();
+
+    return products$.pipe(
+      map(products => products.some(product => product.item_name === name))
+    );
+  }
+
+  addProduct = (product: Product) => {
+    return this.http.post<Product>(`${this.serverUrl}/inventory`, product);
+  }
+
+  updateProduct = (product: Product) => {
+    return this.http.put<Product>(`${this.serverUrl}/inventory/${product.id}`, product);
+  }
+
+  deleteProduct = (id: string) => {
+    return this.http.delete<Product>(`${this.serverUrl}/inventory/${id}`);
+  }
+
+ 
 }

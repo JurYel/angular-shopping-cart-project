@@ -56,10 +56,17 @@ export class RegisterComponent {
                     );
   }
 
+  capitalizeWord = (word: string) => {
+    return word.charAt(0).toUpperCase() + word.slice(1);
+  }
+
   onSubmit = () => {
     this.submitted = true;
     const postData = {...this.registerForm.getRawValue()};
     delete postData.confirm_password; // do not need to pass confirm_password to backend
+
+    postData['first_name'] = this.capitalizeWord(postData['first_name']);
+    postData['last_name'] = this.capitalizeWord(postData['last_name']);
 
     if(this.registerForm.invalid) {
       return;

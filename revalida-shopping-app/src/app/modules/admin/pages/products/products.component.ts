@@ -1,10 +1,12 @@
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AfterContentInit, AfterViewChecked, AfterViewInit, Component, ElementRef, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { Grid, h, html } from 'gridjs';
 import 'gridjs/dist/theme/mermaid.css';
 import { ProductsService } from '../../services/products.service';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { Product } from '../../../models/product.interface';
 import { DataTable } from 'simple-datatables';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-products',
@@ -16,14 +18,40 @@ export class ProductsComponent implements OnInit, AfterViewInit {
   @ViewChild('datatablesSimple', { static: false }) datatablesSimple!: ElementRef;
   adminSection: HTMLDivElement;
   productsList$: Observable<Product[]>;
+  productForm: FormGroup;
+  categories: string[];
+  itemImgValue: string;
+  submitted: boolean = false;
+  productIndex!: number;
 
-  constructor(private productsService: ProductsService) {
+  constructor(private fb: FormBuilder,
+              private productsService: ProductsService,
+              private messageService: MessageService) {
+
     this.adminSection = document.querySelector(".sb-nav-fixed") as HTMLDivElement;
     
     this.productsList$ = this.productsService.getProducts();
     this.productsList$.subscribe(
       data => console.log(data)
     )
+
+    this.productForm = this.fb.group({
+      item_img: ['', [Validators.required]],
+      item_name: ['', Validators.required],
+      category: ['Select category', Validators.required],  
+      quantity: ['', Validators.required],
+      unit_price: ['', Validators.required]
+    });
+
+    this.categories = [
+      "Food",
+      "Drinks",
+      "Hygiene",
+      "Cooking Essentials"
+    ]
+
+    console.log(this.f['item_img'].value);
+    this.itemImgValue = (this.f['item_img'].value) ? this.f['item_img'].value : 'default_item_img.jpg'; 
   }
 
   ngOnInit(): void {
@@ -44,10 +72,10 @@ export class ProductsComponent implements OnInit, AfterViewInit {
             localStorage.setItem('sb|sidebar-toggle', document.querySelector('.sb-nav-fixed')?.classList.contains('sb-sidenav-toggled').toString() as string);
           })
       }
-
   }
 
   ngAfterViewInit(): void {
+    
     if(this.datatablesSimple) {
       // new DataTable(this.datatablesSimple.nativeElement, {
       //   searchable: true,
@@ -144,6 +172,25 @@ export class ProductsComponent implements OnInit, AfterViewInit {
     // }).render(document.getElementById('myProductsTable') as HTMLDivElement);
   }
 
+
+  uploadFile = (event: Event) => {
+    const element = event.currentTarget as HTMLInputElement;
+    let fileList: FileList | null = element.files;
+    if(fileList){
+      console.log(fileList[0].name)
+      this.itemImgValue = fileList[0].name;
+    }
+  }
+
+  get f() {
+    return this.productForm.controls;
+  }
+
+  getIndex = (index: number) => {
+    this.productIndex = index;
+    console.log(this.productIndex)
+  }
+
   editRow(row: any) {
     alert(`Edit row with Name: ${row.cells[0].data}`);
     // Implement your edit logic here
@@ -154,6 +201,57 @@ export class ProductsComponent implements OnInit, AfterViewInit {
       alert(`Deleted row with Name: ${row.cells[0].data}`);
       // Implement your delete logic here
     }
+  }
+
+  capitalizeWord = (word: string) => {
+    return word.charAt(0).toUpperCase() + word.slice(1);
+  }
+
+  onSubmitAdd = () => {
+    this.submitted = true;
+    const postData = {...this.productForm.getRawValue()};
+    postData['item_name'] = this.capitalizeWord(postData['item_name']);
+    postData['item_img'] = (postData['item_img'] as string).split('fakepath\\')[1];
+
+    if(this.productForm.invalid){
+      return;
+    }
+
+   this.productsService.checkIfProductExists(postData['item_name'] as string).subscribe(
+    exists => {
+      if(!exists) {
+        
+        this.productsService.addProduct(postData as Product).subscribe(
+          response => {
+            this.messageService.add({ severity:'success', summary: 'Success', detail: 'New product has been added' });
+            this.productsList$ = this.productsService.getProducts();
+          },
+          error => {
+            this.messageService.add({ severity:'error', summary: 'Error', detail: 'Error occured in adding product' });
+          }
+        )
+      } else {
+        this.messageService.add({ severity:'error', summary: 'Error', detail: 'This product already exists' });
+      }
+    }
+   );
+  }
+
+  onSubmitDeleteItem = (index: number) => {
+    
+    this.productsList$.pipe(
+      map(products => products[index])
+    ).subscribe(
+      product => {
+        this.productsService.deleteProduct(product.id as string).subscribe(
+          response => {
+            console.log("Deleted item: ", response);
+            this.messageService.add({ severity:'success', summary: 'Success', detail: 'Product has been deleted' });
+            this.productsList$ = this.productsService.getProducts();
+          }
+        );
+      }
+    );
   }
   
 }

@@ -6,6 +6,7 @@ import { ProductsComponent } from './pages/products/products.component';
 import { SharedModule } from '../../shared/shared.module';
 import { AccountsComponent } from './pages/accounts/accounts.component';
 import { ProductItemComponent } from './components/product-item/product-item.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 
@@ -19,7 +20,8 @@ import { ProductItemComponent } from './components/product-item/product-item.com
   imports: [
     CommonModule,
     AdminRoutingModule,
-    SharedModule
+    SharedModule,
+    ReactiveFormsModule
   ]
 })
 export class AdminModule { }
