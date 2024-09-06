@@ -132,6 +132,9 @@ export class ProfileComponent implements OnInit, AfterViewChecked {
     this.authService.getIdByUsername(this.username as string).subscribe(
       user => {
         if(user.length > 0){
+            postData['is_admin'] = user[0].is_admin;
+            postData['password'] = user[0].password;
+            
             this.authService.updateUser(user[0].id, postData as AuthUser).subscribe(
               response => {
                 console.log("Updated user: ", response);

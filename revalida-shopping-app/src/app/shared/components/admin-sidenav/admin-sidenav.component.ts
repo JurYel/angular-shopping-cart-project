@@ -10,7 +10,8 @@ export class AdminSidenavComponent implements OnInit {
 
   // @Input('adminSidenavInput') adminSidenav: HTMLElement | undefined;
   // @Input('sidebarToggleInput') sidebarToggleBtn: HTMLElement | undefined;
-
+  @Input('adminName') adminName: string | undefined;
+  
   constructor(private router: Router){}
 
   ngOnInit(): void {

@@ -13,6 +13,7 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
   @ViewChild('datatablesSimple', { static: false }) datatablesSimple!: ElementRef;
   // @ViewChild('areaChartCanvas', { static: false}) areaChartCanvas!: ElementRef;
   adminSection: HTMLElement;
+  adminName: string | undefined;
 
   constructor(private router: Router) {
     // Set new default font family and font color to mimic Bootstrap's default styling
@@ -20,6 +21,9 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
     Chart.defaults.global.defaultFontColor = '#292b2c';
     this.adminSection = document.querySelector(".sb-nav-fixed") as HTMLElement;
     console.log("nav: ", this.adminSection);
+
+    this.adminName = `${sessionStorage.getItem('first_name')} ${sessionStorage.getItem('last_name')}`;
+    console.log(this.adminName);
   }
 
   ngOnInit(): void {
