@@ -7,6 +7,6 @@ export const adminGuard: CanActivateFn = (route, state) => {
     return true;
   } else {
     const router = inject(Router);
-    return router.navigate(['auth/login']);
+    return router.navigate(['error/401']);
   }
 };

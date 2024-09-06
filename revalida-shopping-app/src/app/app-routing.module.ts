@@ -23,6 +23,10 @@ const routes: Routes = [
     loadChildren: () => import("./modules/admin/admin.module").then((m) => m.AdminModule),
     canActivate: [adminGuard]
     // add guards for admin - accessible for admin only
+  },
+  {
+    path: 'error',
+    loadChildren: () => import("./modules/errors/errors.module").then((m) => m.ErrorsModule)
   }
 ];
 
