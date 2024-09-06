@@ -41,7 +41,17 @@ export class LoginComponent {
       response => {
         if(response.length > 0 && response[0].password === password) {
           sessionStorage.setItem('username', username as string);
-          this.router.navigate(['/home']);
+          sessionStorage.setItem('first_name', response[0].first_name as string);
+          sessionStorage.setItem('last_name', response[0].last_name);
+          sessionStorage.setItem('is_admin', String(response[0].is_admin))
+          console.log(sessionStorage.getItem('is_admin'))
+
+          if(response[0].is_admin){
+            this.router.navigate(['/admin']);
+          } else{
+            this.router.navigate(['/home']);
+          }
+
         } else {
           this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Username or password is incorrect' });
         }

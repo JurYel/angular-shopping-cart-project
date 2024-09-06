@@ -1,6 +1,16 @@
 {
   "users": [
     {
+      "id": "7f82",
+      "username": "admin",
+      "first_name": "Juriel",
+      "last_name": "Botoy",
+      "email": "juriel.botoy182@gmail.com",
+      "is_admin": true,
+      "mobile_num": "9155671750",
+      "password": "admin123"
+    },
+    {
       "id": "f947",
       "username": "juryel1",
       "first_name": "jur1",
@@ -28,6 +38,16 @@
       "email": "jason.silver@gmail.com",
       "is_admin": false,
       "mobile_num": "9123456789",
+      "password": "1234"
+    },
+    {
+      "id": "e4c1",
+      "first_name": "Jur",
+      "last_name": "Yel",
+      "username": "juryel",
+      "email": "juryel@gmail.com",
+      "is_admin": false,
+      "mobile_num": "9181733784",
       "password": "1234"
     }
   ],
@@ -57,5 +77,4 @@
       "unit_price": 28.5
     }
   ]
-  
 }
