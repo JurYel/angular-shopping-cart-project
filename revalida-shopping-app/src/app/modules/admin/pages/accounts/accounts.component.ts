@@ -15,10 +15,12 @@ export class AccountsComponent implements OnInit, AfterViewInit{
   @ViewChild('datatablesSimple', { static: false }) datatablesSimple!: ElementRef;
   adminSection: HTMLDivElement;
   accountsList$: Observable<AuthUser[]>;
+  adminName: string | undefined;
 
   constructor(private accountsService: AccountsService) {
     this.adminSection = document.querySelector(".sb-nav-fixed") as HTMLDivElement;
 
+    this.adminName = `${sessionStorage.getItem('first_name')} ${sessionStorage.getItem('last_name')}`;
     this.accountsList$ = this.accountsService.getAccounts();
     this.accountsList$.subscribe(
       data => console.log(data)

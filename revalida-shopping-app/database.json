@@ -53,28 +53,44 @@
   ],
   "inventory": [
     {
-      "id": "90f2",
-      "item_img": "pancit_canton.jpg",
-      "item_name": "Pancit Canton",
+      "id": "0aa1",
+      "item_img": "gardenia-white-bread.png",
+      "item_name": " Gardenia White Bread ",
       "category": "Food",
-      "quantity": 50,
-      "unit_price": 15.5
+      "quantity": 20,
+      "unit_price": 58
     },
     {
-      "id": "16c5",
-      "item_img": "magic-flakes.jpg",
-      "item_name": "Magic Flakes",
+      "id": "9ffb",
+      "item_img": "gardenia-wheat-bread.png",
+      "item_name": " Gardenia Wheat Bread ",
       "category": "Food",
-      "quantity": 100,
-      "unit_price": 8.5
+      "quantity": 20,
+      "unit_price": 88
     },
     {
-      "id": "7068",
-      "item_img": "beef_loaf.jpg",
-      "item_name": "Beef Loaf",
+      "id": "3db5",
+      "item_img": "lala-fishcracker.png",
+      "item_name": " Lala Fishcracker ",
       "category": "Food",
-      "quantity": 50,
-      "unit_price": 28.5
+      "quantity": 20,
+      "unit_price": 25
+    },
+    {
+      "id": "5177",
+      "item_img": "fit-n-right.png",
+      "item_name": " Fit N' Right ",
+      "category": "Drinks",
+      "quantity": 12,
+      "unit_price": 23
+    },
+    {
+      "id": "5677",
+      "item_img": "itlog.jpg",
+      "item_name": " Itlog ",
+      "category": "Food",
+      "quantity": 12,
+      "unit_price": 12
     }
   ]
 }

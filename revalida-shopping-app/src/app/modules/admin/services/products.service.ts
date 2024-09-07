@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { map, Observable } from 'rxjs';
+import { map, Observable, tap } from 'rxjs';
 import { Product } from '../../models/product.interface';
 
 @Injectable({
@@ -24,7 +24,7 @@ export class ProductsService {
     const products$: Observable<Product[]> = this.getProducts();
 
     return products$.pipe(
-      map(products => products.some(product => product.item_name === name))
+      map(products => products.some(product => product.item_name.toLowerCase() === name.toLowerCase()))
     );
   }
 
@@ -33,7 +33,9 @@ export class ProductsService {
   }
 
   updateProduct = (product: Product) => {
-    return this.http.put<Product>(`${this.serverUrl}/inventory/${product.id}`, product);
+    return this.http.put<Product>(`${this.serverUrl}/inventory/${product.id}`, product).pipe(
+      tap(prod => console.log("Updating item: ", prod))
+    );
   }
 
   deleteProduct = (id: string) => {

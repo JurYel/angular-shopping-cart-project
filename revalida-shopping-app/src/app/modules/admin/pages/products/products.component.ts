@@ -7,6 +7,7 @@ import { Product } from '../../../models/product.interface';
 import { DataTable } from 'simple-datatables';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
+import { Modal } from 'bootstrap';
 
 @Component({
   selector: 'app-products',
@@ -16,13 +17,23 @@ import { MessageService } from 'primeng/api';
 export class ProductsComponent implements OnInit, AfterViewInit {
   
   @ViewChild('datatablesSimple', { static: false }) datatablesSimple!: ElementRef;
+  @ViewChild('closeModalAdd') closeModalAdd !: ElementRef;
+  @ViewChild('closeModalDelete') closeModalDelete !: ElementRef;
+  @ViewChild('closeModalEdit') closeModalEdit !: ElementRef;
+  @ViewChild('closeModalDeleteSel') closeModalDeleteSel !: ElementRef;
   adminSection: HTMLDivElement;
   productsList$: Observable<Product[]>;
   productForm: FormGroup;
+  updateProductForm: FormGroup;
   categories: string[];
   itemImgValue: string;
   submitted: boolean = false;
   productIndex!: number;
+  modalInstance: any; 
+  deleteDescription: string;
+  checkedItems: number[] = [];
+  adminName: string | undefined;
+
 
   constructor(private fb: FormBuilder,
               private productsService: ProductsService,
@@ -30,12 +41,21 @@ export class ProductsComponent implements OnInit, AfterViewInit {
 
     this.adminSection = document.querySelector(".sb-nav-fixed") as HTMLDivElement;
     
+    this.adminName = `${sessionStorage.getItem('first_name')} ${sessionStorage.getItem('last_name')}`;
     this.productsList$ = this.productsService.getProducts();
     this.productsList$.subscribe(
       data => console.log(data)
     )
 
     this.productForm = this.fb.group({
+      item_img: ['', [Validators.required]],
+      item_name: ['', Validators.required],
+      category: ['Select category', Validators.required],  
+      quantity: ['', Validators.required],
+      unit_price: ['', Validators.required]
+    });
+
+    this.updateProductForm = this.fb.group({
       item_img: ['', [Validators.required]],
       item_name: ['', Validators.required],
       category: ['Select category', Validators.required],  
@@ -52,6 +72,7 @@ export class ProductsComponent implements OnInit, AfterViewInit {
 
     console.log(this.f['item_img'].value);
     this.itemImgValue = (this.f['item_img'].value) ? this.f['item_img'].value : 'default_item_img.jpg'; 
+    this.deleteDescription = "these products";
   }
 
   ngOnInit(): void {
@@ -107,69 +128,6 @@ export class ProductsComponent implements OnInit, AfterViewInit {
       //   ]
       // });
     }
-    // new Grid({
-    //   from: document.getElementById("myTable") as HTMLTableElement,
-    //   columns: [
-    //     "Item Image",
-    //     "Item Name",
-    //     "Category",
-    //     "Quantity",
-    //     "Unit Price",
-    //     {
-    //       name: 'Actions',
-    //       formatter: (cell, row) => {
-    //         // return html(`
-    //         //   <button class="btn btn-sm btn-warning" (click)="editRow(row)"><i class="fa fa-pencil"></i> </button>
-    //         //   <button class="btn btn-sm btn-danger (click)="deleteRow(row)"><i class="fa fa-trash"></i> </button>
-    //         // `);
-    //         return h('span', { className: 'btn-group' }, [
-    //           h('button', {
-    //             className: 'btn btn-sm btn-primary me-2',
-    //             onClick: () => alert(`Editing: ${row.cells[0].data} ${row.cells[1].data}`)
-    //           }, [
-    //             // h('i', { className: 'fa fa-pencil' }),
-    //             // h('img', { src: "assets/img/pencil-solid.svg", className: "btn-img" }),
-    //             'Edit'
-    //           ]),
-    //           h('button', {
-    //             className: 'btn btn-sm btn-danger',
-    //             onClick: () => alert(`Deleting: ${row.cells[0].data} ${row.cells[1].data}`)
-    //           }, [
-    //             // h('i', { className: 'fa fa-trash' }),
-    //             'Delete'
-    //           ])
-    //         ]);
-    //       }
-    //     }
-    //   ],
-    //   data: [
-    //     ['Tiger Nixon', 'System Architect', 61, '2011/04/25', '$320,800'],
-    //     ['Garrett Winters', 'Accountant', 63, '2011/07/25', '$170,750'],
-    //     ['Ashton Cox', 'Junior Technical Author', 66, '2009/01/12', '$86,000'],
-    //     ['Cedric Kelly', 'Senior Javascript Developer',  22, '2012/03/29', '$433,060'],
-    //     ['Airi Satou', 'Accountant', 33, '2008/11/28', '$162,700'],
-    //     ['Brielle Williamson', 'Integration Specialist', 61, '2012/12/02', '$372,000'],
-    //     ['Herrod Chandler', 'Sales Assistant',  59, '2012/08/06', '$137,500'],
-    //     ['Rhona Davidson', 'Integration Specialist', 55, '2010/10/14', '$327,900'],
-    //     ['Colleen Hurst', 'Javascript Developer', 39, '2009/09/15', '$205,500'],
-    //     ['Sonya Frost', 'Software Engineer', 23, '2008/12/13', '$103,600'],
-    //   ],
-    //   search: true,
-    //   pagination: true,
-    //   sort: true,
-    //   resizable: false,
-    //   language: {
-    //     'search': {
-    //       'placeholder': '🔍 Search...'
-    //     },
-    //     'pagination': {
-    //       'previous': '⬅️',
-    //       'next': '➡️',
-    //       'showing': '😃 Displaying',
-    //       'results': () => 'Records'
-    //     }
-    //   }
-    // }).render(document.getElementById('myProductsTable') as HTMLDivElement);
   }
 
 
@@ -177,7 +135,8 @@ export class ProductsComponent implements OnInit, AfterViewInit {
     const element = event.currentTarget as HTMLInputElement;
     let fileList: FileList | null = element.files;
     if(fileList){
-      console.log(fileList[0].name)
+      console.log("uploadFile: ", fileList[0].name)
+      console.log("uploadFile: ", fileList[0].type)
       this.itemImgValue = fileList[0].name;
     }
   }
@@ -188,23 +147,98 @@ export class ProductsComponent implements OnInit, AfterViewInit {
 
   getIndex = (index: number) => {
     this.productIndex = index;
-    console.log(this.productIndex)
+    this.deleteDescription = "this product";
+
+    this.productsList$.pipe(
+      map(products => products[index])
+    ).subscribe(
+      product => {
+        this.deleteDescription = `${product.item_name}`;
+      }
+    );
   }
 
-  editRow(row: any) {
-    alert(`Edit row with Name: ${row.cells[0].data}`);
-    // Implement your edit logic here
+  loadURLToInputFiled = (url: string) => {
+    this.getImgURL(url, (imgBlob: Blob)=>{
+      // Load img blob to input
+      // WIP: UTF8 character error
+      let fileName = url;
+      let file = new File([imgBlob], fileName,{type:"image/jpeg", lastModified:new Date().getTime()});
+      let container = new DataTransfer(); 
+      container.items.add(file);
+      console.log(container.files[0]);
+      (document.querySelector('#item-img-input-edit') as HTMLInputElement).files = container.files;
+      
+    })
   }
 
-  deleteRow(row: any) {
-    if (confirm(`Are you sure you want to delete ${row.cells[0].data}?`)) {
-      alert(`Deleted row with Name: ${row.cells[0].data}`);
-      // Implement your delete logic here
-    }
+  // xmlHTTP return blob respond
+  getImgURL = (url: string, callback:any) => {
+    var xhr = new XMLHttpRequest();
+    xhr.onload = function() {
+        callback(xhr.response);
+    };
+    url = "assets/img/" + url;
+    xhr.open('GET', url);
+    xhr.responseType = 'blob';
+    xhr.send();
+  }
+
+  populateEditForm = (index: number) => {
+    this.productIndex = index;
+    
+    this.productsList$.pipe(
+      map(products => products[index])
+    ).subscribe(
+      product => {
+        this.itemImgValue = product.item_img;
+        // console.log();
+        // fetch(this.itemImgValue)
+        //   .then((response) => {
+        //     return response.blob()
+        //   })
+        //   .then((blob) => {
+        //     console.log(blob);
+        //     const file = new File([blob], this.itemImgValue, {type: "text/image"})
+        //     console.log(file);
+        //     this.productForm.patchValue({item_img: file});
+        //   })
+
+        this.loadURLToInputFiled(this.itemImgValue);
+        this.productForm.patchValue({
+          // item_img: product.item_img,
+          item_name: product.item_name,
+          category: product.category,
+          quantity: product.quantity,
+          unit_price: product.unit_price
+        })
+      }
+    );
+  }
+
+  changeDeleteDesc = () => {
+    this.deleteDescription = "these products";
   }
 
   capitalizeWord = (word: string) => {
-    return word.charAt(0).toUpperCase() + word.slice(1);
+    let words: string[] = word.split(' ');
+    let capitalized = " ";
+    words.forEach((token: string) => {
+      capitalized += token.charAt(0).toUpperCase() + token.slice(1) + " ";
+    })
+
+    console.log(capitalized.trim());
+    return capitalized;
+  }
+
+  onCheck = (index: number) => {
+    if(this.checkedItems.includes(index)) {
+      this.checkedItems = this.checkedItems.filter(
+        (item) => item !== index
+      );
+    } else {
+      this.checkedItems.push(index);
+    }
   }
 
   onSubmitAdd = () => {
@@ -224,10 +258,12 @@ export class ProductsComponent implements OnInit, AfterViewInit {
         this.productsService.addProduct(postData as Product).subscribe(
           response => {
             this.messageService.add({ severity:'success', summary: 'Success', detail: 'New product has been added' });
+            
+            this.closeModalAdd.nativeElement.click();
             this.productsList$ = this.productsService.getProducts();
           },
           error => {
-            this.messageService.add({ severity:'error', summary: 'Error', detail: 'Error occured in adding product' });
+            this.messageService.add({ severity:'error', summary: 'Error', detail: 'Failed to add new product' });
           }
         )
       } else {
@@ -235,6 +271,42 @@ export class ProductsComponent implements OnInit, AfterViewInit {
       }
     }
    );
+
+   this.productForm.reset();
+   this.productForm.patchValue({category: "Select category"});
+   this.itemImgValue = "default_item_img.jpg";
+   this.submitted = false;
+  }
+
+  onSubmitEdit = (index: number) => {
+    this.submitted = true;
+    const updatedProduct: Product = this.productForm.getRawValue();
+
+    if(this.productForm.invalid && updatedProduct.item_img){
+      return;
+    }
+
+    this.productsList$.pipe(
+      map(products => products[index])
+    ).subscribe(
+      product => {
+        updatedProduct.id = product.id;
+        updatedProduct.item_img = (!updatedProduct.item_img) ? product.item_img : updatedProduct.item_img;
+        this.productsService.updateProduct(updatedProduct as Product).subscribe(
+          response => {
+            console.log("Updated item: ", response);
+            this.messageService.add({ severity:'success', summary: 'Success', detail: 'Product has been updated' });
+            this.productsList$ = this.productsService.getProducts();
+            this.closeModalEdit.nativeElement.click();
+          },
+          error => {
+            this.messageService.add({ severity:'error', summary: 'Error', detail: 'Failed to update product' });
+          }
+        )
+      }
+    )
+
+    this.submitted = false;
   }
 
   onSubmitDeleteItem = (index: number) => {
@@ -246,12 +318,43 @@ export class ProductsComponent implements OnInit, AfterViewInit {
         this.productsService.deleteProduct(product.id as string).subscribe(
           response => {
             console.log("Deleted item: ", response);
-            this.messageService.add({ severity:'success', summary: 'Success', detail: 'Product has been deleted' });
+            this.closeModalDelete.nativeElement.click();
             this.productsList$ = this.productsService.getProducts();
+            this.messageService.add({ severity:'success', summary: 'Success', detail: 'Product has been removed' });
+          },
+          error => {
+            this.messageService.add({ severity:'error', summary: 'Error', detail: 'Failed to remove product' });
           }
         );
       }
     );
+  }
+
+  onSubmitDeleteSelected = () => {
+    console.log(this.checkedItems);
+
+    this.checkedItems.forEach((item) => {
+      this.productsList$.pipe(
+        map(products => products[item])
+      ).subscribe(
+        product => {
+          this.productsService.deleteProduct(product.id as string).subscribe(
+            response => {
+              console.log("removed item: ", response);
+              this.productsList$ = this.productsService.getProducts();
+            },  
+            error => {
+              console.log(error);
+              this.messageService.add({ severity:'error', summary: 'Error', detail: 'Failed to remove product' });
+            }
+          )
+        }
+      );
+    });
+    
+    // this.productsList$ = this.productsService.getProducts();
+    this.closeModalDeleteSel.nativeElement.click();
+    this.messageService.add({ severity:'success', summary: 'Success', detail: `Removed ${this.checkedItems.length} products from inventory.` });
   }
   
 }
