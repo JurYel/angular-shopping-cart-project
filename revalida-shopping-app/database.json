@@ -40,7 +40,7 @@
       "username": "jason.silver",
       "email": "jason.silver@gmail.com",
       "is_admin": false,
-      "deactivated": true,
+      "deactivated": false,
       "mobile_num": "9123456789",
       "password": "1234"
     },
@@ -51,7 +51,7 @@
       "username": "juryel",
       "email": "juryel@gmail.com",
       "is_admin": false,
-      "deactivated": false,
+      "deactivated": true,
       "mobile_num": "9181733784",
       "password": "1234"
     },
@@ -62,7 +62,7 @@
       "username": "edith.heimer",
       "email": "edith.heimer@gmail.com",
       "is_admin": false,
-      "deactivated": true,
+      "deactivated": false,
       "mobile_num": "9156783433",
       "password": "1234"
     },
@@ -120,7 +120,5 @@
       "unit_price": 12
     }
   ],
-  "orders": [
-    
-  ]
+  "orders": []
 }

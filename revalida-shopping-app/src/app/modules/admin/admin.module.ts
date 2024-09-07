@@ -7,6 +7,7 @@ import { SharedModule } from '../../shared/shared.module';
 import { AccountsComponent } from './pages/accounts/accounts.component';
 import { ProductItemComponent } from './components/product-item/product-item.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { OrdersComponent } from './pages/orders/orders.component';
 
 
 
@@ -15,7 +16,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     AdminDashboardComponent,
     ProductsComponent,
     AccountsComponent,
-    ProductItemComponent
+    ProductItemComponent,
+    OrdersComponent
   ],
   imports: [
     CommonModule,
