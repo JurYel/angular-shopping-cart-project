@@ -41,33 +41,26 @@
                       <span>entries</span>
                     </div>
                   </div>
-                  <div class="col-sm-9">
-                    <button type="button" class="btn btn-primary">
-                      <i class="fa fa-search"></i>
-                    </button>
-                    <div class="filter-group">
-                      <label>Name</label>
-                      <input type="text" class="form-control" />
+                  <div class="filter-right col-sm-9">
+                    <div class="filter-search-group">
+                        <button type="button" class="btn btn-primary">
+                            <i class="fa fa-search"></i>
+                        </button>
+                        <div class="filter-group">
+                        <label>Search</label>
+                        <input type="search" [(ngModel)]="searchQuery" (keyup)="searchOrder()" class="form-control" />
+                        </div>
                     </div>
-                    <div class="filter-group">
+                    <div class="filter-loc-group filter-group">
                       <label>Location</label>
-                      <select class="form-select">
-                        <option>All</option>
-                        <option>Berlin</option>
-                        <option>London</option>
-                        <option>Madrid</option>
-                        <option>New York</option>
-                        <option>Paris</option>
+                      <select class="form-select" (change)="onLocationChange($event)">
+                        <option *ngFor="let location of locationList" [value]="location">{{location}}</option>
                       </select>
                     </div>
-                    <div class="filter-group">
+                    <div class="filter-status-group filter-group">
                       <label>Status</label>
-                      <select class="form-select">
-                        <option>Any</option>
-                        <option>Delivered</option>
-                        <option>Shipped</option>
-                        <option>Pending</option>
-                        <option>Cancelled</option>
+                      <select class="form-select" (change)="onStatusChange($event)">
+                        <option *ngFor="let status of statusList" [value]="status">{{ status }}</option>
                       </select>
                     </div>
                     <span class="filter-icon"
@@ -94,7 +87,7 @@
                     <th>Item Name</th>
                     <th>Quantity</th>
                     <th>Subtotal</th>
-                    <th>Actions</th>
+                    <th>Action</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -103,7 +96,7 @@
                                     Shipped - bg-info
                                     Cancelled - bg-danger
                                     Pending - bg-warning -->
-                  <tr (click)="viewOrderSummary(i)" data-bs-toggle="modal" data-bs-target="#viewOrderModal" *ngFor="let order of orders$ | async; let i = index">
+                  <tr *ngFor="let order of orders$ | async; let i = index">
                     <td>
                       <a href="#"
                         ><img
@@ -114,25 +107,36 @@
                         {{ order.customer }}</a
                       >
                     </td>
-                    <td>{{ order.location }}</td>
-                    <td>{{ order.datetime }}</td>
-                    <td>{{ order.payment_mode }}</td>
-                    <td>
+                    <td (click)="viewOrderSummary(i)" data-bs-toggle="modal" data-bs-target="#viewOrderModal">{{ order.location }}</td>
+                    <td (click)="viewOrderSummary(i)" data-bs-toggle="modal" data-bs-target="#viewOrderModal">{{ order.datetime }}</td>
+                    <td (click)="viewOrderSummary(i)" data-bs-toggle="modal" data-bs-target="#viewOrderModal">{{ order.payment_mode }}</td>
+                    <td (click)="viewOrderSummary(i)" data-bs-toggle="modal" data-bs-target="#viewOrderModal">
                       <small class="badge bg-{{ badgeStyle[order.status] }}">{{
                         order.status
                       }}</small>
                     </td>
-                    <td>{{ order.item_name }}</td>
-                    <td>{{ order.quantity }}</td>
-                    <td>{{ order.subtotal | currency : "PHP" }}</td>
-                    <td>
+                    <td (click)="viewOrderSummary(i)" data-bs-toggle="modal" data-bs-target="#viewOrderModal">{{ order.item_name }}</td>
+                    <td (click)="viewOrderSummary(i)" data-bs-toggle="modal" data-bs-target="#viewOrderModal">{{ order.quantity }}</td>
+                    <td (click)="viewOrderSummary(i)" data-bs-toggle="modal" data-bs-target="#viewOrderModal">{{ order.subtotal | currency : "PHP" }}</td>
+                    <td class="dropdown">
                       <a
                         href="#"
-                        class="view"
+                        class="view dropdown-toggle"
                         title="View Details"
                         data-toggle="tooltip"
-                        ><i class="material-icons">&#xE5C8;</i></a
+                        role="button"
+                        data-bs-toggle="dropdown"
+                        ><i class="fa-solid fa-gear"></i></a
                       >
+                      <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" (click)="updateOrderStatus(i, 'Pending')"><i class="fa-solid fa-spinner"></i>  Pending</a></li>
+                        <li><hr class="dropdown-divider" /></li>
+                        <li><a class="dropdown-item" (click)="updateOrderStatus(i, 'Shipped')"><i class="fa-solid fa-ship"></i>  Shipped</a></li>
+                        <li><hr class="dropdown-divider" /></li>
+                        <li ><a class="dropdown-item" (click)="updateOrderStatus(i, 'Delivered')"><i class="fa-solid fa-truck-fast"></i>  Delivered</a></li>
+                        <li><hr class="dropdown-divider" /></li>
+                        <li><a class="dropdown-item"  (click)="updateOrderStatus(i, 'Cancelled')"><i class="fa-solid fa-ban"></i>  Cancelled</a></li>
+                      </ul>
                     </td>
                   </tr>
                 </tbody>

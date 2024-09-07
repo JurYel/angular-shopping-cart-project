@@ -559,8 +559,31 @@ body {
 	width: 60px;
 	margin: 0 5px;
 }
+.table-filter .filter-right {
+    display: grid;
+    grid-template-columns: auto;
+    grid-template-rows: auto;
+    grid-template-areas: 
+        "filterIcon statusGroup locationGroup searchGroup";
+    column-gap: 0;
+    justify-items: center;
+    align-items: center;
+}
+.table-filter .filter-search-group {
+    grid-area: searchGroup;
+}
+
+.table-filter .filter-loc-group {
+    grid-area: locationGroup;
+}
+.table-filter .filter-status-group {
+    grid-area: statusGroup;
+}
+.table-filter .filter-icon {
+    grid-area: filterIcon;
+}
 .table-filter .filter-group {
-	float: right;
+	// float: right;
 	margin-left: 15px;
 }
 .table-filter input, .table-filter select {
@@ -573,27 +596,39 @@ body {
 	padding: 5px 0 15px;
 	border-bottom: 1px solid #e9e9e9;
 	margin-bottom: 5px;
+    
 }
 .table-filter .btn {
 	height: 34px;
 }
 .table-filter label {
 	font-weight: normal;
-	margin-left: 10px;
+    margin: auto 10px auto 0px;
+	// margin-left: 10px;
 }
+
+.table-filter .filter-group {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+}
+
 .table-filter select, .table-filter input {
 	display: inline-block;
 	margin-left: 5px;
 }
 .table-filter input {
 	width: 200px;
-	display: inline-block;
+	// display: inline-block;
 }
 .filter-group select.form-select {
 	width: 110px;
 }
+.filter-right {
+    // white-space: nowrap;
+}
 .filter-icon {
-	float: right;
+	// float: right;
 	margin-top: 7px;
 }
 .filter-icon i {
@@ -629,26 +664,36 @@ table.table tr th, table.table tr td {
 	cursor: pointer;
 }	
 .table-wrapper table.table td a {
-	font-weight: bold;
+	font-weight: normal;
 	color: #566787;
 	display: inline-block;
 	text-decoration: none;
     white-space: nowrap; // makes sure that content is in single line
 }
+.table-wrapper table.table td:first-child a {
+    font-weight: bold;
+}
+
 .table-wrapper table.table td {
     // white-space: nowrap;
 }
 .table-wrapper table.table td a:hover {
 	color: #2196F3;
 }
-.table-wrapper table.table td a.view {        
+.table-wrapper table.table td a.view {   
+    font-weight: normal;     
 	width: 30px;
 	height: 30px;
-	color: #2196F3;
-	border: 2px solid;
-	border-radius: 30px;
+	color: #1383df;
+	// border: 2px solid;
+	// border-radius: 30px;
 	text-align: center;
 }
+
+.table-wrapper table.table td a.view:hover{
+    color: #0e5086;
+}
+
 .table-wrapper table.table td a.view i {
 	font-size: 22px;
 	margin: 2px 0 0 1px;
@@ -662,6 +707,7 @@ table.table tr th, table.table tr td {
 .table-wrapper table.table td {
     // font-size: 15px;
 }
+
 // .status {
 // 	font-size: 30px;
 // 	margin: 2px 2px 0 0;
@@ -724,4 +770,30 @@ table.table tr th, table.table tr td {
     font-size: 14px;
     color: gray;
     margin-bottom: -10px;
+}
+
+.dropdown .dropdown-menu li a {
+    text-align: start;
+    font-weight: normal;     
+
+}
+
+.fa-spinner {
+    color: #ffc107;
+}
+
+.fa-ship {
+    color: #0dcaf0;
+}
+
+.fa-truck-fast {
+    color: #198754;   
+}
+
+.fa-ban {
+    color: #dc3545;
+}
+
+.fa-gear {
+    font-size: 25px;
 }

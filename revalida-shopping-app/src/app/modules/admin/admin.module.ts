@@ -6,7 +6,7 @@ import { ProductsComponent } from './pages/products/products.component';
 import { SharedModule } from '../../shared/shared.module';
 import { AccountsComponent } from './pages/accounts/accounts.component';
 import { ProductItemComponent } from './components/product-item/product-item.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { OrdersComponent } from './pages/orders/orders.component';
 
 
@@ -23,7 +23,8 @@ import { OrdersComponent } from './pages/orders/orders.component';
     CommonModule,
     AdminRoutingModule,
     SharedModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    FormsModule
   ]
 })
 export class AdminModule { }

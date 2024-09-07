@@ -15,5 +15,7 @@ export class OrderService {
     return this.http.get<Order[]>(`${this.serverUrl}/orders`);
   }
 
-  
+  updateOrder = (order: Order) => {
+    return this.http.put<Order>(`${this.serverUrl}/orders/${order.id}`, order);
+  }
 }

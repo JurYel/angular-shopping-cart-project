@@ -138,7 +138,7 @@
       "location": "Magallanes, Agusan del Norte",
       "datetime": "",
       "payment_mode": "Gcash",
-      "status": "Shipped",
+      "status": "Delivered",
       "item_name": "Vitasoy Classic",
       "quantity": 3,
       "subtotal": 120.43
@@ -149,7 +149,7 @@
       "location": "Plaridel",
       "datetime": "",
       "payment_mode": "COD",
-      "status": "Pending",
+      "status": "Shipped",
       "item_name": "Energy Booster",
       "quantity": 2,
       "subtotal": 45.67
@@ -160,7 +160,7 @@
       "location": "Muntinlupa City",
       "datetime": "",
       "payment_mode": "Paypal",
-      "status": "Delivered",
+      "status": "Cancelled",
       "item_name": "Magnum Praline 400ml",
       "quantity": 1,
       "subtotal": 680.55
@@ -171,7 +171,7 @@
       "location": "Cebu City",
       "datetime": "",
       "payment_mode": "COD",
-      "status": "Cancelled",
+      "status": "Pending",
       "item_name": "Oreo Ice Cream 400ml",
       "quantity": 2,
       "subtotal": 789.23
