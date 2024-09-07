@@ -6,5 +6,6 @@ export interface AuthUser {
     email: string
     mobile_num: string
     is_admin: boolean
+    deactivated: boolean
     password: string
 }

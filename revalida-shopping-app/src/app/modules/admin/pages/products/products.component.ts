@@ -257,10 +257,10 @@ export class ProductsComponent implements OnInit, AfterViewInit {
         
         this.productsService.addProduct(postData as Product).subscribe(
           response => {
-            this.messageService.add({ severity:'success', summary: 'Success', detail: 'New product has been added' });
             
-            this.closeModalAdd.nativeElement.click();
             this.productsList$ = this.productsService.getProducts();
+            this.closeModalAdd.nativeElement.click();
+            this.messageService.add({ severity:'success', summary: 'Success', detail: 'New product has been added' });
           },
           error => {
             this.messageService.add({ severity:'error', summary: 'Error', detail: 'Failed to add new product' });
@@ -295,9 +295,9 @@ export class ProductsComponent implements OnInit, AfterViewInit {
         this.productsService.updateProduct(updatedProduct as Product).subscribe(
           response => {
             console.log("Updated item: ", response);
-            this.messageService.add({ severity:'success', summary: 'Success', detail: 'Product has been updated' });
             this.productsList$ = this.productsService.getProducts();
             this.closeModalEdit.nativeElement.click();
+            this.messageService.add({ severity:'success', summary: 'Success', detail: 'Product has been updated' });
           },
           error => {
             this.messageService.add({ severity:'error', summary: 'Error', detail: 'Failed to update product' });

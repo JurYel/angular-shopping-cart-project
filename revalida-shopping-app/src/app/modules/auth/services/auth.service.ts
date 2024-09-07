@@ -28,7 +28,7 @@ export class AuthService {
     const users$: Observable<AuthUser[]> = this.getUsers();
 
     return users$.pipe(
-      map(users => users.some(user => user.username === username))
+      map(users => users.some(user => user.username.toLowerCase() === username.toLowerCase()))
     );
   }
 

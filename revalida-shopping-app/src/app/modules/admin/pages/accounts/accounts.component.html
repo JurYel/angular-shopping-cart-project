@@ -7,100 +7,503 @@
         </div>
         <div id="layoutSidenav_content">
             <main>
-                <div id="myProductsTable" class="me-5">
+                <div id="myUsersTable" class="me-5">
                 </div>
-                <div class="card mb-4" id="cardTable">
-                    <div class="card-header">
-                        <i class="fas fa-table me-1"></i>
-                        User Accounts
-                    </div>
-                    <div class="card-body">
-                        <div id="accountsTable" class="me-5">
-                            <table id="myTable" #datatablesSimple class="table table-striped">
-                                <thead>
-                                <tr>
-                                    <th>First Name</th>
-                                    <th>Last Name</th>
-                                    <th>Username</th>
-                                    <th>Is Admin</th>
-                                    <th>Email</th>
-                                    <th>Mobile #</th>
-                                    <th>Password</th>
-                                    <th>Actions</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                    <tr *ngFor="let account of accountsList$ | async">
-                                        <td>{{account.first_name}}</td>
-                                        <td>{{account.last_name}}</td>
-                                        <td>{{account.username}}</td>
-                                        <td>{{account.is_admin}}</td>
-                                        <td>{{account.email}}</td>
-                                        <td>{{account.mobile_num}}</td>
-                                        <td>{{account.password}}</td>
-                                        <td>
-                                            <button class="btn btn-sm btn-primary me-1">
-                                            <i class="fa fa-pencil"></i> 
-                                            </button>
-                                            <button class="btn btn-sm btn-danger">
-                                            <i class="fa fa-trash"></i> 
-                                            </button>
-                                        </td>
-                                    </tr>                           
-                                </tbody>
-                            </table>
+                <div class="table-container">
+                    <div class="table-responsive">
+                      <div class="table-wrapper">
+                        <div class="table-title">
+                          <div class="row">
+                            <div class="col-sm-6">
+                              <h2>Manage <b>Users</b></h2>
+                            </div>
+                            <div class="col-sm-6">
+                              <a href="" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addUserModal"><i class="material-icons">&#xE147;</i> <span>Add New User</span></a>
+                              <a href="" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deactivateSelectedUserModal"><i class="material-icons">&#xE15C;</i> <span>Deactivate</span></a>						
+                            </div>
+                          </div>
                         </div>
+                        <table class="table table-striped table-hover">
+                          <thead>
+                            <tr>    
+                              <th>
+                                <span class="custom-checkbox">
+                                  <input type="checkbox" id="selectAll">
+                                  <label for="selectAll"></label>
+                                </span>
+                              </th>
+                              <th>First Name</th>
+                              <th>Last Name</th>
+                              <th>Username</th>
+                              <th>Deactivated</th>
+                              <th>Email Address</th>
+                              <th>Mobile #</th>
+                              <th>Password</th>
+                              <th>Actions</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr *ngFor="let account of accountsList$ | async; let i = index">
+                              <td>
+                                <span class="custom-checkbox"> 
+                                  <input type="checkbox" id="checkbox-{{i}}" name="options[]" value="{{ i }}" (change)="onCheck(i)">
+                                  <label for="checkbox-{{i}}"></label>
+                                </span>
+                              </td>
+                              <td>{{account.first_name}}</td>
+                              <td>{{account.last_name}}</td>
+                              <td>{{account.username}}</td>
+                              <td>{{account.deactivated}}</td>
+                              <td>{{account.email}}</td>
+                              <td>{{account.mobile_num}}</td>
+                              <td>{{account.password}}</td>
+                              <td>
+                                <a href="#editUserModal" (click)="populateEditForm(i)" class="edit" data-bs-toggle="modal"><i class="material-icons" data-bs-toggle="tooltip" title="Edit">&#xE254;</i></a>
+                                <a href="#deactivateUserModal" (click)="getIndex(i)" class="delete" data-bs-toggle="modal"><i class="fa-solid fa-user-large-slash" data-bs-toggle="tooltip" title="Deactivate"></i></a>
+                              </td>
+                          </tr>     
+                          </tbody>
+                        </table>
+                        <div class="clearfix">
+                          <div class="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
+                          <ul class="pagination">
+                            <li class="page-item disabled"><a href="#">Previous</a></li>
+                            <li class="page-item"><a href="#" class="page-link">1</a></li>
+                            <li class="page-item"><a href="#" class="page-link">2</a></li>
+                            <li class="page-item active"><a href="#" class="page-link">3</a></li>
+                            <li class="page-item"><a href="#" class="page-link">4</a></li>
+                            <li class="page-item"><a href="#" class="page-link">5</a></li>
+                            <li class="page-item"><a href="#" class="page-link">Next</a></li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>        
+                  </div>
+                  <!-- Add Modal HTML -->
+                  <div id="addUserModal" class="modal fade">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <form [formGroup]="accountForm" (ngSubmit)="onSubmitCreate()">
+                          <div class="modal-header">						
+                            <h4 class="modal-title">Add User</h4>
+                            <button #closeModalAdd type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                          </div>
+                          <div class="modal-body">					
+                            <div class="fullname form-group">
+                                <div class="mb-3">
+                                  <label for="firstname" class="form-label">First Name</label>
+                                  <input
+                                    type="text"
+                                    class="form-control"
+                                    [ngClass]="{ 'is-invalid': submitted && f['first_name'].errors}"
+                                    formControlName="first_name"
+                                    id="firstname"
+                                    placeholder="Type your first name"
+                                  />
+                                  <small *ngIf="f['first_name'].invalid && (f['first_name'].dirty || f['last_name'].touched)" class="invalid-feedback">
+                                    <div *ngIf="f['first_name'].errors?.['required']">First name is required</div>
+                                  </small>
+                                </div>
+                                <div class="mb-3">
+                                  <label for="lastname" class="form-label">Last Name</label>
+                                  <input
+                                    type="text"
+                                    class="form-control"
+                                    [ngClass]="{ 'is-invalid': submitted && f['last_name'].errors}"
+                                    formControlName="last_name"
+                                    id="lastname"
+                                    placeholder="Type your last name"
+                                  />
+                                  <small *ngIf="f['last_name'].invalid && (f['last_name'].dirty || f['last_name'].touched)" class="invalid-feedback">
+                                    <div *ngIf="f['last_name'].errors?.['required']">Last name is required</div>
+                                  </small>
+                                </div>
+                              </div>
+                              <div class="mb-3 form-group">
+                                <label for="username" class="form-label">User Name</label>
+                                <input
+                                  type="text"
+                                  class="form-control"
+                                  [ngClass]="{ 'is-invalid': (submitted && f['username'].errors) || (usernameAlreadyTaken && f['username'].touched)}"
+                                  formControlName="username"
+                                  id="username"
+                                  placeholder="Type your user name"
+                                />
+                                <small *ngIf="f['username'].invalid && (f['username'].dirty || f['username'].touched)" class="invalid-feedback">
+                                    <div *ngIf="f['username'].errors?.['required']">User name is required</div>
+                                </small>
+                                <small class="invalid-feedback" *ngIf="usernameAlreadyTaken">
+                                      Username already exists
+                                </small>
+                                <!-- <small *ngIf="registerForm.errors?.['usernameExists'] && f['username'].valid" class="invalid-feedback">
+                                      Username already exists
+                                </small> -->
+                              </div>
+                              <div class="contacts form-group">
+                                <div class="mb-3">
+                                  <label for="email" class="form-label">Email</label>
+                                  <input
+                                    type="email"
+                                    class="form-control"
+                                    [ngClass]="{ 'is-invalid': submitted && f['email'].errors}"
+                                    formControlName="email"
+                                    id="email"
+                                    placeholder="Type your email"
+                                  />
+                                  <small *ngIf="f['email'].invalid && (f['email'].dirty || f['email'].touched)" class="invalid-feedback">
+                                    <div *ngIf="f['email'].errors?.['required']">Email is required</div>
+                                    <div *ngIf="f['email'].errors?.['email']">Email should be valid</div>
+                                  </small>
+                                </div>
+                                <div class="mb-3">
+                                  <label for="mobile-number" class="form-label">Mobile Number</label>
+                                  <div class="input-group">
+                                    <span class="input-group-text">+63</span>
+                                    <input
+                                      type="text"
+                                      id="mobile-number"
+                                      formControlName="mobile_num"
+                                      class="form-control"
+                                      [ngClass]="{ 'is-invalid': (submitted && f['mobile_num'].errors) || (f['mobile_num'].touched && (f['mobile_num'].errors?.['pattern'] || f['mobile_num'].errors?.['maxlength']))}"
+                                      placeholder="Enter mobile number"
+                                    />
+                                    <small *ngIf="f['mobile_num'].invalid && (f['mobile_num'].dirty || f['mobile_num'].touched)" class="invalid-feedback">
+                                        <div *ngIf="f['mobile_num'].errors?.['required']">Mobile number is required</div>
+                                        <div *ngIf="f['mobile_num'].errors?.['pattern'] || f['mobile_num'].errors?.['maxlength']">Mobile number is invalid</div>
+                                        <!-- <div *ngIf="f['mobile_num'].errors?.['maxlength']">Mobile number exceeds max length</div> -->
+                                     </small>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="mb-3 form-group">
+                                <label for="password" class="form-label">Password</label>
+                                <input
+                                  type="password"
+                                  class="form-control"
+                                  [ngClass]="{ 'is-invalid': submitted && f['password'].errors}"
+                                  formControlName="password"
+                                  id="password"
+                                  placeholder="Type your password"
+                                />
+                                <small *ngIf="f['password'].invalid && (f['password'].dirty || f['password'].touched)" class="invalid-feedback">
+                                    <div *ngIf="f['password'].errors?.['required']">Password is required</div>
+                                </small>
+                              </div>
+                              <div class="mb-3 form-group">
+                                <label for="confirm-password" class="form-label"
+                                  >Confirm Password</label
+                                >
+                                <input
+                                  type="password"
+                                  class="form-control"
+                                  [ngClass]="{ 'is-invalid': (submitted && f['confirm_password'].errors) || (f['confirm_password'].touched && accountForm.errors?.['passwordMismatch']) }"
+                                  formControlName="confirm_password"
+                                  id="confirm-password"
+                                  placeholder="Confirm Password"
+                                />
+                                <small *ngIf="f['confirm_password'].invalid && (f['confirm_password'].dirty || f['confirm_password'].touched)" class="invalid-feedback">
+                                    <div *ngIf="f['confirm_password'].errors?.['required']">Please confirm your password</div>
+                                </small>
+                                <small *ngIf="accountForm.errors?.['passwordMismatch'] && f['confirm_password'].valid && f['password'].valid" class="invalid-feedback">
+                                    Password should match
+                                </small>
+                              </div>
+                          </div>
+                          <div class="modal-footer">
+                            <input type="button" class="btn btn-default" data-bs-dismiss="modal" value="Cancel">
+                            <input type="submit" class="btn btn-success" value="Add">
+                          </div>
+                        </form>
+                      </div>
                     </div>
-                </div>
-                <div class="form-wrapper">
+                  </div>
+                  <!-- Edit Modal HTML -->
+                  <div id="editUserModal" class="modal fade">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <form [formGroup]="accountForm">
+                          <div class="modal-header">						
+                            <h4 class="modal-title">Edit User</h4>
+                            <button #closeModalEdit type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                          </div>
+                          <div class="modal-body">					
+                            <div class="fullname form-group">
+                                <div class="mb-3">
+                                  <label for="firstname" class="form-label">First Name</label>
+                                  <input
+                                    type="text"
+                                    class="form-control"
+                                    [ngClass]="{ 'is-invalid': submitted && f['first_name'].errors}"
+                                    formControlName="first_name"
+                                    id="firstname"
+                                    placeholder="Type your first name"
+                                  />
+                                  <small *ngIf="f['first_name'].invalid && (f['first_name'].dirty || f['last_name'].touched)" class="invalid-feedback">
+                                    <div *ngIf="f['first_name'].errors?.['required']">First name is required</div>
+                                  </small>
+                                </div>
+                                <div class="mb-3">
+                                  <label for="lastname" class="form-label">Last Name</label>
+                                  <input
+                                    type="text"
+                                    class="form-control"
+                                    [ngClass]="{ 'is-invalid': submitted && f['last_name'].errors}"
+                                    formControlName="last_name"
+                                    id="lastname"
+                                    placeholder="Type your last name"
+                                  />
+                                  <small *ngIf="f['last_name'].invalid && (f['last_name'].dirty || f['last_name'].touched)" class="invalid-feedback">
+                                    <div *ngIf="f['last_name'].errors?.['required']">Last name is required</div>
+                                  </small>
+                                </div>
+                              </div>
+                              <div class="mb-3 form-group">
+                                <label for="username" class="form-label">User Name</label>
+                                <input
+                                  type="text"
+                                  class="form-control"
+                                  [ngClass]="{ 'is-invalid': (submitted && f['username'].errors) || (usernameAlreadyTaken && f['username'].touched)}"
+                                  formControlName="username"
+                                  id="username"
+                                  placeholder="Type your user name"
+                                />
+                                <small *ngIf="f['username'].invalid && (f['username'].dirty || f['username'].touched)" class="invalid-feedback">
+                                    <div *ngIf="f['username'].errors?.['required']">User name is required</div>
+                                </small>
+                                <small class="invalid-feedback" *ngIf="usernameAlreadyTaken">
+                                      Username already exists
+                                </small>
+                                <!-- <small *ngIf="registerForm.errors?.['usernameExists'] && f['username'].valid" class="invalid-feedback">
+                                      Username already exists
+                                </small> -->
+                              </div>
+                              <div class="contacts form-group">
+                                <div class="mb-3">
+                                  <label for="email" class="form-label">Email</label>
+                                  <input
+                                    type="email"
+                                    class="form-control"
+                                    [ngClass]="{ 'is-invalid': submitted && f['email'].errors}"
+                                    formControlName="email"
+                                    id="email"
+                                    placeholder="Type your email"
+                                  />
+                                  <small *ngIf="f['email'].invalid && (f['email'].dirty || f['email'].touched)" class="invalid-feedback">
+                                    <div *ngIf="f['email'].errors?.['required']">Email is required</div>
+                                    <div *ngIf="f['email'].errors?.['email']">Email should be valid</div>
+                                  </small>
+                                </div>
+                                <div class="mb-3">
+                                  <label for="mobile-number" class="form-label">Mobile Number</label>
+                                  <div class="input-group">
+                                    <span class="input-group-text">+63</span>
+                                    <input
+                                      type="text"
+                                      id="mobile-number"
+                                      formControlName="mobile_num"
+                                      class="form-control"
+                                      [ngClass]="{ 'is-invalid': (submitted && f['mobile_num'].errors) || (f['mobile_num'].touched && (f['mobile_num'].errors?.['pattern'] || f['mobile_num'].errors?.['maxlength']))}"
+                                      placeholder="Enter mobile number"
+                                    />
+                                    <small *ngIf="f['mobile_num'].invalid && (f['mobile_num'].dirty || f['mobile_num'].touched)" class="invalid-feedback">
+                                        <div *ngIf="f['mobile_num'].errors?.['required']">Mobile number is required</div>
+                                        <div *ngIf="f['mobile_num'].errors?.['pattern'] || f['mobile_num'].errors?.['maxlength']">Mobile number is invalid</div>
+                                        <!-- <div *ngIf="f['mobile_num'].errors?.['maxlength']">Mobile number exceeds max length</div> -->
+                                     </small>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="mb-3 form-group">
+                                <label for="password" class="form-label">Password</label>
+                                <input
+                                  type="password"
+                                  class="form-control"
+                                  [ngClass]="{ 'is-invalid': submitted && f['password'].errors}"
+                                  formControlName="password"
+                                  id="password"
+                                  placeholder="Type your password"
+                                />
+                                <small *ngIf="f['password'].invalid && (f['password'].dirty || f['password'].touched)" class="invalid-feedback">
+                                    <div *ngIf="f['password'].errors?.['required']">Password is required</div>
+                                </small>
+                              </div>			
+                          </div>
+                          <div class="modal-footer">
+                            <input type="button" class="btn btn-default" data-bs-dismiss="modal" value="Cancel">
+                            <input type="submit" class="btn btn-info" value="Save">
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Deactivate Modal HTML -->
+                  <div id="deactivateUserModal" class="modal fade">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <form [formGroup]="accountForm" (ngSubmit)="onSubmitDeactivateUser(accountIndex)">
+                          <div class="modal-header">						
+                            <h4 class="modal-title">Deactivate User</h4>
+                            <button #closeModalDeact type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                          </div>
+                          <div class="modal-body">					
+                            <p>Are you sure you want to deactivate <strong>{{deactDesc}}</strong>?</p>
+                            <p class="text-warning"><small>This action cannot be undone.</small></p>
+                          </div>
+                          <div class="modal-footer">
+                            <input type="button" class="btn btn-default" data-bs-dismiss="modal" value="Cancel">
+                            <input type="submit" class="btn btn-danger" value="Deactivate">
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Deactivate Selected Modal HTML -->
+                  <div id="deactivateSelectedUserModal" class="modal fade">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <form [formGroup]="accountForm" (ngSubmit)="onSubmitDeactivateChecked()">
+                          <div class="modal-header">						
+                            <h4 class="modal-title">Deactivate User</h4>
+                            <button #closeModalDeactChecked type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                          </div>
+                          <div class="modal-body">					
+                            <p>Are you sure you want to deactivate these users?</p>
+                            <p class="text-warning"><small>This action cannot be undone.</small></p>
+                          </div>
+                          <div class="modal-footer">
+                            <input type="button" class="btn btn-default" data-bs-dismiss="modal" value="Cancel">
+                            <input type="submit" class="btn btn-danger" value="Deactivate">
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                <div class="form-wrapper" style="display: none;">
                     <div class="form-container">
                       <h3 class="text-center">Item Details</h3>
-                      <form enctype="multipart/form-data">
+                      <form [formGroup]="accountForm" enctype="multipart/form-data">
                         <div class="item-img">
                           <img src="assets/img/default_item_img.jpg" alt="">
                         </div>
-                        <div class="mb-3">
-                            <label for="item-img-input" class="form-label">Item Image</label>
-                            <input
-                              type="file"
-                              class="form-control"
-                              id="item-img-input"
-                              formControlName=""
-                              placeholder="Choose an image"
-                            />
+                        <div class="fullname form-group">
+                            <div class="mb-3">
+                              <label for="firstname" class="form-label">First Name</label>
+                              <input
+                                type="text"
+                                class="form-control"
+                                [ngClass]="{ 'is-invalid': submitted && f['first_name'].errors}"
+                                formControlName="first_name"
+                                id="firstname"
+                                placeholder="Type your first name"
+                              />
+                              <small *ngIf="f['first_name'].invalid && (f['first_name'].dirty || f['last_name'].touched)" class="invalid-feedback">
+                                <div *ngIf="f['first_name'].errors?.['required']">First name is required</div>
+                              </small>
+                            </div>
+                            <div class="mb-3">
+                              <label for="lastname" class="form-label">Last Name</label>
+                              <input
+                                type="text"
+                                class="form-control"
+                                [ngClass]="{ 'is-invalid': submitted && f['last_name'].errors}"
+                                formControlName="last_name"
+                                id="lastname"
+                                placeholder="Type your last name"
+                              />
+                              <small *ngIf="f['last_name'].invalid && (f['last_name'].dirty || f['last_name'].touched)" class="invalid-feedback">
+                                <div *ngIf="f['last_name'].errors?.['required']">Last name is required</div>
+                              </small>
+                            </div>
                           </div>
-                        <div class="mb-3">
-                          <label for="username" class="form-label">Item Name</label>
-                          <input
-                            type="text"
-                            class="form-control"
-                            id="username"
-                            formControlName="username"
-                            placeholder="Type your user name"
-                          />
-                        </div>
-                        <div class="item-qty-price form-group">
+                          <div class="mb-3 form-group">
+                            <label for="username" class="form-label">User Name</label>
+                            <input
+                              type="text"
+                              class="form-control"
+                              [ngClass]="{ 'is-invalid': (submitted && f['username'].errors) || (usernameAlreadyTaken && f['username'].touched)}"
+                              formControlName="username"
+                              id="username"
+                              placeholder="Type your user name"
+                            />
+                            <small *ngIf="f['username'].invalid && (f['username'].dirty || f['username'].touched)" class="invalid-feedback">
+                                <div *ngIf="f['username'].errors?.['required']">User name is required</div>
+                            </small>
+                            <small class="invalid-feedback" *ngIf="usernameAlreadyTaken">
+                                  Username already exists
+                            </small>
+                            <!-- <small *ngIf="registerForm.errors?.['usernameExists'] && f['username'].valid" class="invalid-feedback">
+                                  Username already exists
+                            </small> -->
+                          </div>
+                          <div class="contacts form-group">
                             <div class="mb-3">
-                                <label for="quantity" class="form-label">Quantity</label>
-                                <input
-                                  type="number"
-                                  class="form-control"
-                                  formControlName=""
-                                  id="quantity"
-                                  placeholder="Input quantity"
-                                />
+                              <label for="email" class="form-label">Email</label>
+                              <input
+                                type="email"
+                                class="form-control"
+                                [ngClass]="{ 'is-invalid': submitted && f['email'].errors}"
+                                formControlName="email"
+                                id="email"
+                                placeholder="Type your email"
+                              />
+                              <small *ngIf="f['email'].invalid && (f['email'].dirty || f['email'].touched)" class="invalid-feedback">
+                                <div *ngIf="f['email'].errors?.['required']">Email is required</div>
+                                <div *ngIf="f['email'].errors?.['email']">Email should be valid</div>
+                              </small>
                             </div>
                             <div class="mb-3">
-                                <label for="unit-price" class="form-label">Unit Price</label>
+                              <label for="mobile-number" class="form-label">Mobile Number</label>
+                              <div class="input-group">
+                                <span class="input-group-text">+63</span>
                                 <input
-                                  type="number"
+                                  type="text"
+                                  id="mobile-number"
+                                  formControlName="mobile_num"
                                   class="form-control"
-                                  formControlName=""
-                                  id="unit-price"
-                                  placeholder="Input price"
+                                  [ngClass]="{ 'is-invalid': (submitted && f['mobile_num'].errors) || (f['mobile_num'].touched && (f['mobile_num'].errors?.['pattern'] || f['mobile_num'].errors?.['maxlength']))}"
+                                  placeholder="Enter mobile number"
                                 />
+                                <small *ngIf="f['mobile_num'].invalid && (f['mobile_num'].dirty || f['mobile_num'].touched)" class="invalid-feedback">
+                                    <div *ngIf="f['mobile_num'].errors?.['required']">Mobile number is required</div>
+                                    <div *ngIf="f['mobile_num'].errors?.['pattern'] || f['mobile_num'].errors?.['maxlength']">Mobile number is invalid</div>
+                                    <!-- <div *ngIf="f['mobile_num'].errors?.['maxlength']">Mobile number exceeds max length</div> -->
+                                 </small>
+                              </div>
                             </div>
-                        </div>
+                          </div>
+                          <div class="mb-3 form-group">
+                            <label for="password" class="form-label">Password</label>
+                            <input
+                              type="password"
+                              class="form-control"
+                              [ngClass]="{ 'is-invalid': submitted && f['password'].errors}"
+                              formControlName="password"
+                              id="password"
+                              placeholder="Type your password"
+                            />
+                            <small *ngIf="f['password'].invalid && (f['password'].dirty || f['password'].touched)" class="invalid-feedback">
+                                <div *ngIf="f['password'].errors?.['required']">Password is required</div>
+                            </small>
+                          </div>
+                          <div class="mb-3 form-group">
+                            <label for="confirm-password" class="form-label"
+                              >Confirm Password</label
+                            >
+                            <input
+                              type="password"
+                              class="form-control"
+                              [ngClass]="{ 'is-invalid': (submitted && f['confirm_password'].errors) || (f['confirm_password'].touched && accountForm.errors?.['passwordMismatch']) }"
+                              formControlName="confirm_password"
+                              id="confirm-password"
+                              placeholder="Confirm Password"
+                            />
+                            <small *ngIf="f['confirm_password'].invalid && (f['confirm_password'].dirty || f['confirm_password'].touched)" class="invalid-feedback">
+                                <div *ngIf="f['confirm_password'].errors?.['required']">Please confirm your password</div>
+                            </small>
+                            <small *ngIf="accountForm.errors?.['passwordMismatch'] && f['confirm_password'].valid && f['password'].valid" class="invalid-feedback">
+                                Password should match
+                            </small>
+                          </div>
                         <button type="submit" class="btn btn-primary w-100">Submit</button>
                       </form>
                     </div>

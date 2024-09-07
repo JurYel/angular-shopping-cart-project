@@ -1,9 +1,13 @@
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Grid, h } from 'gridjs';
 import 'gridjs/dist/theme/mermaid.css';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { AuthUser } from '../../../models/auth-user.interface';
 import { AccountsService } from '../../services/accounts.service';
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { passwordMatchValidator } from '../../../../shared/validators/password-match.validator';
+import { UniqueUsernameValidator } from '../../../../shared/validators/unique-username.validator';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-accounts',
@@ -13,11 +17,25 @@ import { AccountsService } from '../../services/accounts.service';
 export class AccountsComponent implements OnInit, AfterViewInit{
 
   @ViewChild('datatablesSimple', { static: false }) datatablesSimple!: ElementRef;
+  @ViewChild('closeModalAdd') closeModalAdd !: ElementRef;
+  @ViewChild('closeModalEdit') closeModalEdit !: ElementRef;
+  @ViewChild('closeModalDeact') closeModalDeact !: ElementRef;
+  @ViewChild('closeModalDeactChecked') closeModalDeactChecked !: ElementRef;
+
   adminSection: HTMLDivElement;
   accountsList$: Observable<AuthUser[]>;
   adminName: string | undefined;
+  accountForm: FormGroup;
+  submitted: boolean = false;
+  accountIndex!: number;
+  deactDesc!: string;
+  checkedUsers : number[] = [];
 
-  constructor(private accountsService: AccountsService) {
+  constructor(private fb: FormBuilder,
+              private accountsService: AccountsService,
+              private usernameValidator: UniqueUsernameValidator,
+              private messageService: MessageService
+            ) {
     this.adminSection = document.querySelector(".sb-nav-fixed") as HTMLDivElement;
 
     this.adminName = `${sessionStorage.getItem('first_name')} ${sessionStorage.getItem('last_name')}`;
@@ -25,6 +43,21 @@ export class AccountsComponent implements OnInit, AfterViewInit{
     this.accountsList$.subscribe(
       data => console.log(data)
     );
+
+    this.accountForm = this.fb.group({
+      // Validators.patterns(/^[a-zA-Z]+(?: [a-zA-Z]+)*$/) full name regex
+      first_name: ['', Validators.required],
+      last_name: ['', Validators.required],
+      username: ['', [Validators.required], this.usernameIsUnique.bind(this)], // check if username already exists -> create fn in backend for checking username -> use it in validator
+      email: ['', [Validators.required, Validators.email]],
+      is_admin: [false],
+      deactivated: [false],
+      mobile_num: ['', [Validators.required, Validators.pattern(/^(9)\d{9}/), Validators.maxLength(10)]], // add regex validation for mobile num
+      password: ['', Validators.required],
+      confirm_password: ['', Validators.required]
+    }, {
+      validators: passwordMatchValidator
+    });
   }
 
   ngOnInit(): void {
@@ -50,84 +83,193 @@ export class AccountsComponent implements OnInit, AfterViewInit{
 
   ngAfterViewInit(): void {
 
-    // new Grid({
-    //     from: document.getElementById("myTable") as HTMLTableElement,
-    //     columns: [
-    //       "Name",
-    //       "Position",
-    //       {
-    //         name: "Office",
-    //         hidden: true,
-    //         sort: false
-    //       },
-    //       "Age",
-    //       "Salary",
-    //       {
-    //         name: 'Actions',
-    //         formatter: (cell, row) => {
-    //           // return html(`
-    //           //   <button class="btn btn-sm btn-warning" (click)="editRow(row)"><i class="fa fa-pencil"></i> </button>
-    //           //   <button class="btn btn-sm btn-danger (click)="deleteRow(row)"><i class="fa fa-trash"></i> </button>
-    //           // `);
-    //           return h('span', { className: 'btn-group' }, [
-    //             h('button', {
-    //               className: 'btn btn-sm btn-primary me-2',
-    //               onClick: () => alert(`Editing: ${row.cells[0].data} ${row.cells[1].data}`)
-    //             }, [
-    //               // h('i', { className: 'fa fa-pencil' }),
-    //               // h('img', { src: "assets/img/pencil-solid.svg", className: "btn-img" }),
-    //               'Edit'
-    //             ]),
-    //             h('button', {
-    //               className: 'btn btn-sm btn-danger',
-    //               onClick: () => alert(`Deleting: ${row.cells[0].data} ${row.cells[1].data}`)
-    //             }, [
-    //               // h('i', { className: 'fa fa-trash' }),
-    //               'Delete'
-    //             ])
-    //           ]);
-    //         }
-    //       }
-    //     ],
-    //     data: [
-    //       ['Tiger Nixon', 'System Architect', 61, '2011/04/25', '$320,800'],
-    //       ['Garrett Winters', 'Accountant', 63, '2011/07/25', '$170,750'],
-    //       ['Ashton Cox', 'Junior Technical Author', 66, '2009/01/12', '$86,000'],
-    //       ['Cedric Kelly', 'Senior Javascript Developer',  22, '2012/03/29', '$433,060'],
-    //       ['Airi Satou', 'Accountant', 33, '2008/11/28', '$162,700'],
-    //       ['Brielle Williamson', 'Integration Specialist', 61, '2012/12/02', '$372,000'],
-    //       ['Herrod Chandler', 'Sales Assistant',  59, '2012/08/06', '$137,500'],
-    //       ['Rhona Davidson', 'Integration Specialist', 55, '2010/10/14', '$327,900'],
-    //       ['Colleen Hurst', 'Javascript Developer', 39, '2009/09/15', '$205,500'],
-    //       ['Sonya Frost', 'Software Engineer', 23, '2008/12/13', '$103,600'],
-    //     ],
-    //     search: true,
-    //     pagination: true,
-    //     sort: true,
-    //     resizable: false,
-    //     language: {
-    //       'search': {
-    //         'placeholder': '🔍 Search...'
-    //       },
-    //       'pagination': {
-    //         'previous': '⬅️',
-    //         'next': '➡️',
-    //         'showing': '😃 Displaying',
-    //         'results': () => 'Records'
-    //       }
-    //     }
-    //   }).render(document.getElementById('myProductsTable') as HTMLDivElement);
+    
   }
 
-  editRow(row: any) {
-    alert(`Edit row with Name: ${row.cells[0].data}`);
-    // Implement your edit logic here
+
+  get f() {
+    return this.accountForm.controls;
   }
 
-  deleteRow(row: any) {
-    if (confirm(`Are you sure you want to delete ${row.cells[0].data}?`)) {
-      alert(`Deleted row with Name: ${row.cells[0].data}`);
-      // Implement your delete logic here
+  get usernameAlreadyTaken() {
+    return this.f['username'].hasError('usernameExists');
+            // && this.registerForm.get('username')?.touched;
+  }
+
+  usernameIsUnique = (control: AbstractControl) => {
+    return this.usernameValidator
+                  .checkIfUsernameUnique(control.value)
+                    .pipe(
+                      map((response: boolean) => response ? { usernameExists: true} : null)
+                    );
+  }
+  
+  capitalizeWord = (word: string) => {
+    let words: string[] = word.split(' ');
+    let capitalized = " ";
+    words.forEach((token: string) => {
+      capitalized += token.charAt(0).toUpperCase() + token.slice(1) + " ";
+    })
+
+    console.log(capitalized.trim());
+    return capitalized;
+  }
+
+  getIndex = (index: number) => {
+    this.accountIndex = index;
+
+    this.accountsList$.pipe(
+      map(users => users[index])
+    ).subscribe(
+      user => {
+        this.deactDesc = `${user.first_name} ${user.last_name}`;
+      }
+    );
+  }
+
+  onCheck = (index: number) => {
+    if(this.checkedUsers.includes(index)) {
+      this.checkedUsers = this.checkedUsers.filter(
+        (item) => item !== index
+      );
+    } else {
+      this.checkedUsers.push(index);
     }
+  }
+
+  populateEditForm = (index: number) => {
+    this.accountIndex = index;
+
+    this.accountsList$.pipe(
+      map(accounts => accounts[index])
+    ).subscribe(
+      account => {
+        this.accountForm.patchValue({
+          first_name: account.first_name,
+          last_name: account.last_name,
+          username: account.username,
+          is_admin: account.is_admin,
+          deactivated: account.deactivated,
+          email: account.email,
+          mobile_num: account.mobile_num,
+          password: account.mobile_num
+        });
+      }
+    );
+  }
+
+  
+  onSubmitCreate = () => {
+    this.submitted = true;
+    const postData = {...this.accountForm.getRawValue()};
+    delete postData.confirm_password;
+    postData['first_name'] = this.capitalizeWord(postData['first_name']);
+    postData['last_name'] = this.capitalizeWord(postData['last_name']);
+
+    if(this.accountForm.invalid) {
+      return;
+    }
+
+    this.accountsService.checkIfUsernameExists(postData['username'] as string).subscribe(
+      exists => {
+        if(!exists) {
+          this.accountsService.addUser(postData as AuthUser).subscribe(
+            response => {
+              console.log("Created user: ", response);
+              this.closeModalAdd.nativeElement.click();
+              this.accountsList$ = this.accountsService.getAccounts();
+              this.messageService.add({ severity:'success', summary: 'Success', detail: 'Created new user' });
+            },
+            error => {
+              this.messageService.add({ severity:'error', summary: 'Error', detail: 'Failed to create new user' });
+            }
+          );
+        } else {
+          this.messageService.add({ severity:'error', summary: 'Error', detail: 'User already exists' });
+        }
+      }
+    );
+
+    this.accountForm.reset();
+    this.submitted = false;
+  }
+
+  onSubmitEdit = (index: number) => {
+    this.submitted = true;
+    const updatedUser = {...this.accountForm.getRawValue()};
+    delete updatedUser.confirm_password;
+
+    if(this.accountForm.invalid) {
+      return;
+    }
+
+    this.accountsList$.pipe(
+      map(users => users[index])
+    ).subscribe(
+      user => {
+        updatedUser['id'] = user.id;
+        this.accountsService.updateUser(updatedUser as AuthUser).subscribe(
+          response => {
+            console.log("Updated user: ", response);
+            this.accountsList$ = this.accountsService.getAccounts();
+            this.closeModalEdit.nativeElement.click();
+            this.messageService.add({ severity:'success', summary: 'Success', detail: 'User information has been updated' });
+          },
+          error => {
+            this.messageService.add({ severity:'error', summary: 'Error', detail: 'Failed to update user information' });
+          }
+        )
+      }
+    );
+
+    this.submitted = false;
+  }
+
+  onSubmitDeactivateUser = (index: number) => {
+    
+    this.accountsList$.pipe(
+      map(users => users[index])
+    ).subscribe(
+      user => {
+        user.deactivated = !user.deactivated;
+        this.accountsService.deactivateUser(user as AuthUser).subscribe(
+          response => {
+            console.log("Deactivated user: ", response);
+            this.accountsList$ = this.accountsService.getAccounts();
+            this.closeModalDeact.nativeElement.click();
+            this.messageService.add({ severity:'success', summary: 'Success', detail: `${user.first_name} ${user.last_name} has been deactivated` });
+          },
+          error => {
+            console.log(error);
+            this.messageService.add({ severity:'error', summary: 'error', detail: 'Failed to deactivate user' });
+          }
+        );
+      }
+    );
+  }
+
+  onSubmitDeactivateChecked = () => {
+
+    this.checkedUsers.forEach((index) => {
+      this.accountsList$.pipe(
+        map(users => users[index])
+      ).subscribe(
+        user => {
+          user.deactivated = !user.deactivated;
+          this.accountsService.deactivateUser(user as AuthUser).subscribe(
+            response => {
+              console.log("Deactivated user: ", response);
+              this.accountsList$ = this.accountsService.getAccounts();
+            },
+            error => {
+              this.messageService.add({ severity:'error', summary: 'Error', detail: 'Failed to remove product' });
+            }
+          );
+        }
+      );
+    });
+
+    this.closeModalDeactChecked.nativeElement.click();
+    this.messageService.add({ severity:'success', summary: 'Success', detail: `Deactivated ${this.checkedUsers.length} users.` });
   }
 }

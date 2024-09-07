@@ -31,6 +31,7 @@ export class RegisterComponent {
       username: ['', [Validators.required], this.usernameIsUnique.bind(this)], // check if username already exists -> create fn in backend for checking username -> use it in validator
       email: ['', [Validators.required, Validators.email]],
       is_admin: [false],
+      deactivated: [false],
       mobile_num: ['', [Validators.required, Validators.pattern(/^(9)\d{9}/), Validators.maxLength(10)]], // add regex validation for mobile num
       password: ['', Validators.required],
       confirm_password: ['', Validators.required]
@@ -57,7 +58,14 @@ export class RegisterComponent {
   }
 
   capitalizeWord = (word: string) => {
-    return word.charAt(0).toUpperCase() + word.slice(1);
+    let words: string[] = word.split(' ');
+    let capitalized = " ";
+    words.forEach((token: string) => {
+      capitalized += token.charAt(0).toUpperCase() + token.slice(1) + " ";
+    })
+
+    console.log(capitalized.trim());
+    return capitalized;
   }
 
   onSubmit = () => {

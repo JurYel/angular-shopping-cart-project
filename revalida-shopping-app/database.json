@@ -7,6 +7,7 @@
       "last_name": "Botoy",
       "email": "juriel.botoy182@gmail.com",
       "is_admin": true,
+      "deactivated": true,
       "mobile_num": "9155671750",
       "password": "admin123"
     },
@@ -17,6 +18,7 @@
       "last_name": "yel1",
       "email": "juryel@gmail.com1",
       "is_admin": false,
+      "deactivated": false,
       "mobile_num": "9155671751",
       "password": "1234"
     },
@@ -27,6 +29,7 @@
       "username": "alex.gonzaga",
       "email": "alex.gonzaga@gmail.com",
       "is_admin": false,
+      "deactivated": false,
       "mobile_num": "9122378472",
       "password": "1234"
     },
@@ -37,6 +40,7 @@
       "username": "jason.silver",
       "email": "jason.silver@gmail.com",
       "is_admin": false,
+      "deactivated": true,
       "mobile_num": "9123456789",
       "password": "1234"
     },
@@ -47,7 +51,30 @@
       "username": "juryel",
       "email": "juryel@gmail.com",
       "is_admin": false,
+      "deactivated": false,
       "mobile_num": "9181733784",
+      "password": "1234"
+    },
+    {
+      "id": "3362",
+      "first_name": "Edith",
+      "last_name": "Heimer",
+      "username": "edith.heimer",
+      "email": "edith.heimer@gmail.com",
+      "is_admin": false,
+      "deactivated": true,
+      "mobile_num": "9156783433",
+      "password": "1234"
+    },
+    {
+      "id": "3bbb",
+      "first_name": "Lisa",
+      "last_name": "Poirot",
+      "username": "lisa.poirot",
+      "email": "lisa.poirot@gmail.com",
+      "is_admin": false,
+      "deactivated": false,
+      "mobile_num": "9113985322",
       "password": "1234"
     }
   ],
@@ -92,5 +119,8 @@
       "quantity": 12,
       "unit_price": 12
     }
+  ],
+  "orders": [
+    
   ]
 }

@@ -62,12 +62,12 @@
                       <span class="custom-checkbox">
                         <input
                           type="checkbox"
-                          id="checkbox1"
+                          id="checkbox-{{i}}"
                           name="options[]"
                           value="{{ i }}"
                           (change)="onCheck(i)"
                         />
-                        <label for="checkbox1"></label>
+                        <label for="checkbox-{{i}}"></label>
                       </span>
                     </td>
                     <td>
