@@ -1,7 +1,8 @@
 export interface Order {
     id: string
-    datetime: Date
     customer: string
+    location: string
+    datetime: Date
     item_name: string
     payment_mode: string
     quantity: number

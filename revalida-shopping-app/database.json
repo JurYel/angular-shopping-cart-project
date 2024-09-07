@@ -120,5 +120,61 @@
       "unit_price": 12
     }
   ],
-  "orders": []
+  "orders": [
+    {
+      "id": "3362",
+      "customer": "Alex Gonzaga",
+      "location": "Pasig City",
+      "datetime": "",
+      "payment_mode": "Gcash",
+      "status": "Pending",
+      "item_name": "Gardenia Wheat Bread",
+      "quantity": 4,
+      "subtotal": 336.5
+    },
+    {
+      "id": "0aa1",
+      "customer": "Juriel Botoy",
+      "location": "Magallanes, Agusan del Norte",
+      "datetime": "",
+      "payment_mode": "Gcash",
+      "status": "Shipped",
+      "item_name": "Vitasoy Classic",
+      "quantity": 3,
+      "subtotal": 120.43
+    },
+    {
+      "id": "3db5",
+      "customer": "Liah Mendoza",
+      "location": "Plaridel",
+      "datetime": "",
+      "payment_mode": "COD",
+      "status": "Pending",
+      "item_name": "Energy Booster",
+      "quantity": 2,
+      "subtotal": 45.67
+    },
+    {
+      "id": "f947",
+      "customer": "Justin Silver",
+      "location": "Muntinlupa City",
+      "datetime": "",
+      "payment_mode": "Paypal",
+      "status": "Delivered",
+      "item_name": "Magnum Praline 400ml",
+      "quantity": 1,
+      "subtotal": 680.55
+    },
+    {
+      "id": "16c5",
+      "customer": "Lisa Poirot",
+      "location": "Cebu City",
+      "datetime": "",
+      "payment_mode": "COD",
+      "status": "Cancelled",
+      "item_name": "Oreo Ice Cream 400ml",
+      "quantity": 2,
+      "subtotal": 789.23
+    }
+  ]
 }

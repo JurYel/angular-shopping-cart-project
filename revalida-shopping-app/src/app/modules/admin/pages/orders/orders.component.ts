@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { Order } from '../../../models/order.interface';
 import { OrderService } from '../../services/order.service';
 
@@ -13,12 +13,20 @@ export class OrdersComponent implements OnInit {
   adminName: string | undefined;
   orders$: Observable<Order[]>;
   checkedItems: number[] = [];
+  badgeStyle: any;
+  selectedOrder!: Order;
 
   constructor(private orderService: OrderService) {
 
     this.adminName = `${sessionStorage.getItem('first_name')} ${sessionStorage.getItem('last_name')}`;
 
     this.orders$ = this.orderService.getOrders();
+    this.badgeStyle = {
+      "Delivered": "success",
+      "Pending": "warning",
+      "Shipped": "info",
+      "Cancelled": "danger"
+    }
   }
 
   ngOnInit(): void {
@@ -51,5 +59,15 @@ export class OrdersComponent implements OnInit {
     }
   }
 
-  
+  viewOrderSummary = (index: number) => {
+
+    this.orders$.pipe(
+      map(orders => orders[index])
+    ).subscribe(
+      order => {
+        this.selectedOrder = order;
+      }
+    );
+  }
+
 }
