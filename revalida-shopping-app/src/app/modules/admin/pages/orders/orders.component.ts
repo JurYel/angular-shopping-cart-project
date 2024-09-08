@@ -12,14 +12,28 @@ import { MessageService } from 'primeng/api';
 export class OrdersComponent implements OnInit {
   adminName: string | undefined;
   orders$: Observable<Order[]>;
+  
+  // variables for pagination
+  paginatedOrders$!: Observable<Order[]>;
+  currentPage: number = 1;
+  pageSize: number = 5;
+  totalPages: number = 0;
+
+  // for checkbox items
   checkedItems: number[] = [];
+  // for status badges
   badgeStyle: any;
+
+  // for filters
   selectedOrder!: Order;
   searchQuery!: string;
   locationList: string[] = [];
   statusList: string[] = [];
   selectedLocation: string = "All";
   selectedStatus: string = "Any";
+
+  pageNumbers: number[] = [];
+  availablePageSizes: number[] = [5, 10, 15, 20];
 
   constructor(
     private orderService: OrderService,
@@ -30,6 +44,9 @@ export class OrdersComponent implements OnInit {
     )} ${sessionStorage.getItem('last_name')}`;
 
     this.orders$ = this.orderService.getOrders();
+    this.orders$.subscribe(
+      data => console.log(data)
+    );
     this.badgeStyle = {
       Delivered: 'success',
       Pending: 'warning',
@@ -79,6 +96,7 @@ export class OrdersComponent implements OnInit {
         this.locationList = locations;
       });
 
+    // get list of unique statuses
     this.orders$.pipe(
       map(orders => [
         'Any',
@@ -90,10 +108,76 @@ export class OrdersComponent implements OnInit {
       }
     )
 
+    // upon init, initialized the filters
     this.filterLocation(this.selectedLocation);
     this.filterStatus(this.selectedStatus);
+
+    // calculate total number of pages based on the data
+    this.orders$.subscribe(orders => {
+      this.updatePagination(orders);
+    });
+
+    // Initially show the first page of data
+    this.paginateOrders();
   }
 
+  // Method to generate page numbers from totalPages
+  generatePageNumbers = () => {
+    this.pageNumbers = Array.from({ length: this.totalPages }, (_, i) => i + 1);
+  }
+
+  updatePagination(orders: Order[]){
+    this.totalPages = Math.ceil(orders.length / this.pageSize);
+    this.generatePageNumbers();
+    // this.paginateOrders();
+  }
+
+  // Method to paginate orders based on the current page
+  paginateOrders = () => {
+    this.paginatedOrders$ = this.orders$
+      .pipe(
+        map(orders => {
+          const startIndex = (this.currentPage - 1) * this.pageSize;
+          const endIndex = Math.min(startIndex + this.pageSize, orders.length); // Ensure we don't exceed the total length of the orders
+          return orders.slice(startIndex, endIndex);
+        })
+      );
+  }
+
+  // Method to go to next page
+  nextPage = () => {
+    if(this.currentPage < this.totalPages) {
+      this.currentPage++;
+      this.paginateOrders();
+    }
+  }
+
+  // Method to go to previous page
+  prevPage = () => {
+    if(this.currentPage > 1) {
+      this.currentPage--;
+      this.paginateOrders();
+    }
+  }
+
+  // Method to go to a specific page
+  gotoPage = (page: number) => {
+    this.currentPage = page;
+    this.paginateOrders();
+  }
+
+  // Method to update the pageSize and reset pagination when a new page size is selected
+  onPageSizeChange = (event: Event) => {
+    const pageSizeSelect = event.target as HTMLSelectElement;
+    this.pageSize = parseInt(pageSizeSelect.value); // Get selected page from dropdown
+    this.currentPage = 1 // Reset to the first page
+    this.orders$.subscribe(orders => {
+      this.updatePagination(orders);
+      this.paginateOrders();
+    });
+  }
+
+  // Get checked items
   onCheck = (index: number) => {
     if (this.checkedItems.includes(index)) {
       this.checkedItems = this.checkedItems.filter((item) => item !== index);
@@ -102,12 +186,14 @@ export class OrdersComponent implements OnInit {
     }
   };
 
+  // Method for populating Order Summary modal
   viewOrderSummary = (index: number) => {
-    this.orders$.pipe(map((orders) => orders[index])).subscribe((order) => {
+    this.paginatedOrders$.pipe(map((orders) => orders[index])).subscribe((order) => {
       this.selectedOrder = order;
     });
   };
 
+  // Method for updating order status
   updateOrderStatus = (index: number, status: string) => {
     this.orders$.pipe(map((orders) => orders[index])).subscribe((order) => {
       order.status = status;
@@ -115,6 +201,8 @@ export class OrdersComponent implements OnInit {
         (response) => {
           console.log('Updated order status: ', response);
           this.orders$ = this.orderService.getOrders();
+          // this.paginateOrders();
+          this.searchOrder();
           this.messageService.add({
             severity: 'success',
             summary: 'Success',
@@ -132,6 +220,7 @@ export class OrdersComponent implements OnInit {
     });
   };
 
+  // Method for searchiing orders
   searchOrder = (): void => {
     if (this.searchQuery) {
       this.orders$ = this.orderService
@@ -141,6 +230,9 @@ export class OrdersComponent implements OnInit {
             orders.filter((order) =>
               order.item_name
                 .toLowerCase()
+                .includes(this.searchQuery.toLowerCase()) ||
+              order.customer
+                .toLowerCase()
                 .includes(this.searchQuery.toLowerCase())
             )
           )
@@ -148,8 +240,12 @@ export class OrdersComponent implements OnInit {
     } else {
       this.orders$ = this.orderService.getOrders();
     }
+
+    this.paginateOrders();
   };
 
+
+  // Method for filtering location
   filterLocation = (location: string) => {
     
     this.orders$ = this.orderService.getOrders().pipe(
@@ -164,8 +260,11 @@ export class OrdersComponent implements OnInit {
         return orders.filter(order => order.location.toLowerCase().includes(location.toLowerCase()));
       })
     );
+
+    this.paginateOrders();
   };
 
+  // Method for capturing location select change
   onLocationChange = (event: Event) => {
 
     const formSelect = event.target as HTMLSelectElement;
@@ -175,6 +274,7 @@ export class OrdersComponent implements OnInit {
     this.filterLocation(newLocation);
   }
 
+  // Method for filtering status
   filterStatus = (status: string) => {
 
     this.orders$ = this.orderService.getOrders().pipe(
@@ -189,8 +289,11 @@ export class OrdersComponent implements OnInit {
         return orders.filter(order => order.status.toLowerCase().includes(status.toLowerCase()));
       })
     );
+
+    this.paginateOrders();
   }
 
+  // Method for capturing Status select change
   onStatusChange = (event: Event) => {
 
     const formSelect = event.target as HTMLSelectElement;
@@ -198,5 +301,10 @@ export class OrdersComponent implements OnInit {
 
     this.selectedStatus = newStatus;
     this.filterStatus(newStatus);
+  }
+
+  refreshOrdersTable = () => {
+    this.orders$ = this.orderService.getOrders();
+    this.searchOrder();
   }
 }
