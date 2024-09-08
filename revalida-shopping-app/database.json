@@ -1,16 +1,16 @@
 {
   "users": [
     {
-      "id": "7f82",
       "username": "admin",
       "first_name": "Juriel",
       "last_name": "Botoy",
-      "profile_img": "default_profile_img-100.png",
       "email": "juriel.botoy182@gmail.com",
-      "is_admin": true,
-      "deactivated": true,
+      "profile_img": "1725818207.png",
       "mobile_num": "9155671750",
-      "password": "admin123"
+      "is_admin": true,
+      "password": "admin123",
+      "deactivated": true,
+      "id": "7f82"
     },
     {
       "id": "f947",
