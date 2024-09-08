@@ -13,9 +13,9 @@
         <!-- Side Menu -->
         <div class="col-md-3">
           <div class="side-menu">
-            <div class="text-center mb-4">
+            <div class="small-profile text-center mb-4">
               <img
-                src="assets/img/default_profile_img-50.png"
+                src="assets/users/{{ savedProfileImgName }}"
                 class="rounded-circle"
                 alt="User Avatar"
               />
@@ -66,7 +66,7 @@
             <p>Manage and protect your account</p>
             <hr>
             <div class="account-form">
-              <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+              <form enctype="multipart/form-data" [formGroup]="profileForm" (ngSubmit)="onSubmit()">
                 <div class="profile-form">
                   <div class="mb-3">
                     <label for="username" class="form-label">Username</label>
@@ -208,16 +208,16 @@
                 
                 <div class="profile-image">
                   <img
-                  src="assets/img/{{ profileImgName }}"
+                  src="assets/users/{{ profileImgName }}"
                   alt="Profile Image"
                   />
                   <br />
                   <input type="file" name="" id="profile-img-input"
-                         placeholder="Choose an image" accept="image/*"
+                         placeholder="Choose an image" accept="image/png, image/jpeg"
                          formControlName="profile_img" class="form-control"
                          [ngClass]="{'is-invalid': submitted && isDefaultImg && !f['profile_img'].value}"
                          (change)="uploadFile($event)">
-                  <button class="btn btn-secondary">Select Image</button>
+                  <!-- <button class="btn btn-secondary">Select Image</button> -->
                   <small
                       *ngIf="isDefaultImg && submitted"
                       class="invalid-feedback"

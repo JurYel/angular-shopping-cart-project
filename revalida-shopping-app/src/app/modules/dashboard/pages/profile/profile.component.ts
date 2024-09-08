@@ -12,6 +12,7 @@ import { MessageService } from 'primeng/api';
 import { UniqueUsernameValidator } from '../../../../shared/validators/unique-username.validator';
 import { map, Observable, of } from 'rxjs';
 import { AuthUser } from '../../../models/auth-user.interface';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Component({
   selector: 'app-profile',
@@ -25,13 +26,16 @@ export class ProfileComponent implements OnInit, AfterViewChecked {
   userExists = false;
   submitted = false;
   profileImgName: string;
+  savedProfileImgName!: string;
   isDefaultImg: boolean = true;
+  selectedFile !: File;
 
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
     private messageService: MessageService,
-    private usernameValidator: UniqueUsernameValidator
+    private usernameValidator: UniqueUsernameValidator,
+    private http: HttpClient
   ) {
     this.profileForm = this.fb.group({
       username: ['', Validators.required],
@@ -60,6 +64,7 @@ export class ProfileComponent implements OnInit, AfterViewChecked {
           this.profileForm.patchValue({ email: response[0].email });
           this.profileForm.patchValue({ mobile_num: response[0].mobile_num });
           this.profileImgName = (response[0].profile_img) ? response[0].profile_img : 'default_profile_img-100.png';
+          this.savedProfileImgName = (response[0].profile_img) ? response[0].profile_img : 'default_profile_img-50.png'
           this.isDefaultImg = this.profileImgName.includes("default");
 
           if (this.profileForm.get('username')?.value === this.username) {
@@ -87,9 +92,27 @@ export class ProfileComponent implements OnInit, AfterViewChecked {
     const element = event.currentTarget as HTMLInputElement;
     let fileList: FileList | null = element.files;
     if(fileList) {
-      if(fileList[0].type.match('image.*')){
-        this.profileImgName = fileList[0].name;
-        
+      if(fileList[0].type.match('image.jpeg') ||
+         fileList[0].type.match('image.jpg') ||
+         fileList[0].type.match('image.png')){
+          // this.profileImgName = fileList[0].name;
+          this.selectedFile = fileList[0];
+
+          // Testing file image saving with express
+          const formData: FormData = new FormData();
+          const timestamp = Date.now().toString();
+          this.profileImgName = `${timestamp.slice(0, -3)}.${fileList[0].type.split('/')[1]}`;
+          console.log(this.profileImgName);
+          formData.append('image', fileList[0]);
+          formData.append('name', `${timestamp.slice(0, -3)}.${this.profileImgName.split('.')[1]}`)
+          // formData.append('name', `${this.f['username'].value}-${timestamp}.${this.profileImgName.split('.')[1]}`);
+
+          // Send image file to the backend
+          this.http.post('http://localhost:3030/api/v1/upload-image', formData)
+            .subscribe({
+              next: (response) => console.log("File uploaded successfully", response),
+              error: (error) => console.error("Error uploading file: ", error)
+            });
       } else {
         this.messageService.add({ severity:'error', summary: 'Error', detail: 'Uploaded file must be an image (JPEG/PNG)' });
       }
@@ -142,6 +165,8 @@ export class ProfileComponent implements OnInit, AfterViewChecked {
   onSubmit = () => {
     this.submitted = true;
     const postData = {...this.profileForm.getRawValue()};
+    const timestamp = Date.now().toString();
+    const imgName = `${this.f['username'].value}-${timestamp.slice(0, -3)}.${this.profileImgName.split('.')[1]}`
 
     console.log(postData);
     if(this.profileForm.invalid) {
@@ -154,10 +179,46 @@ export class ProfileComponent implements OnInit, AfterViewChecked {
             postData['is_admin'] = user[0].is_admin;
             postData['password'] = user[0].password;
             postData['deactivated'] = user[0].deactivated;
+            postData['profile_img'] = (this.profileImgName.includes('default'))? this.profileImgName : `${timestamp.slice(0, -3)}.${this.profileImgName.split('.')[1]}`;
             
+             // Testing file image saving with express
+            const formData: FormData = new FormData();
+            const headers: HttpHeaders = new HttpHeaders();
+            headers.append('Content-Type', 'multipart/form-data');
+
+            formData.append('image', this.selectedFile);
+            formData.append('name', imgName);
+
+            // Send image file to the backend
+            this.http.post('http://localhost:3030/api/v1/upload-image', formData, {
+              headers: headers
+            }).subscribe({
+                next: (response) => console.log("File uploaded successfully", response),
+                error: (error) => console.error("Error uploading file: ", error)
+              });
+
             this.authService.updateUser(user[0].id, postData as AuthUser).subscribe(
               response => {
                 console.log("Updated user: ", response);
+
+                 // Testing file image saving with express
+                const formData: FormData = new FormData();
+                const headers: HttpHeaders = new HttpHeaders();
+                headers.append('Content-Type', 'multipart/form-data');
+
+                formData.append('image', this.selectedFile);
+                formData.append('name', imgName);
+
+                // Send image file to the backend
+                this.http.post('http://localhost:3030/api/v1/upload-image', formData, {
+                  headers: headers
+                }).subscribe({
+                    next: (response) => console.log("File uploaded successfully", response),
+                    error: (error) => console.error("Error uploading file: ", error)
+                  });
+                
+                this.profileImgName = postData['profile_img'];
+                this.savedProfileImgName = postData['profile_img'];
                 this.messageService.add({ severity:'success', summary: 'Success', detail: 'Information has been updated' });
               },
               error => {
