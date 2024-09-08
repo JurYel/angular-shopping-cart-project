@@ -230,11 +230,11 @@
               </table>
               <div class="clearfix">
                 <div class="hint-text">
-                  Showing <b>{{ currentPage }}</b> out of
-                  <b>{{ totalPages }}</b> entries
+                  Showing <b>{{ currentPageLength }}</b> out of
+                  <b>{{ totalLength }}</b> entries
                 </div>
                 <ul class="pagination">
-                  <li class="page-item disabled">
+                  <li class="page-item">
                     <button
                       class="btn btn-link"
                       (click)="prevPage()"
@@ -245,7 +245,7 @@
                   </li>
                   <ng-container *ngFor="let page of pageNumbers">
                     <li class="page-item"
-                        [ngClass]="{ active: currentPage === page }">
+                        [ngClass]="{ 'active': currentPage === page }">
                       <button
                         class="btn btn-link"
                         (click)="gotoPage(page)"

@@ -263,7 +263,8 @@ body {
 }
 .table-title {        
 	padding-bottom: 15px;
-	background: #435d7d;
+	// background: #435d7d;
+  background: #4b5366;		
 	color: #fff;
 	padding: 16px 30px;
 	// min-width: 100%;
@@ -356,25 +357,33 @@ table.table .avatar {
 	float: right;
 	margin: 0 0 5px;
 }
-.pagination li a {
+.pagination li a,
+.pagination li button {
 	border: none;
 	font-size: 13px;
 	min-width: 30px;
 	min-height: 30px;
-	color: #999;
+	color: #5e5e5e;
 	margin: 0 2px;
 	line-height: 30px;
 	border-radius: 2px !important;
 	text-align: center;
 	padding: 0 6px;
 }
-.pagination li a:hover {
-	color: #666;
+.pagination li a:hover,
+.pagination li button:hover {
+	color: #353434;
 }	
-.pagination li.active a, .pagination li.active a.page-link {
+.pagination li.active a,
+.pagination li.active button,
+.pagination li.active button.page-link 
+.pagination li.active a.page-link {
+  color: #5e5e5e;
 	background: #03A9F4;
 }
-.pagination li.active a:hover {        
+.pagination li.active a:hover,
+.pagination li.active button:hover {        
+  color: #5e5e5e;
 	background: #0397d6;
 }
 .pagination li.disabled i {
@@ -513,4 +522,9 @@ table.table .avatar {
 
 .contacts .input-group{
     width: 100%;
+}
+
+.fa-circle-check,
+.fa-circle-xmark {
+  font-size: 22px;
 }

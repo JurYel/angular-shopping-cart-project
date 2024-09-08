@@ -8,6 +8,7 @@ import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/fo
 import { passwordMatchValidator } from '../../../../shared/validators/password-match.validator';
 import { UniqueUsernameValidator } from '../../../../shared/validators/unique-username.validator';
 import { MessageService } from 'primeng/api';
+import { end, start } from '@popperjs/core';
 
 @Component({
   selector: 'app-accounts',
@@ -24,6 +25,16 @@ export class AccountsComponent implements OnInit, AfterViewInit{
 
   adminSection: HTMLDivElement;
   accountsList$: Observable<AuthUser[]>;
+
+  //variables for pagination
+  paginatedAccounts$ !: Observable<AuthUser[]>;
+  currentPage: number = 1;
+  pageSize: number = 5;
+  totalPages: number = 0;
+  pageNumbers: number[] = [];
+  totalLength: number = 0;
+  currentPageLength: number = 0;
+
   adminName: string | undefined;
   accountForm: FormGroup;
   submitted: boolean = false;
@@ -79,13 +90,65 @@ export class AccountsComponent implements OnInit, AfterViewInit{
             localStorage.setItem('sb|sidebar-toggle', document.querySelector('.sb-nav-fixed')?.classList.contains('sb-sidenav-toggled').toString() as string);
           })
       }
+
+    // calculate total number of pages based on the data
+    this.accountsList$.subscribe(accounts => {
+      this.totalLength = accounts.length;
+      this.updatePagination(accounts);
+    })
+
+    // Initially show the first page of the data
+    this.paginateAccounts();
   }
 
   ngAfterViewInit(): void {
 
-    
   }
 
+  // Method to generate page numbers from totalPages
+  generatePageNumbers = () => {
+    this.pageNumbers = Array.from({ length: this.totalPages }, (_, i) => i + 1);
+  }
+
+  updatePagination = (accounts: AuthUser[]) => {
+    this.totalPages = Math.ceil(accounts.length / this.pageSize);
+    this.generatePageNumbers();
+  }
+
+  // Method to paginate orders based on the current page
+  paginateAccounts = () => {
+    this.paginatedAccounts$ = this.accountsList$
+      .pipe(
+        map(accounts => {
+          const startIndex = (this.currentPage - 1) * this.pageSize;
+          const endIndex = Math.min(startIndex + this.pageSize, accounts.length);
+          this.currentPageLength += endIndex - this.currentPageLength;
+          console.log(this.currentPageLength);
+          return accounts.slice(startIndex, endIndex);
+        })
+      );
+  }
+
+  // Method to go to next page
+  nextPage = () => {
+    if(this.currentPage < this.totalPages) {
+      this.currentPage++;
+      this.paginateAccounts();
+    }
+  }
+
+  // Method to go to previous page
+  prevPage = () => {
+    if(this.currentPage > 1) {
+      this.currentPage--;
+      this.paginateAccounts();
+    }
+  }
+
+  gotoPage = (page: number) => {
+    this.currentPage = page;
+    this.paginateAccounts();
+  }
 
   get f() {
     return this.accountForm.controls;

@@ -43,7 +43,7 @@
                             </tr>
                           </thead>
                           <tbody>
-                            <tr *ngFor="let account of accountsList$ | async; let i = index">
+                            <tr *ngFor="let account of paginatedAccounts$ | async; let i = index">
                               <td>
                                 <span class="custom-checkbox"> 
                                   <input type="checkbox" id="checkbox-{{i}}" name="options[]" value="{{ i }}" (change)="onCheck(i)">
@@ -67,15 +67,15 @@
                           </tbody>
                         </table>
                         <div class="clearfix">
-                          <div class="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
+                          <div class="hint-text">Showing <b>{{ currentPageLength }}</b> out of <b>{{ totalLength }}</b> entries</div>
                           <ul class="pagination">
-                            <li class="page-item disabled"><a href="#">Previous</a></li>
-                            <li class="page-item"><a href="#" class="page-link">1</a></li>
-                            <li class="page-item"><a href="#" class="page-link">2</a></li>
-                            <li class="page-item active"><a href="#" class="page-link">3</a></li>
-                            <li class="page-item"><a href="#" class="page-link">4</a></li>
-                            <li class="page-item"><a href="#" class="page-link">5</a></li>
-                            <li class="page-item"><a href="#" class="page-link">Next</a></li>
+                            <li class="page-item disabled"><button class="btn btn-link" (click)="prevPage()" [disabled]="currentPage === 1">Previous</button></li>
+                            <ng-container *ngFor="let page of pageNumbers">
+                              <li class="page-item" [ngClass]="{ 'active': currentPage === page }">
+                                <button class="btn btn-link" (click)="gotoPage(page)" [disabled]="currentPage === page">{{ page }}</button>
+                              </li>
+                            </ng-container>
+                            <li class="page-item"><button (click)="nextPage()" class="btn btn-link" [disabled]="currentPage === totalPages">Next</button></li>
                           </ul>
                         </div>
                       </div>

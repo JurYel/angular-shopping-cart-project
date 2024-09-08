@@ -18,6 +18,10 @@ export class OrdersComponent implements OnInit {
   currentPage: number = 1;
   pageSize: number = 5;
   totalPages: number = 0;
+  pageNumbers: number[] = [];
+  availablePageSizes: number[] = [5, 10, 15, 20];
+  totalLength: number = 0;
+  currentPageLength: number = 0;
 
   // for checkbox items
   checkedItems: number[] = [];
@@ -32,9 +36,7 @@ export class OrdersComponent implements OnInit {
   selectedLocation: string = "All";
   selectedStatus: string = "Any";
 
-  pageNumbers: number[] = [];
-  availablePageSizes: number[] = [5, 10, 15, 20];
-
+  
   constructor(
     private orderService: OrderService,
     private messageService: MessageService
@@ -114,6 +116,7 @@ export class OrdersComponent implements OnInit {
 
     // calculate total number of pages based on the data
     this.orders$.subscribe(orders => {
+      this.totalLength = orders.length;
       this.updatePagination(orders);
     });
 
@@ -139,6 +142,7 @@ export class OrdersComponent implements OnInit {
         map(orders => {
           const startIndex = (this.currentPage - 1) * this.pageSize;
           const endIndex = Math.min(startIndex + this.pageSize, orders.length); // Ensure we don't exceed the total length of the orders
+          this.currentPageLength += endIndex - this.currentPageLength;
           return orders.slice(startIndex, endIndex);
         })
       );
