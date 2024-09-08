@@ -24,6 +24,8 @@ export class ProfileComponent implements OnInit, AfterViewChecked {
   username: string | null;
   userExists = false;
   submitted = false;
+  profileImgName: string;
+  isDefaultImg: boolean = true;
 
   constructor(
     private fb: FormBuilder,
@@ -36,12 +38,14 @@ export class ProfileComponent implements OnInit, AfterViewChecked {
       first_name: ['', Validators.required],
       last_name: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
+      profile_img: ['', Validators.required],
       mobile_num: [
         '',
         [Validators.required, Validators.pattern(/^(9)\d{9}/), Validators.maxLength(10)],
       ]
     });
 
+    this.profileImgName = (this.f['profile_img'].value) ? this.f['profile_img'].value : 'default_profile_img-100.png';
     this.username = sessionStorage.getItem('username');
   }
 
@@ -55,6 +59,8 @@ export class ProfileComponent implements OnInit, AfterViewChecked {
           this.profileForm.patchValue({ last_name: response[0].last_name });
           this.profileForm.patchValue({ email: response[0].email });
           this.profileForm.patchValue({ mobile_num: response[0].mobile_num });
+          this.profileImgName = (response[0].profile_img) ? response[0].profile_img : 'default_profile_img-100.png';
+          this.isDefaultImg = this.profileImgName.includes("default");
 
           if (this.profileForm.get('username')?.value === this.username) {
             this.userExists = true;
@@ -75,6 +81,19 @@ export class ProfileComponent implements OnInit, AfterViewChecked {
 
   get usernameAlreadyTaken() {
     return this.f['username'].hasError('usernameExists');
+  }
+
+  uploadFile = (event: Event) => {
+    const element = event.currentTarget as HTMLInputElement;
+    let fileList: FileList | null = element.files;
+    if(fileList) {
+      if(fileList[0].type.match('image.*')){
+        this.profileImgName = fileList[0].name;
+        
+      } else {
+        this.messageService.add({ severity:'error', summary: 'Error', detail: 'Uploaded file must be an image (JPEG/PNG)' });
+      }
+    }
   }
 
   // can remove this now, updated function below
