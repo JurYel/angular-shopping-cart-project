@@ -6,6 +6,9 @@
       <!-- <app-admin-sidenav  [sidebarToggleInput]="sideToggleBtn" [adminSidenavInput]="adminSection"></app-admin-sidenav> -->
     </div>
     <div id="layoutSidenav_content">
+      <div class="title">
+        <h2><b>Products</b> Inventory</h2>
+      </div>
       <main>
         <div class="table-container">
           <div class="table-responsive">
@@ -55,18 +58,18 @@
                 </thead>
                 <tbody>
                   <tr
-                    *ngFor="let product of productsList$ | async; let i = index"
+                    *ngFor="let product of paginatedProducts$ | async; let i = index"
                   >
                     <td>
                       <span class="custom-checkbox">
                         <input
                           type="checkbox"
-                          id="checkbox-{{i}}"
+                          id="checkbox-{{ i }}"
                           name="options[]"
                           value="{{ i }}"
                           (change)="onCheck(i)"
                         />
-                        <label for="checkbox-{{i}}"></label>
+                        <label for="checkbox-{{ i }}"></label>
                       </span>
                     </td>
                     <td>
@@ -111,19 +114,35 @@
               </table>
               <div class="clearfix">
                 <div class="hint-text">
-                  Showing <b>5</b> out of <b>25</b> entries
+                  Showing <b>{{ currentPageLength }}</b> out of
+                  <b>{{ totalLength }}</b> entries
                 </div>
                 <ul class="pagination">
-                  <li class="page-item disabled"><a href="#">Previous</a></li>
-                  <li class="page-item"><a href="#" class="page-link">1</a></li>
-                  <li class="page-item"><a href="#" class="page-link">2</a></li>
-                  <li class="page-item active">
-                    <a href="#" class="page-link">3</a>
-                  </li>
-                  <li class="page-item"><a href="#" class="page-link">4</a></li>
-                  <li class="page-item"><a href="#" class="page-link">5</a></li>
                   <li class="page-item">
-                    <a href="#" class="page-link">Next</a>
+                    <button
+                      class="btn btn-link"
+                      (click)="prevPage()"
+                      [disabled]="currentPage === 1"
+                    >
+                      Previous
+                    </button>
+                  </li>
+                  <ng-container *ngFor="let page of pageNumbers">
+                    <li
+                      class="page-item"
+                      [ngClass]="{ active: currentPage === page }"
+                    >
+                      <button
+                        class="btn btn-link"
+                        (click)="gotoPage(page)"
+                        [disabled]="currentPage === page"
+                      >
+                        {{ page }}
+                      </button>
+                    </li>
+                  </ng-container>
+                  <li class="page-item">
+                    <button (click)="nextPage()" [disabled]="currentPage === totalPages" class="btn btn-link">Next</button>
                   </li>
                 </ul>
               </div>
@@ -178,7 +197,9 @@
                     <input
                       type="text"
                       class="form-control"
-                      [ngClass]="{'is-invalid': submitted && f['item_name'].errors }"
+                      [ngClass]="{
+                        'is-invalid': submitted && f['item_name'].errors
+                      }"
                       id="item_name"
                       formControlName="item_name"
                       placeholder="Enter the item name"
@@ -196,7 +217,10 @@
                     <label for="category" class="form-label">Category</label>
                     <select
                       class="form-select"
-                      [ngClass]="{ 'is-invalid': submitted && (f['category'].value === 'Select category')}"
+                      [ngClass]="{
+                        'is-invalid':
+                          submitted && f['category'].value === 'Select category'
+                      }"
                       formControlName="category"
                       aria-label="Default select example"
                       id="category"
@@ -210,12 +234,14 @@
                       </option>
                     </select>
                     <small
-                      *ngIf="(f['category'].value === 'Select category') && submitted"
+                      *ngIf="
+                        f['category'].value === 'Select category' && submitted
+                      "
                       class="invalid-feedback"
                     >
-                    <div *ngIf="f['category'].errors?.['required']">
-                      Category is required
-                    </div>
+                      <div *ngIf="f['category'].errors?.['required']">
+                        Category is required
+                      </div>
                     </small>
                   </div>
                   <div class="item-qty-price form-group">
@@ -224,19 +250,21 @@
                       <input
                         type="number"
                         class="form-control"
-                        [ngClass]="{'is-invalid': submitted && f['quantity'].errors }"
+                        [ngClass]="{
+                          'is-invalid': submitted && f['quantity'].errors
+                        }"
                         formControlName="quantity"
                         id="quantity"
                         placeholder="Input quantity"
                       />
                       <small
-                      *ngIf="f['quantity'].invalid && submitted"
-                      class="invalid-feedback"
-                    >
-                      <div *ngIf="f['quantity'].errors?.['required']">
-                        Quantity is required
-                      </div>
-                    </small>
+                        *ngIf="f['quantity'].invalid && submitted"
+                        class="invalid-feedback"
+                      >
+                        <div *ngIf="f['quantity'].errors?.['required']">
+                          Quantity is required
+                        </div>
+                      </small>
                     </div>
                     <div class="mb-3">
                       <label for="unit-price" class="form-label"
@@ -245,7 +273,9 @@
                       <input
                         type="number"
                         class="form-control"
-                        [ngClass]="{'is-invalid': submitted && f['unit_price'].errors }"
+                        [ngClass]="{
+                          'is-invalid': submitted && f['unit_price'].errors
+                        }"
                         formControlName="unit_price"
                         id="unit-price"
                         placeholder="Input price"
@@ -254,10 +284,10 @@
                         *ngIf="f['unit_price'].invalid && submitted"
                         class="invalid-feedback"
                       >
-                      <div *ngIf="f['unit_price'].errors?.['required']">
-                        Unit price is required
-                      </div>
-                    </small>
+                        <div *ngIf="f['unit_price'].errors?.['required']">
+                          Unit price is required
+                        </div>
+                      </small>
                     </div>
                   </div>
                 </div>
@@ -278,7 +308,10 @@
         <div id="editProductModal" class="modal fade">
           <div class="modal-dialog">
             <div class="modal-content">
-              <form [formGroup]="productForm" (ngSubmit)="onSubmitEdit(productIndex)">
+              <form
+                [formGroup]="productForm"
+                (ngSubmit)="onSubmitEdit(productIndex)"
+              >
                 <div class="modal-header">
                   <h4 class="modal-title">Edit Product</h4>
                   <button
@@ -319,7 +352,9 @@
                     <input
                       type="text"
                       class="form-control"
-                      [ngClass]="{'is-invalid': submitted && f['item_name'].errors }"
+                      [ngClass]="{
+                        'is-invalid': submitted && f['item_name'].errors
+                      }"
                       id="item_name"
                       formControlName="item_name"
                       placeholder="Enter the item name"
@@ -337,7 +372,10 @@
                     <label for="category" class="form-label">Category</label>
                     <select
                       class="form-select"
-                      [ngClass]="{ 'is-invalid': submitted && (f['category'].value === 'Select category')}"
+                      [ngClass]="{
+                        'is-invalid':
+                          submitted && f['category'].value === 'Select category'
+                      }"
                       formControlName="category"
                       aria-label="Default select example"
                       id="category"
@@ -351,7 +389,9 @@
                       </option>
                     </select>
                     <small
-                      *ngIf="(f['category'].value === 'Select category') && submitted"
+                      *ngIf="
+                        f['category'].value === 'Select category' && submitted
+                      "
                       class="invalid-feedback"
                     >
                       Category is required
@@ -363,19 +403,21 @@
                       <input
                         type="number"
                         class="form-control"
-                        [ngClass]="{'is-invalid': submitted && f['quantity'].errors }"
+                        [ngClass]="{
+                          'is-invalid': submitted && f['quantity'].errors
+                        }"
                         formControlName="quantity"
                         id="quantity"
                         placeholder="Input quantity"
                       />
                       <small
-                      *ngIf="f['quantity'].invalid && submitted"
-                      class="invalid-feedback"
-                    >
-                      <div *ngIf="f['quantity'].errors?.['required']">
-                        Quantity is required
-                      </div>
-                    </small>
+                        *ngIf="f['quantity'].invalid && submitted"
+                        class="invalid-feedback"
+                      >
+                        <div *ngIf="f['quantity'].errors?.['required']">
+                          Quantity is required
+                        </div>
+                      </small>
                     </div>
                     <div class="mb-3">
                       <label for="unit-price" class="form-label"
@@ -384,7 +426,9 @@
                       <input
                         type="number"
                         class="form-control"
-                        [ngClass]="{'is-invalid': submitted && f['unit_price'].errors }"
+                        [ngClass]="{
+                          'is-invalid': submitted && f['unit_price'].errors
+                        }"
                         formControlName="unit_price"
                         id="unit-price"
                         placeholder="Input price"
@@ -393,10 +437,10 @@
                         *ngIf="f['unit_price'].invalid && submitted"
                         class="invalid-feedback"
                       >
-                      <div *ngIf="f['unit_price'].errors?.['required']">
-                        Unit price is required
-                      </div>
-                    </small>
+                        <div *ngIf="f['unit_price'].errors?.['required']">
+                          Unit price is required
+                        </div>
+                      </small>
                     </div>
                   </div>
                 </div>
@@ -417,7 +461,10 @@
         <div id="deleteProductModal" class="modal fade">
           <div class="modal-dialog">
             <div class="modal-content">
-              <form [formGroup]="productForm" (ngSubmit)="onSubmitDeleteItem(productIndex)">
+              <form
+                [formGroup]="productForm"
+                (ngSubmit)="onSubmitDeleteItem(productIndex)"
+              >
                 <div class="modal-header">
                   <h4 class="modal-title">Delete Product</h4>
                   <button
@@ -428,7 +475,11 @@
                   ></button>
                 </div>
                 <div class="modal-body">
-                  <p>Are you sure you want to remove the product <strong>{{deleteDescription}}</strong>?</p>
+                  <p>
+                    Are you sure you want to remove the product
+                    <strong>{{ deleteDescription }}</strong
+                    >?
+                  </p>
                   <p class="text-warning">
                     <small>This action cannot be undone.</small>
                   </p>
@@ -450,7 +501,10 @@
         <div id="deleteSelectedProductModal" class="modal fade">
           <div class="modal-dialog">
             <div class="modal-content">
-              <form [formGroup]="productForm" (ngSubmit)="onSubmitDeleteSelected()">
+              <form
+                [formGroup]="productForm"
+                (ngSubmit)="onSubmitDeleteSelected()"
+              >
                 <div class="modal-header">
                   <h4 class="modal-title">Delete Selected Product</h4>
                   <button
@@ -518,7 +572,7 @@
                         </div>
                     </div>
                 </div> -->
-        <div class="form-wrapper">
+        <div class="form-wrapper" style="display: none">
           <div class="form-container">
             <h3 class="text-center">Item Details</h3>
             <form enctype="multipart/form-data" [formGroup]="productForm">

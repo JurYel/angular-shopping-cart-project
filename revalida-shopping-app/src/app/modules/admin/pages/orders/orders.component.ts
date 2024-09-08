@@ -129,6 +129,7 @@ export class OrdersComponent implements OnInit {
     this.pageNumbers = Array.from({ length: this.totalPages }, (_, i) => i + 1);
   }
 
+  // Method for updating pagination upon selecting shown entries limit
   updatePagination(orders: Order[]){
     this.totalPages = Math.ceil(orders.length / this.pageSize);
     this.generatePageNumbers();

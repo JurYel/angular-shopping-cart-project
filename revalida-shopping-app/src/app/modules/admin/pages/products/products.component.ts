@@ -23,6 +23,17 @@ export class ProductsComponent implements OnInit, AfterViewInit {
   @ViewChild('closeModalDeleteSel') closeModalDeleteSel !: ElementRef;
   adminSection: HTMLDivElement;
   productsList$: Observable<Product[]>;
+  
+  // variables for pagination
+  paginatedProducts$!: Observable<Product[]>;
+  currentPage: number = 1;
+  pageSize: number = 5;
+  totalPages: number = 0;
+  pageNumbers: number[] = [];
+  totalLength: number = 0;
+  currentPageLength: number = 0;
+
+  // variables for form
   productForm: FormGroup;
   updateProductForm: FormGroup;
   categories: string[];
@@ -93,43 +104,66 @@ export class ProductsComponent implements OnInit, AfterViewInit {
             localStorage.setItem('sb|sidebar-toggle', document.querySelector('.sb-nav-fixed')?.classList.contains('sb-sidenav-toggled').toString() as string);
           })
       }
+
+      // calculate total number of pages based on the data
+      this.productsList$.subscribe(products => {
+        this.totalLength = products.length;
+        this.updatePagination(products);
+      })
+
+      // Initially show the first page of data
+      this.paginateProducts();
   }
 
   ngAfterViewInit(): void {
     
-    if(this.datatablesSimple) {
-      // new DataTable(this.datatablesSimple.nativeElement, {
-      //   searchable: true,
-      //   columns: [
-      //      // Sort the first column in ascending order
-      //     // { select: 0, sort: "asc" },
-      //     // { select: 1, sort: "asc" },
+  }
 
-      //     // Set the second column as datetime string matching the format "DD/MM/YYY"
-      //     // { select: 2 },
+  // Method to generate page numbers from totalPages
+  generatePageNumbers = () => {
+    this.pageNumbers = Array.from({ length: this.totalPages }, (_, i) => i + 1);
+  }
 
-      //     // Disable sorting on the third and fourth columns
-      //     // { select: [3, 4], sortable: false },
-          
-      //     // Set the fourth column as datetime string matching the format "DD/MM/YYY"
-      //     // { select: 4, type: "date", format: "DD/MM/YYYY" },
-         
-      //     // Hide the fifth column
-      //     // { select: 4, hidden: true },
+  // Method for updating pagination upon selecting shown entries limit
+  updatePagination = (products: Product[]) => {
+    this.totalPages = Math.ceil(products.length / this.pageSize);
+    this.generatePageNumbers();
+  }
 
-      //     // Append a button to the sixth column
-      //     // {
-      //     //     select: 5,
-      //     //     type: 'string',
-      //     //     render: function(data, td, rowIndex, cellIndex) {
-      //     //         return `${data}<button type='button' data-row='${rowIndex}'>Select</button>`;
-      //     //     }
-      //     // }
-      //   ]
-      // });
+  // Method to paginate products based on the current page
+  paginateProducts = () => {
+    this.paginatedProducts$ = this.productsList$
+      .pipe(
+        map(products => {
+          const startIndex = (this.currentPage - 1) * this.pageSize;
+          const endIndex = Math.min(startIndex + this.pageSize, products.length);
+          this.currentPageLength += endIndex - this.currentPageLength;
+          return products.slice(startIndex, endIndex);
+        })
+      );
+  }
+
+  // Method to go to next page
+  nextPage = () => {
+    if(this.currentPage < this.totalPages) {
+      this.currentPage++;
+      this.paginateProducts();
     }
   }
 
+  // Method to go to previous page
+  prevPage = () => {
+    if(this.currentPage > 1) {
+      this.currentPage--;
+      this.paginateProducts();
+    }
+  }
+
+  // Method to go to a specific page
+  gotoPage = (page: number) => {
+    this.currentPage = page;
+    this.paginateProducts();
+  }
 
   uploadFile = (event: Event) => {
     const element = event.currentTarget as HTMLInputElement;

@@ -6,6 +6,9 @@
       <!-- <app-admin-sidenav  [sidebarToggleInput]="sideToggleBtn" [adminSidenavInput]="adminSection"></app-admin-sidenav> -->
     </div>
     <div id="layoutSidenav_content">
+      <div class="title">
+        <h2><b>Order</b> Records</h2>
+      </div>
       <main>
         <div class="table-container">
           <div class="table-responsive">
@@ -90,13 +93,6 @@
               <table class="table table-striped table-hover">
                 <thead>
                   <tr>
-                    <!-- <th>#</th>
-                                        <th>Customer</th>
-                                        <th>Location</th>
-                                        <th>Order Date</th>						
-                                        <th>Status</th>						
-                                        <th>Net Amount</th>
-                                        <th>Action</th> -->
                     <th>Customer</th>
                     <th>Location</th>
                     <th>Order Date</th>
@@ -109,11 +105,6 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <!-- 
-                                    Delivered - bg-success
-                                    Shipped - bg-info
-                                    Cancelled - bg-danger
-                                    Pending - bg-warning -->
                   <tr
                     *ngFor="
                       let order of paginatedOrders$ | async;
