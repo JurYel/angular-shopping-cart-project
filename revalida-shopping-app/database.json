@@ -125,6 +125,14 @@
       "category": "Food",
       "quantity": 12,
       "unit_price": 12
+    },
+    {
+      "id": "afe0",
+      "item_img": "grocery-bundle-crop.png",
+      "item_name": "Assorted Products Gift Bundle",
+      "category": "Food",
+      "quantity": 20,
+      "unit_price": 799
     }
   ],
   "cart_items": [
@@ -146,7 +154,7 @@
         "Fit N' Right"
       ],
       "quantity": [
-        16,
+        19,
         13,
         6,
         63,
@@ -160,11 +168,55 @@
         23
       ],
       "subtotal": [
-        928,
+        1102,
         1144,
         150,
         756,
         345
+      ]
+    },
+    {
+      "id": "5113",
+      "username": "admin",
+      "item_img": [
+        "gardenia-white-bread.png",
+        "gardenia-wheat-bread.png",
+        "lala-fishcracker.png",
+        "itlog.jpg",
+        "fit-n-right.png",
+        "grocery-bundle-crop.png"
+      ],
+      "item_name": [
+        "Gardenia White Bread",
+        "Gardenia Wheat Bread",
+        "Lala Fishcracker",
+        "Itlog",
+        "Fit N' Right",
+        "Assorted Products Gift Bundle"
+      ],
+      "quantity": [
+        19,
+        13,
+        6,
+        63,
+        15,
+        1
+      ],
+      "unit_price": [
+        58,
+        88,
+        25,
+        12,
+        23,
+        799
+      ],
+      "subtotal": [
+        1102,
+        1144,
+        150,
+        756,
+        345,
+        799
       ]
     }
   ],

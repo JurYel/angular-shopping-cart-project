@@ -16,6 +16,8 @@ import { CartItem } from '../../../models/cart-item.interface';
 export class DashboardComponent implements OnInit {
 
   products$: Observable<Product[]>;
+  productBundle!: Product;
+  productBundleIndex: number;
   addToCartForm: FormGroup;
   cartItemCount: number;
   customerUsername: string;
@@ -25,7 +27,21 @@ export class DashboardComponent implements OnInit {
               private productService: ProductsService,
               private cartService: CartService
   ) {
-    this.products$ = this.productService.getProducts();
+    this.products$ = this.productService.getProducts().pipe(
+      // map(products => products.filter(product => !product.item_name.includes("Bundle")))
+    );
+
+
+    this.productService.getProducts().pipe(
+      map(products => products.filter(product => product.item_name.includes("Bundle")))
+    ).subscribe(
+      product => {
+       if(product) {
+        this.productBundle = product[0];
+       }
+      }
+    );
+    
     this.addToCartForm = this.fb.group({
       "quantity": [1, [Validators.required, Validators.min(1)]]
     });
@@ -41,6 +57,7 @@ export class DashboardComponent implements OnInit {
       subtotal: [] as number[]
     }
     this.cartItemCount = 0;
+    this.productBundleIndex = 0;
   }
 
   ngOnInit(): void {
@@ -61,11 +78,28 @@ export class DashboardComponent implements OnInit {
         }
       }
     );
+
+    this.getProductBundleIndex();
   }
 
   logOut = () => {
     sessionStorage.clear();
     this.router.navigate(['/auth/login'])
+  }
+
+  getProductBundleIndex = () => {
+
+    this.productService.getProducts().pipe(
+      map(products => {
+        const index = products.findIndex(product => product.item_name.includes('Bundle'));
+        console.log("bundle: ", index);
+        if(index === -1){
+          console.log("Error getting index: No product with such name");
+        } else {
+          this.productBundleIndex = index;
+        }
+      })
+    ).subscribe();
   }
 
   stepUp = (index: number) => {
@@ -90,6 +124,7 @@ export class DashboardComponent implements OnInit {
 
   addToCart = (index: number) => {
     const quantityInput = parseInt(this.addToCartForm.get('quantity')?.value);
+    console.log("index: ", this.productBundleIndex)
 
     if(parseInt(this.addToCartForm.get('quantity')?.value) > 0) {
       this.products$.pipe(
