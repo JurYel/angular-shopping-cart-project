@@ -15,7 +15,7 @@
           <div class="side-menu">
             <div class="small-profile text-center mb-4">
               <img
-                src="assets/users/{{ savedProfileImgName }}"
+                src="{{ savedImageUrl }}"
                 class="rounded-circle"
                 alt="User Avatar"
               />
@@ -206,11 +206,17 @@
                   </button>
                 </div>
                 
-                <div class="profile-image">
-                  <img
+                <div class="profile-image" >
+                  <!-- <img
                   src="assets/users/{{ profileImgName }}"
                   alt="Profile Image"
-                  />
+                  /> -->
+                  <ng-container *ngIf="imageUrl">
+                    <img
+                      [src]="imageUrl"
+                      alt="Profile Image"
+                    />
+                  </ng-container>
                   <br />
                   <input type="file" name="" id="profile-img-input"
                          placeholder="Choose an image" accept="image/png, image/jpeg"
