@@ -28,20 +28,20 @@ export class ProfileComponent implements OnInit, AfterViewChecked {
   userExists = false;
   submitted = false;
   profileImgName: string;
-  savedProfileImgName!: string;
   isDefaultImg: boolean = true;
   selectedFile !: File;
   imageUrl: string;
   savedImageUrl: string
   timestamp: string;
   s3Folder: string;
+  customerName: string;
 
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
     private messageService: MessageService,
     private usernameValidator: UniqueUsernameValidator,
-    private s3UploadService: S3UploadService,
+    private awsS3Service: S3UploadService,
     private orderService: OrderService,
     private http: HttpClient
   ) {
@@ -63,6 +63,7 @@ export class ProfileComponent implements OnInit, AfterViewChecked {
     this.imageUrl = `${this.s3Folder}/default_profile_img-100.png`;
     this.savedImageUrl = `${this.s3Folder}/default_profile_img-50.png`;
     this.timestamp = Date.now().toString();
+    this.customerName = `${sessionStorage.getItem('first_name')} ${sessionStorage.getItem('last_name')}`;
     console.log(this.timestamp);
   }
 
@@ -77,7 +78,7 @@ export class ProfileComponent implements OnInit, AfterViewChecked {
           this.profileForm.patchValue({ email: response[0].email });
           this.profileForm.patchValue({ mobile_num: response[0].mobile_num });
 
-          const imageSignedUrl = await this.s3UploadService.getSignedUrl(`${this.s3Folder}/${response[0].profile_img}`);
+          const imageSignedUrl = await this.awsS3Service.getSignedUrl(`${this.s3Folder}/${response[0].profile_img}`);
           this.profileImgName = (response[0].profile_img) ? imageSignedUrl : 'default_profile_img-100.png';
           this.imageUrl = imageSignedUrl;
           this.savedImageUrl = imageSignedUrl;
@@ -135,8 +136,8 @@ export class ProfileComponent implements OnInit, AfterViewChecked {
           try {
             const imageKey = `assets/users/${this.profileImgName}`;
             // Upload file to S3 and get the URL
-            this.imageUrl = await this.s3UploadService.uploadFile(fileList[0], this.profileImgName);
-            this.imageUrl = await this.s3UploadService.getSignedUrl(`${this.s3Folder}/${this.profileImgName}`);
+            this.imageUrl = await this.awsS3Service.uploadFile(fileList[0], this.profileImgName);
+            this.imageUrl = await this.awsS3Service.getSignedUrl(`${this.s3Folder}/${this.profileImgName}`);
 
             // Log or use the URL to display the image
             console.log("File uploaded successfully. Image URL: ", this.imageUrl);
@@ -206,12 +207,13 @@ export class ProfileComponent implements OnInit, AfterViewChecked {
               },
               error => {
                 console.log("Error order update: ", error);
-                this.messageService.add({ severity:'error', summary: 'Error', detail: 'Failed to update order image' });
+                // this.messageService.add({ severity:'error', summary: 'Error', detail: 'Failed to update order image' });
               }
             );
           });
         } else {
-          this.messageService.add({ severity:'error', summary: 'Error', detail: 'Customer has no orders' });
+          console.log("Error updating order image: Customer has no orders");
+          // this.messageService.add({ severity:'error', summary: 'Error', detail: 'Customer has no orders' });
         }
       }
     )
@@ -223,7 +225,6 @@ export class ProfileComponent implements OnInit, AfterViewChecked {
     const timestamp = Date.now().toString();
     const imgName = `${this.f['username'].value}-${timestamp.slice(0, -3)}.${this.profileImgName.split('.')[1]}`
 
-    console.log(postData);
     if(this.profileForm.invalid) {
       return;
     }
@@ -235,6 +236,9 @@ export class ProfileComponent implements OnInit, AfterViewChecked {
             postData['password'] = user[0].password;
             postData['deactivated'] = user[0].deactivated;
             postData['profile_img'] = this.profileImgName;
+            console.log("Image name: ", postData['profile_img'].split('.')[0]);
+
+            this.customerName = `${postData['first_name']} ${postData['last_name']}`;
             
             //  // Testing file image saving with express
             // const formData: FormData = new FormData();
@@ -255,8 +259,34 @@ export class ProfileComponent implements OnInit, AfterViewChecked {
             this.authService.updateUser(user[0].id, postData as AuthUser).subscribe(
               response => {
                 console.log("Updated user: ", response);
+                let objectsList: string[] = [];
                 this.savedImageUrl = this.imageUrl;
                 this.updateCustomerOrderImage(postData['username'], this.savedImageUrl);
+
+                this.awsS3Service.listObjectsWithName(this.s3Folder).pipe(
+                  map(objects => objects?.Contents?.filter(
+                            object => 
+                              object.Key?.includes(postData['username']) && 
+                              !object.Key?.includes(postData['profile_img'].split('.')[0].split('-')[1]) && 
+                              !object.Key?.includes('default')))
+                ).subscribe(
+                  (objects: any) => {
+                    objectsList = objects.map((item: any) => item.Key);
+                    console.log("Objects containing name: ", objectsList);
+
+                    this.awsS3Service.deleteObjectsWithName(objectsList).subscribe(
+                      (response: any) => {
+                        console.log("Deleted objects: ", response.Deleted);
+                      },
+                      (error) => {
+                        console.error("Error deleting objects: ", error);
+                      }
+                    )
+                  },
+                  (error) => {
+                    console.error("Error listing objects: ", error);
+                  }
+                )
                 this.messageService.add({ severity:'success', summary: 'Success', detail: 'Information has been updated' });
               },
               error => {

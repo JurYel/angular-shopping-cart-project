@@ -44,7 +44,7 @@ export class AuthService {
   // Getting ERROR TypeError: Failed to fetch dynamically imported module:
   updateUser = (id: string, user: AuthUser) => {
     return this.http.put<AuthUser>(`${this.serverUrl}/users/${id}`, user).pipe(
-      tap(x => console.log("updating: ", x))
+      // tap(x => console.log("updating: ", x))
     );
   }
 }
