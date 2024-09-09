@@ -1,5 +1,6 @@
 export interface Order {
     id: string
+    username: string
     customer_img: string
     customer: string
     location: string

@@ -14,6 +14,7 @@ import { map, Observable, of } from 'rxjs';
 import { AuthUser } from '../../../models/auth-user.interface';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { S3UploadService } from '../../services/s3-upload.service';
+import { OrderService } from '../../../admin/services/order.service';
 
 @Component({
   selector: 'app-profile',
@@ -30,8 +31,8 @@ export class ProfileComponent implements OnInit, AfterViewChecked {
   savedProfileImgName!: string;
   isDefaultImg: boolean = true;
   selectedFile !: File;
-  imageUrl: string | null;
-  savedImageUrl: string | null;
+  imageUrl: string;
+  savedImageUrl: string
   timestamp: string;
   s3Folder: string;
 
@@ -41,6 +42,7 @@ export class ProfileComponent implements OnInit, AfterViewChecked {
     private messageService: MessageService,
     private usernameValidator: UniqueUsernameValidator,
     private s3UploadService: S3UploadService,
+    private orderService: OrderService,
     private http: HttpClient
   ) {
     this.profileForm = this.fb.group({
@@ -191,6 +193,30 @@ export class ProfileComponent implements OnInit, AfterViewChecked {
     this.isSubMenuVisible = !this.isSubMenuVisible;
   };
 
+  updateCustomerOrderImage = (username: string, newImgName: string) => {
+    this.orderService.getOrdersByUsername(username as string).subscribe(
+      orders => {
+        if(orders.length > 0) {
+          orders.forEach((order) => {
+            order.customer_img = newImgName;
+            
+            this.orderService.updateOrder(order).subscribe(
+              response => {
+                console.log("Updated order img: ", response);
+              },
+              error => {
+                console.log("Error order update: ", error);
+                this.messageService.add({ severity:'error', summary: 'Error', detail: 'Failed to update order image' });
+              }
+            );
+          });
+        } else {
+          this.messageService.add({ severity:'error', summary: 'Error', detail: 'Customer has no orders' });
+        }
+      }
+    )
+  }
+
   onSubmit = () => {
     this.submitted = true;
     const postData = {...this.profileForm.getRawValue()};
@@ -230,6 +256,7 @@ export class ProfileComponent implements OnInit, AfterViewChecked {
               response => {
                 console.log("Updated user: ", response);
                 this.savedImageUrl = this.imageUrl;
+                this.updateCustomerOrderImage(postData['username'], this.savedImageUrl);
                 this.messageService.add({ severity:'success', summary: 'Success', detail: 'Information has been updated' });
               },
               error => {
