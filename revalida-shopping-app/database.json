@@ -171,7 +171,7 @@
       "location": "Muntinlupa City",
       "datetime": "",
       "payment_mode": "Paypal",
-      "status": "Delivered",
+      "status": "Cancelled",
       "item_name": "Magnum Praline 400ml",
       "quantity": 1,
       "subtotal": 680.55
@@ -183,7 +183,7 @@
       "location": "Cebu City",
       "datetime": "",
       "payment_mode": "COD",
-      "status": "Cancelled",
+      "status": "Delivered",
       "item_name": "Oreo Ice Cream 400ml",
       "quantity": 2,
       "subtotal": 789.23

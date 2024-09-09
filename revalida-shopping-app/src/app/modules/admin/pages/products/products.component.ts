@@ -293,6 +293,7 @@ export class ProductsComponent implements OnInit, AfterViewInit {
           response => {
             
             this.productsList$ = this.productsService.getProducts();
+            this.paginateProducts();
             this.closeModalAdd.nativeElement.click();
             this.messageService.add({ severity:'success', summary: 'Success', detail: 'New product has been added' });
           },
@@ -330,6 +331,7 @@ export class ProductsComponent implements OnInit, AfterViewInit {
           response => {
             console.log("Updated item: ", response);
             this.productsList$ = this.productsService.getProducts();
+            this.paginateProducts();
             this.closeModalEdit.nativeElement.click();
             this.messageService.add({ severity:'success', summary: 'Success', detail: 'Product has been updated' });
           },
@@ -352,8 +354,9 @@ export class ProductsComponent implements OnInit, AfterViewInit {
         this.productsService.deleteProduct(product.id as string).subscribe(
           response => {
             console.log("Deleted item: ", response);
-            this.closeModalDelete.nativeElement.click();
             this.productsList$ = this.productsService.getProducts();
+            this.paginateProducts();
+            this.closeModalDelete.nativeElement.click();
             this.messageService.add({ severity:'success', summary: 'Success', detail: 'Product has been removed' });
           },
           error => {
@@ -376,6 +379,7 @@ export class ProductsComponent implements OnInit, AfterViewInit {
             response => {
               console.log("removed item: ", response);
               this.productsList$ = this.productsService.getProducts();
+              this.paginateProducts();
             },  
             error => {
               console.log(error);
