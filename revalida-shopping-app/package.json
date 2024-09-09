@@ -20,6 +20,8 @@
     "@angular/platform-browser": "^18.2.0",
     "@angular/platform-browser-dynamic": "^18.2.0",
     "@angular/router": "^18.2.0",
+    "@aws-sdk/client-s3": "^3.645.0",
+    "@aws-sdk/s3-request-presigner": "^3.645.0",
     "@popperjs/core": "^2.11.8",
     "bootstrap": "^5.2.3",
     "chart.js": "^2.8.0",

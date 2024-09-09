@@ -75,6 +75,7 @@ export class RegisterComponent {
 
     postData['first_name'] = this.capitalizeWord(postData['first_name']);
     postData['last_name'] = this.capitalizeWord(postData['last_name']);
+    postData['profile_img'] = "default_profile_img-100.png";
 
     if(this.registerForm.invalid) {
       return;
