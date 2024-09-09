@@ -239,8 +239,9 @@ export class AccountsComponent implements OnInit, AfterViewInit{
           this.accountsService.addUser(postData as AuthUser).subscribe(
             response => {
               console.log("Created user: ", response);
-              this.closeModalAdd.nativeElement.click();
               this.accountsList$ = this.accountsService.getAccounts();
+              this.paginateAccounts();
+              this.closeModalAdd.nativeElement.click();
               this.messageService.add({ severity:'success', summary: 'Success', detail: 'Created new user' });
             },
             error => {
@@ -275,6 +276,7 @@ export class AccountsComponent implements OnInit, AfterViewInit{
           response => {
             console.log("Updated user: ", response);
             this.accountsList$ = this.accountsService.getAccounts();
+            this.paginateAccounts();
             this.closeModalEdit.nativeElement.click();
             this.messageService.add({ severity:'success', summary: 'Success', detail: 'User information has been updated' });
           },
@@ -299,6 +301,7 @@ export class AccountsComponent implements OnInit, AfterViewInit{
           response => {
             console.log("Deactivated user: ", response);
             this.accountsList$ = this.accountsService.getAccounts();
+            this.paginateAccounts()
             this.closeModalDeact.nativeElement.click();
             this.messageService.add({ severity:'success', summary: 'Success', detail: `${user.first_name} ${user.last_name} has been deactivated` });
           },
@@ -323,6 +326,7 @@ export class AccountsComponent implements OnInit, AfterViewInit{
             response => {
               console.log("Deactivated user: ", response);
               this.accountsList$ = this.accountsService.getAccounts();
+              this.paginateAccounts();
             },
             error => {
               this.messageService.add({ severity:'error', summary: 'Error', detail: 'Failed to remove product' });
