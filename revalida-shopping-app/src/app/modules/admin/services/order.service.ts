@@ -2,13 +2,15 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Order } from '../../models/order.interface';
+import { environment } from '../../../../environment/environment.dev';
 
 @Injectable({
   providedIn: 'root'
 })
 export class OrderService {
 
-  private serverUrl = 'http://localhost:3000';
+  private serverUrl = environment.SERVER_URL;
+  
   constructor(private http: HttpClient) { }
 
   getOrders = (): Observable<Order[]> => {

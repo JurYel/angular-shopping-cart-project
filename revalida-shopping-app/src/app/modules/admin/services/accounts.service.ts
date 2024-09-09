@@ -2,13 +2,14 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { filter, map, Observable } from 'rxjs';
 import { AuthUser } from '../../models/auth-user.interface';
+import { environment } from '../../../../environment/environment.dev';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AccountsService {
 
-  private serverUrl = 'http://localhost:3000';
+  private serverUrl = environment.SERVER_URL;
 
   constructor(private http: HttpClient) { }
 

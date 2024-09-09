@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { S3Client, PutObjectCommand, GetObjectCommand } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
+import { environment } from '../../../../environment/environment.dev';
 
 @Injectable({
   providedIn: 'root'
@@ -8,10 +9,10 @@ import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 export class S3UploadService {
 
   private s3: S3Client;
-  private bucketName: string = 'revalida-angular-shop-app';
-  private region: string = 'ap-southeast-1';
-  private accessKeyId: string = 'AKIAXQISFHH2YFJA4EMJ';
-  private secretAccessKey: string= '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';
+  private bucketName: string = environment.BUCKET_NAME;
+  private region: string = environment.S3_REGION;
+  private accessKeyId: string = environment.ACCESS_KEY;
+  private secretAccessKey: string= environment.SECRET_ACCESS_KEY;
 
   constructor() { 
     // Initialize the S3 client with the credentials
