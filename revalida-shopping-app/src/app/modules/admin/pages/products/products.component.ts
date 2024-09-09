@@ -278,8 +278,8 @@ export class ProductsComponent implements OnInit, AfterViewInit {
   onSubmitAdd = () => {
     this.submitted = true;
     const postData = {...this.productForm.getRawValue()};
-    postData['item_name'] = this.capitalizeWord(postData['item_name']);
-    postData['item_img'] = (postData['item_img'] as string).split('fakepath\\')[1];
+    postData['item_name'] = this.capitalizeWord(postData['item_name']).trim();
+    postData['item_img'] = (postData['item_img'] as string).split('fakepath\\')[1].trim();
 
     if(this.productForm.invalid){
       return;

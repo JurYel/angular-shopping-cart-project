@@ -89,7 +89,7 @@
     {
       "id": "0aa1",
       "item_img": "gardenia-white-bread.png",
-      "item_name": " Gardenia White Bread ",
+      "item_name": "Gardenia White Bread",
       "category": "Food",
       "quantity": 20,
       "unit_price": 58
@@ -97,7 +97,7 @@
     {
       "id": "9ffb",
       "item_img": "gardenia-wheat-bread.png",
-      "item_name": " Gardenia Wheat Bread ",
+      "item_name": "Gardenia Wheat Bread",
       "category": "Food",
       "quantity": 20,
       "unit_price": 88
@@ -105,7 +105,7 @@
     {
       "id": "3db5",
       "item_img": "lala-fishcracker.png",
-      "item_name": " Lala Fishcracker ",
+      "item_name": "Lala Fishcracker",
       "category": "Food",
       "quantity": 20,
       "unit_price": 25
@@ -113,7 +113,7 @@
     {
       "id": "5177",
       "item_img": "fit-n-right.png",
-      "item_name": " Fit N' Right ",
+      "item_name": "Fit N' Right",
       "category": "Drinks",
       "quantity": 12,
       "unit_price": 23
@@ -121,7 +121,7 @@
     {
       "id": "5677",
       "item_img": "itlog.jpg",
-      "item_name": " Itlog ",
+      "item_name": "Itlog",
       "category": "Food",
       "quantity": 12,
       "unit_price": 12
@@ -129,7 +129,43 @@
   ],
   "cart_items": [
     {
-      
+      "id": "5113",
+      "username": "admin",
+      "item_img": [
+        "gardenia-white-bread.png",
+        "gardenia-wheat-bread.png",
+        "lala-fishcracker.png",
+        "itlog.jpg",
+        "fit-n-right.png"
+      ],
+      "item_name": [
+        "Gardenia White Bread",
+        "Gardenia Wheat Bread",
+        "Lala Fishcracker",
+        "Itlog",
+        "Fit N' Right"
+      ],
+      "quantity": [
+        16,
+        13,
+        6,
+        63,
+        15
+      ],
+      "unit_price": [
+        58,
+        88,
+        25,
+        12,
+        23
+      ],
+      "subtotal": [
+        928,
+        1144,
+        150,
+        756,
+        345
+      ]
     }
   ],
   "orders": [

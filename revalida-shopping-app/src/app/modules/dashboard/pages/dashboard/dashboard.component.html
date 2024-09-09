@@ -15,7 +15,7 @@
   </head>
   <body>
     <!-- Navigation-->
-     <app-navbar></app-navbar>
+     <app-navbar [itemCountInput]="cartItemCount"></app-navbar>
     <!-- Product section-->
     <section class="py-5">
       <div class="container px-4 px-lg-5 my-5">
@@ -41,10 +41,11 @@
               quick-fix meals with Lucky Me! Instant Noodles in mouthwatering flavors 
               like Spicy Bulalo and Beef. Perfect for easy, tasty meals!
             </p>
-            <form class="d-flex">
+            <form [formGroup]="addToCartForm" class="d-flex">
               <input
                 class="form-control text-center me-3"
                 id="inputQuantity"
+                formControlName="quantity"
                 type="num"
                 value="1"
                 style="max-width: 3rem"
@@ -73,7 +74,7 @@
           class="shop-item row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-flex-start"
           
         >
-          <div class="item col mb-5" *ngFor="let product of products$ | async">
+          <div class="item col mb-5" *ngFor="let product of products$ | async; let i = index">
             <div class="card h-100">
               <!-- Product image-->
               <img
@@ -107,24 +108,23 @@
               </div>
               <!-- Product actions-->
               <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                <form class="text-center">
+                <form [formGroup]="addToCartForm" (ngSubmit)="addToCart(i)" class="text-center">
                   <div class="qty-wrapper">
-                    <a href="" class="btn btn-link px-2"
-                          onclick="">
+                    <a class="btn btn-link px-2"
+                          (click)="stepDown(i)">
                       <i class="fa-solid fa-minus"></i>
                     </a>
 
-                    <input min="0" name="quantity" value="1" type="number"
+                    <input min="0" formControlName="quantity" id="{{ i }}" type="number"
                             class="form-control form-control-sm qty-input"/>
 
-                    <a href="" class="btn btn-link px-2"
-                            onclick="">
+                    <a class="btn btn-link px-2"
+                            (click)="stepUp(i)">
                         <i class="fa-solid fa-plus"></i>
                     </a>
                   </div>
-                  <a class="btn btn-outline-dark mt-auto" href="#"
-                    >Add to cart</a
-                  >
+                  <button type="submit" class="btn btn-outline-dark mt-auto"
+                    >Add to cart</button>
                 </form>
               </div>
             </div>
