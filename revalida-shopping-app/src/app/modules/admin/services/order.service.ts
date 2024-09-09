@@ -17,6 +17,10 @@ export class OrderService {
     return this.http.get<Order[]>(`${this.serverUrl}/orders`);
   }
 
+  createOrder = (order: Order) => {
+    return this.http.post<Order>(`${this.serverUrl}/orders`, order);
+  }
+
   updateOrder = (order: Order) => {
     return this.http.put<Order>(`${this.serverUrl}/orders/${order.id}`, order);
   }
