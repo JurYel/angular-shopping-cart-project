@@ -49,6 +49,16 @@
       "is_admin": false,
       "mobile_num": "9181733784",
       "password": "1234"
+    },
+    {
+      "id": "fd41",
+      "first_name": "Dom",
+      "last_name": "Frogoso",
+      "username": "domvpf",
+      "email": "domvpf@gmail.com",
+      "is_admin": false,
+      "mobile_num": "9474338866",
+      "password": "password"
     }
   ],
   "inventory": [
