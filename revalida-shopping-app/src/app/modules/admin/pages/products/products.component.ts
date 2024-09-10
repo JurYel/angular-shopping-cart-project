@@ -100,7 +100,7 @@ export class ProductsComponent implements OnInit, AfterViewInit {
 
     console.log(this.f['item_img'].value);
     // this.itemImgValue = (this.f['item_img'].value) ? this.f['item_img'].value : 'default_item_img.jpg'; 
-    this.itemImgValue = `${this.s3Folder}/default_item_img.jpg`; 
+    this.itemImgValue = 'assets/img/default_item_img.jpg'; 
     this.deleteDescription = "these products";
   }
 
@@ -127,11 +127,7 @@ export class ProductsComponent implements OnInit, AfterViewInit {
       this.productsList$.subscribe(products => {
         this.totalLength = products.length;
         this.updatePagination(products);
-
-        products.forEach((product) => {
-          this.imageUrls.push(`${this.awsS3Service.cloudfrontDomain}/${this.s3Folder}/${product.item_img}`);
-        });
-      })
+      });
 
       // Initially show the first page of data
       this.paginateProducts();
@@ -163,9 +159,12 @@ export class ProductsComponent implements OnInit, AfterViewInit {
           this.totalLength = products.length;
           this.generatePageNumbers();
 
-          products.forEach((product) => {
-            this.imageUrls.push(`${this.awsS3Service.cloudfrontDomain}/${this.s3Folder}/${product.item_img}`);
+          this.imageUrls = [];
+          products.slice(startIndex, endIndex).forEach(async (product) => {
+            // this.imageUrls.push(`${this.awsS3Service.cloudfrontDomain}/${this.s3Folder}/${product.item_img}`);
+            this.imageUrls.push(await this.awsS3Service.getSignedUrl(`${this.s3Folder}/${product.item_img}`));
           });
+
           return products.slice(startIndex, endIndex);
         })
       );
@@ -201,17 +200,21 @@ export class ProductsComponent implements OnInit, AfterViewInit {
          fileList[0].type.match('image.jpg') ||
          fileList[0].type.match('image.png')){
           this.selectedFile = fileList[0];
-          this.itemImgValue = fileList[0].name;
+          // this.itemImgValue = fileList[0].name;
 
           // Testing file upload to S3 bucket with
           this.itemImgName = `${this.generateItemName(this.f['item_name'].value)}-${this.timestamp.slice(0, -3)}.${fileList[0].type.split('/')[1]}`;
+          // this.itemImgValue = `${this.awsS3Service.cloudfrontDomain}/${this.s3Folder}/${this.itemImgName}`;
           console.log('itemImgname: ', this.itemImgName);
           try {
             
             // Upload file to S3
             const s3Path = await this.awsS3Service.uploadFile(this.s3Folder, fileList[0], this.itemImgName);
-            this.imageUrls[this.productIndex] = `${this.awsS3Service.cloudfrontDomain}/${this.s3Folder}/${this.itemImgName}`;
+            this.imageUrls[this.productIndex] = await this.awsS3Service.getSignedUrl(`${this.s3Folder}/${this.itemImgName}`);
+            // this.imageUrls[this.productIndex] = `${this.awsS3Service.cloudfrontDomain}/${this.s3Folder}/${this.itemImgName}`;
             
+            this.itemImgValue = await this.awsS3Service.getSignedUrl(`${this.s3Folder}/${this.itemImgName}`);
+
             // Log or use the URL to display the image
             console.log("File uploaded successfully. Image URL: ", s3Path);
 
@@ -245,7 +248,7 @@ export class ProductsComponent implements OnInit, AfterViewInit {
     this.productIndex = index;
     this.deleteDescription = "this product";
 
-    this.productsList$.pipe(
+    this.paginatedProducts$.pipe(
       map(products => products[index])
     ).subscribe(
       product => {
@@ -283,11 +286,14 @@ export class ProductsComponent implements OnInit, AfterViewInit {
   populateEditForm = (index: number) => {
     this.productIndex = index;
     
-    this.productsList$.pipe(
+    this.paginatedProducts$.pipe(
       map(products => products[index])
     ).subscribe(
-      product => {
-        this.itemImgValue = product.item_img;
+      async (product) => {
+        // this.itemImgValue = product.item_img;
+        this.itemImgValue = await this.awsS3Service.getSignedUrl(`${this.s3Folder}/${product.item_img}`);
+        // this.itemImgValue = `${this.awsS3Service.cloudfrontDomain}/${this.s3Folder}/${product.item_img}`;
+
         // console.log();
         // fetch(this.itemImgValue)
         //   .then((response) => {
@@ -300,7 +306,7 @@ export class ProductsComponent implements OnInit, AfterViewInit {
         //     this.productForm.patchValue({item_img: file});
         //   })
 
-        this.loadURLToInputFiled(this.itemImgValue);
+        this.loadURLToInputFiled(this.itemImgValue.split(this.s3Folder)[1]);
         this.productForm.patchValue({
           // item_img: product.item_img,
           item_name: product.item_name,
@@ -341,8 +347,10 @@ export class ProductsComponent implements OnInit, AfterViewInit {
     this.submitted = true;
     const postData = {...this.productForm.getRawValue()};
     postData['item_name'] = this.capitalizeWord(postData['item_name']).trim();
-    postData['item_img'] = (postData['item_img'] as string).split('fakepath\\')[1].trim();
-
+    // postData['item_img'] = (postData['item_img'] as string).split('fakepath\\')[1].trim();
+    this.itemImgName = `${this.generateItemName(this.f['item_name'].value)}-${this.timestamp.slice(0, -3)}.${this.itemImgName.split('.')[1]}`;    
+    postData['item_img'] = this.itemImgName;
+    
     if(this.productForm.invalid){
       return;
     }
@@ -352,7 +360,20 @@ export class ProductsComponent implements OnInit, AfterViewInit {
       if(!exists) {
         
         this.productsService.addProduct(postData as Product).subscribe(
-          response => {
+          async (response) => {
+            
+            try {
+              if(this.selectedFile) {
+                // Upload file to S3
+                const s3Path = await this.awsS3Service.uploadFile(this.s3Folder, this.selectedFile, this.itemImgName);
+                // this.imageUrls[this.productIndex] = `${this.awsS3Service.cloudfrontDomain}/${this.s3Folder}/${this.itemImgName}`;
+                
+                // Log or use the URL to display the image
+                console.log("File uploaded successfully. Image URL: ", s3Path);
+              }
+            } catch(error) {
+              console.error("Error uploading file: ", error);
+            }
             
             this.productsList$ = this.productsService.getProducts();
             this.paginateProducts();
@@ -371,7 +392,7 @@ export class ProductsComponent implements OnInit, AfterViewInit {
 
    this.productForm.reset();
    this.productForm.patchValue({category: "Select category"});
-   this.itemImgValue = "default_item_img.jpg";
+   this.itemImgValue = "assets/img/default_item_img.jpg";
    this.submitted = false;
   }
 
@@ -383,7 +404,7 @@ export class ProductsComponent implements OnInit, AfterViewInit {
       return;
     }
 
-    this.productsList$.pipe(
+    this.paginatedProducts$.pipe(
       map(products => products[index])
     ).subscribe(
       async (product) => {
@@ -392,21 +413,21 @@ export class ProductsComponent implements OnInit, AfterViewInit {
         // Reinitialized item name in case it was changed before submit
         // updatedProduct.item_img = (!updatedProduct.item_img) ? product.item_img : updatedProduct.item_img;
         this.itemImgName = `${this.generateItemName(this.f['item_name'].value)}-${this.timestamp.slice(0, -3)}.${this.itemImgName.split('.')[1]}`;
-        this.imageUrls[this.productIndex] = `${this.awsS3Service.cloudfrontDomain}/${this.s3Folder}/${this.itemImgName}`;
+        this.imageUrls[this.productIndex] = await this.awsS3Service.getSignedUrl(`${this.s3Folder}/${this.itemImgName}`);
+        // this.imageUrls[this.productIndex] = `${this.awsS3Service.cloudfrontDomain}/${this.s3Folder}/${this.itemImgName}`;
         // updatedProduct.item_img = (!updatedProduct.item_img) ? product.item_img : updatedProduct.item_img;
         updatedProduct.item_img = (!updatedProduct.item_img) ? product.item_img : this.itemImgName;
         
         this.productsService.updateProduct(updatedProduct as Product).subscribe(
           async (response) => {
-            let objectsList: string[] = [];            
-            this.productsList$ = this.productsService.getProducts();
-            this.paginateProducts();
-
+            let objectsList: string[] = [];
+            
             try {
               if(this.selectedFile) {
                 // Upload file to S3
                 const s3Path = await this.awsS3Service.uploadFile(this.s3Folder, this.selectedFile, this.itemImgName);
-                this.imageUrls[this.productIndex] = `${this.awsS3Service.cloudfrontDomain}/${this.s3Folder}/${this.itemImgName}`;
+                this.imageUrls[this.productIndex] = await this.awsS3Service.getSignedUrl(`${this.s3Folder}/${this.itemImgName}`);
+                // this.imageUrls[this.productIndex] = `${this.awsS3Service.cloudfrontDomain}/${this.s3Folder}/${this.itemImgName}`;
                 
                 // Log or use the URL to display the image
                 console.log("File uploaded successfully. Image URL: ", s3Path);
@@ -451,6 +472,9 @@ export class ProductsComponent implements OnInit, AfterViewInit {
                 console.error("Error listing objects: ", errorList);
               }
             )
+
+            this.productsList$ = this.productsService.getProducts();
+            this.paginateProducts();
             this.closeModalEdit.nativeElement.click();
             this.messageService.add({ severity:'success', summary: 'Success', detail: 'Product has been updated' });
           },
@@ -461,12 +485,13 @@ export class ProductsComponent implements OnInit, AfterViewInit {
       }
     )
 
-    this.submitted = false;
+   this.itemImgValue = "assets/img/default_item_img.jpg";
+   this.submitted = false;
   }
 
   onSubmitDeleteItem = (index: number) => {
     
-    this.productsList$.pipe(
+    this.paginatedProducts$.pipe(
       map(products => products[index])
     ).subscribe(
       product => {

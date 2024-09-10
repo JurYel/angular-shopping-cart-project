@@ -1,9 +1,12 @@
 import { Injectable } from '@angular/core';
 import { S3Client, PutObjectCommand, GetObjectCommand, 
-          ListObjectsV2Command, DeleteObjectCommand, DeleteObjectsCommand } from '@aws-sdk/client-s3';
+          ListObjectsV2Command, DeleteObjectCommand, DeleteObjectsCommand, 
+          DeleteObjectCommandOutput,
+          DeleteObjectsCommandOutput,
+          ListObjectsV2CommandOutput} from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { environment } from '../../../../environment/environment.dev';
-import { from } from 'rxjs';
+import { from, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -30,7 +33,7 @@ export class S3UploadService {
 
   // List objects in a specific folder in the S3 bucket
   // listObjectsWithName(folderPath: string, fileName: string) {
-  async listObjectsWithName(folderPath: string) {
+  async listObjectsWithName(folderPath: string): Promise<Observable<ListObjectsV2CommandOutput>> {
     const command = new ListObjectsV2Command({
       Bucket: this.bucketName,
       Prefix: folderPath // List objects in the folder
@@ -45,7 +48,7 @@ export class S3UploadService {
   }
 
   // Delete objects with the specified names in the S3 bucket
-  async deleteObjectsWithName(objectKeys: string[]) {
+  async deleteObjectsWithName(objectKeys: string[]): Promise<Observable<DeleteObjectsCommandOutput>> {
     const deleteParams = {
       Bucket: this.bucketName,
       Delete: {
@@ -55,6 +58,16 @@ export class S3UploadService {
 
     const command = new DeleteObjectsCommand(deleteParams);
     return await from(this.s3.send(command));
+  }
+
+  // Delete single object from S3
+  async deleteObjectByName(folderPath: string, objectKey: string): Promise<Observable<DeleteObjectCommandOutput>> {
+      const deleteParams = new DeleteObjectCommand({
+        Bucket: this.bucketName,
+        Key: `${folderPath}/${objectKey}`
+      });
+      
+      return await from(this.s3.send(deleteParams));
   }
 
   // Upload file to S3
@@ -79,7 +92,7 @@ export class S3UploadService {
   }
 
   // Generate a signed URL for the file
-  async getSignedUrl(fileKey: string) {
+  async getSignedUrl(fileKey: string): Promise<string> {
     const command = new GetObjectCommand({
       Bucket: this.bucketName,
       Key: fileKey

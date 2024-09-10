@@ -87,12 +87,12 @@
   ],
   "inventory": [
     {
-      "id": "0aa1",
-      "item_img": "gardenia-white-bread.png",
+      "item_img": "gardenia_white_bread_-1725994139.png",
       "item_name": "Gardenia White Bread",
       "category": "Food",
       "quantity": 20,
-      "unit_price": 58
+      "unit_price": 58,
+      "id": "0aa1"
     },
     {
       "item_img": "gardenia_wheat_bread_-1725989990.png",
@@ -103,60 +103,52 @@
       "id": "9ffb"
     },
     {
-      "id": "3db5",
-      "item_img": "lala-fishcracker.png",
+      "item_img": "lala_fishcracker_-1725990887.png",
       "item_name": "Lala Fishcracker",
       "category": "Food",
       "quantity": 20,
-      "unit_price": 25
+      "unit_price": 25,
+      "id": "3db5"
     },
     {
-      "id": "5177",
-      "item_img": "fit-n-right.png",
+      "item_img": "fit_n'_right_-1725993411.jpeg",
       "item_name": "Fit N' Right",
       "category": "Drinks",
       "quantity": 12,
-      "unit_price": 23
+      "unit_price": 23,
+      "id": "5177"
     },
     {
-      "id": "5677",
-      "item_img": "itlog.jpg",
+      "item_img": "itlog_-1725990887.jpeg",
       "item_name": "Itlog",
       "category": "Food",
       "quantity": 12,
-      "unit_price": 12
+      "unit_price": 12,
+      "id": "5677"
     },
     {
-      "id": "afe0",
-      "item_img": "grocery-bundle-crop.png",
+      "item_img": "assorted_products_gift_bundle_-1725991727.png",
       "item_name": "Assorted Products Gift Bundle",
       "category": "Food",
       "quantity": 20,
-      "unit_price": 799
+      "unit_price": 799,
+      "id": "afe0"
     },
     {
-      "id": "b133",
-      "item_img": "oreo-ice-cream-450ml.png",
+      "item_img": "oreo_ice_cream_450ml_-1725994139.png",
       "item_name": "Oreo Ice Cream 450ml",
       "category": "Food",
       "quantity": 20,
-      "unit_price": 350.9
+      "unit_price": 350.9,
+      "id": "b133"
     },
     {
-      "id": "9919",
-      "item_img": "mogu_mogu.png",
+      "item_img": "mogu_mogu_250ml_-1725993889.png",
       "item_name": "Mogu Mogu 250ml",
       "category": "Drinks",
       "quantity": 50,
-      "unit_price": 48.99
-    },
-    {
-      "id": "acd8",
-      "item_img": "pepsi.jpg",
-      "item_name": "Pepsi",
-      "category": "Drinks",
-      "quantity": 50,
-      "unit_price": 25.59
+      "unit_price": 48.99,
+      "id": "9919"
     }
   ],
   "cart_items": [

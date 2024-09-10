@@ -73,8 +73,13 @@
                       </span>
                     </td>
                     <td>
-                      <img
+                      <!-- <img
                         src="assets/img/{{ product.item_img }}"
+                        class="table-item-img"
+                        alt=""
+                      /> -->
+                      <img
+                        src="{{ imageUrls[i] }}"
                         class="table-item-img"
                         alt=""
                       />
@@ -165,7 +170,8 @@
                 </div>
                 <div class="modal-body">
                   <div class="item-img">
-                    <img src="assets/img/{{ itemImgValue }}" alt="" />
+                    <!-- <img src="assets/img/{{ itemImgValue }}" alt="" /> -->
+                    <img src="{{ itemImgValue }}" alt="" />
                   </div>
                   <div class="mb-3">
                     <label for="item-img-input" class="form-label"
@@ -323,7 +329,7 @@
                 </div>
                 <div class="modal-body">
                   <div class="item-img">
-                    <img src="assets/img/{{ itemImgValue }}" alt="" />
+                    <img src="{{ itemImgValue }}" alt="" />
                   </div>
                   <div class="mb-3">
                     <label for="item-img-input" class="form-label"
