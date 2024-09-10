@@ -28,6 +28,7 @@ export class ProfileComponent implements OnInit, AfterViewChecked {
   userExists = false;
   submitted = false;
   profileImgName: string;
+  savedProfileImgName!: string;
   isDefaultImg: boolean = true;
   selectedFile !: File;
   imageUrl: string;

@@ -138,6 +138,8 @@ export class ProductsComponent implements OnInit, AfterViewInit {
           const startIndex = (this.currentPage - 1) * this.pageSize;
           const endIndex = Math.min(startIndex + this.pageSize, products.length);
           this.currentPageLength += endIndex - this.currentPageLength;
+          this.totalLength = products.length;
+          this.generatePageNumbers();
           return products.slice(startIndex, endIndex);
         })
       );
