@@ -24,7 +24,8 @@ export class DashboardComponent implements OnInit {
   customerUsername: string;
   groceryCart: any;
   s3Folder: string;
-  imageUrl: string;
+  imageUrls: string[] = [];
+  itemImageName: string;
 
   constructor(private router: Router,
               private fb: FormBuilder,
@@ -74,7 +75,16 @@ export class DashboardComponent implements OnInit {
 
     // S3 variables
     this.s3Folder = "assets/items";
-    this.imageUrl = `${this.s3Folder}/default_item_img.jpg`;
+    // this.imageUrls = `${this.s3Folder}/default_item_img.jpg`;
+    this.itemImageName = `assets/img/default_item_img.jpg`;
+    this.products$.subscribe(
+      products => {
+        products.forEach(
+          async (product) =>
+          this.imageUrls.push(await this.awsS3Service.getSignedUrl(`${this.s3Folder}/${product.item_img}`))
+        )
+      }
+    );
   }
 
   ngOnInit(): void {
@@ -95,8 +105,7 @@ export class DashboardComponent implements OnInit {
     //     }
     //   }
     // );
-
-    this.retrieverCustomerCart(this.customerUsername as string);
+    this.retrieveCustomerCart(this.customerUsername as string);
   }
 
   get quantities(): FormArray {
@@ -111,14 +120,20 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  retrieverCustomerCart = (username: string) => {
+  retrieveCustomerCart = (username: string) => {
     this.cartService.getCartItems(username as string).subscribe(
       async (response) => {
         if(response.length > 0){
           this.groceryCart = response[0];
           this.cartItemCount = response[0].quantity.length;
-          // this.imageUrl = await this.awsS3Service.getSignedUrl(`${this.s3Folder}/${response[0].item_img}`);
           console.log("grocery: ", this.groceryCart);
+          
+          response.forEach(
+            async (item) => {
+
+              this.imageUrls.push(await this.awsS3Service.getSignedUrl(`${this.s3Folder}/${item.item_img}`));
+            }
+          )
         }
       }
     );
@@ -235,7 +250,7 @@ export class DashboardComponent implements OnInit {
               }
             );
 
-            this.retrieverCustomerCart(this.customerUsername);
+            this.retrieveCustomerCart(this.customerUsername);
           }
           
 

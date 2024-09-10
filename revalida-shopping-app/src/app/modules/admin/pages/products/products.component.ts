@@ -54,6 +54,7 @@ export class ProductsComponent implements OnInit, AfterViewInit {
   itemImgName: string;
   timestamp: string;
   selectedFile!: File;
+  defaultImg: string;
 
   // https://dbfiqowsfx2io.cloudfront.net
 
@@ -102,6 +103,7 @@ export class ProductsComponent implements OnInit, AfterViewInit {
     console.log(this.f['item_img'].value);
     // this.itemImgValue = (this.f['item_img'].value) ? this.f['item_img'].value : 'default_item_img.jpg'; 
     this.itemImgValue = 'assets/img/default_item_img.jpg'; 
+    this.defaultImg = 'assets/img/default_item_img.jpg'; 
     this.deleteDescription = "these products";
   }
 

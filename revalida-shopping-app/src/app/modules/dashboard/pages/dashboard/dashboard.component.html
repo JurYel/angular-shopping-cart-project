@@ -23,7 +23,7 @@
           <div class="front-img col-md-6">
             <img
               class="card-img-top mb-5 mb-md-0"
-              src="assets/img/{{ productBundle.item_img }}"
+              src="{{ (imageUrls[productBundleIndex]) ? imageUrls[productBundleIndex] : itemImageName }}"
               alt="..."
             />
           </div>
@@ -83,7 +83,7 @@
                 <!-- Product image-->
                 <img
                   class="card-img-top"
-                  src="assets/img/{{ product.item_img }}"
+                  src="{{ (imageUrls[i]) ? imageUrls[i] : itemImageName }}"
                   alt="..."
                 />
                 <!-- Product details-->
