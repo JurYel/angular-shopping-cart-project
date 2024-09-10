@@ -45,6 +45,11 @@ export class ProductsComponent implements OnInit, AfterViewInit {
   checkedItems: number[] = [];
   adminName: string | undefined;
 
+  // variables for S3
+  s3Folder: string;
+  imageUrl: string;
+  itemImgName: string;
+  timestamp: string;
 
   constructor(private fb: FormBuilder,
               private productsService: ProductsService,
@@ -84,6 +89,12 @@ export class ProductsComponent implements OnInit, AfterViewInit {
     console.log(this.f['item_img'].value);
     this.itemImgValue = (this.f['item_img'].value) ? this.f['item_img'].value : 'default_item_img.jpg'; 
     this.deleteDescription = "these products";
+
+    // S3 variables
+    this.s3Folder = "assets/items";
+    this.itemImgName = (this.f['item_img'].value) ? `${this.s3Folder}/${this.f['item_img'].value}` : `${this.s3Folder}/default_item_img.jpg`; 
+    this.imageUrl = `${this.s3Folder}/default_item_img.jpg`;
+    this.timestamp = Date.now().toString();
   }
 
   ngOnInit(): void {

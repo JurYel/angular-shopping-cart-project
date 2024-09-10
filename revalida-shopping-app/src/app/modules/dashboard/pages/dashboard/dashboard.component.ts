@@ -7,6 +7,7 @@ import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { OrderService } from '../../../admin/services/order.service';
 import { CartService } from '../../services/cart.service';
 import { CartItem } from '../../../models/cart-item.interface';
+import { S3UploadService } from '../../services/s3-upload.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -23,11 +24,13 @@ export class DashboardComponent implements OnInit {
   customerUsername: string;
   groceryCart: any;
   s3Folder: string;
+  imageUrl: string;
 
   constructor(private router: Router,
               private fb: FormBuilder,
               private productService: ProductsService,
-              private cartService: CartService
+              private cartService: CartService,
+              private awsS3Service: S3UploadService
   ) {
     this.products$ = this.productService.getProducts().pipe(
       // map(products => products.filter(product => !product.item_name.includes("Bundle")))
@@ -70,7 +73,8 @@ export class DashboardComponent implements OnInit {
     this.getProductBundleIndex();
 
     // S3 variables
-    this.s3Folder = "assets/users";
+    this.s3Folder = "assets/items";
+    this.imageUrl = `${this.s3Folder}/default_item_img.jpg`;
   }
 
   ngOnInit(): void {
@@ -109,10 +113,11 @@ export class DashboardComponent implements OnInit {
 
   retrieverCustomerCart = (username: string) => {
     this.cartService.getCartItems(username as string).subscribe(
-      response => {
+      async (response) => {
         if(response.length > 0){
           this.groceryCart = response[0];
           this.cartItemCount = response[0].quantity.length;
+          // this.imageUrl = await this.awsS3Service.getSignedUrl(`${this.s3Folder}/${response[0].item_img}`);
           console.log("grocery: ", this.groceryCart);
         }
       }
