@@ -82,7 +82,7 @@
                     <td>{{ product.item_name }}</td>
                     <td>{{ product.category }}</td>
                     <td>{{ product.quantity }}</td>
-                    <td>{{ product.unit_price }}</td>
+                    <td>{{ product.unit_price | currency: 'PHP' : 'symbol': '1.2' }}</td>
                     <td>
                       <a
                         (click)="populateEditForm(i)"

@@ -149,6 +149,14 @@
       "category": "Drinks",
       "quantity": 50,
       "unit_price": 48.99
+    },
+    {
+      "id": "acd8",
+      "item_img": "pepsi.jpg",
+      "item_name": "Pepsi",
+      "category": "Drinks",
+      "quantity": 50,
+      "unit_price": 25.59
     }
   ],
   "cart_items": [
@@ -160,35 +168,50 @@
         "gardenia-wheat-bread.png",
         "lala-fishcracker.png",
         "itlog.jpg",
-        "fit-n-right.png"
+        "fit-n-right.png",
+        "grocery-bundle-crop.png",
+        "oreo-ice-cream-450ml.png",
+        "mogu_mogu.png"
       ],
       "item_name": [
         "Gardenia White Bread",
         "Gardenia Wheat Bread",
         "Lala Fishcracker",
         "Itlog",
-        "Fit N' Right"
+        "Fit N' Right",
+        "Assorted Products Gift Bundle",
+        "Oreo Ice Cream 450ml",
+        "Mogu Mogu 250ml"
       ],
       "quantity": [
-        19,
-        13,
-        6,
-        63,
-        15
+        20,
+        14,
+        7,
+        64,
+        16,
+        3,
+        1,
+        1
       ],
       "unit_price": [
         58,
         88,
         25,
         12,
-        23
+        23,
+        799,
+        350.9,
+        48.99
       ],
       "subtotal": [
-        1102,
-        1144,
-        150,
-        756,
-        345
+        1160,
+        1232,
+        175,
+        768,
+        368,
+        2397,
+        350.9,
+        48.99
       ]
     },
     {
@@ -233,6 +256,109 @@
         756,
         345,
         799
+      ]
+    },
+    {
+      "id": "5113",
+      "username": "admin",
+      "item_img": [
+        "gardenia-white-bread.png",
+        "gardenia-wheat-bread.png",
+        "lala-fishcracker.png",
+        "itlog.jpg",
+        "fit-n-right.png",
+        "grocery-bundle-crop.png",
+        "oreo-ice-cream-450ml.png"
+      ],
+      "item_name": [
+        "Gardenia White Bread",
+        "Gardenia Wheat Bread",
+        "Lala Fishcracker",
+        "Itlog",
+        "Fit N' Right",
+        "Assorted Products Gift Bundle",
+        "Oreo Ice Cream 450ml"
+      ],
+      "quantity": [
+        20,
+        14,
+        7,
+        63,
+        16,
+        2,
+        1
+      ],
+      "unit_price": [
+        58,
+        88,
+        25,
+        12,
+        23,
+        799,
+        350.9
+      ],
+      "subtotal": [
+        1160,
+        1232,
+        175,
+        756,
+        368,
+        1598,
+        350.9
+      ]
+    },
+    {
+      "id": "5113",
+      "username": "admin",
+      "item_img": [
+        "gardenia-white-bread.png",
+        "gardenia-wheat-bread.png",
+        "lala-fishcracker.png",
+        "itlog.jpg",
+        "fit-n-right.png",
+        "grocery-bundle-crop.png",
+        "oreo-ice-cream-450ml.png",
+        "mogu_mogu.png"
+      ],
+      "item_name": [
+        "Gardenia White Bread",
+        "Gardenia Wheat Bread",
+        "Lala Fishcracker",
+        "Itlog",
+        "Fit N' Right",
+        "Assorted Products Gift Bundle",
+        "Oreo Ice Cream 450ml",
+        "Mogu Mogu 250ml"
+      ],
+      "quantity": [
+        20,
+        14,
+        7,
+        63,
+        16,
+        2,
+        1,
+        1
+      ],
+      "unit_price": [
+        58,
+        88,
+        25,
+        12,
+        23,
+        799,
+        350.9,
+        48.99
+      ],
+      "subtotal": [
+        1160,
+        1232,
+        175,
+        756,
+        368,
+        1598,
+        350.9,
+        48.99
       ]
     }
   ],
