@@ -45,6 +45,7 @@ export class ProductsComponent implements OnInit, AfterViewInit {
   modalInstance: any; 
   deleteDescription: string;
   checkedItems: number[] = [];
+  selectAll: boolean = false;
   adminName: string | undefined;
 
   // variables for S3
@@ -333,6 +334,43 @@ export class ProductsComponent implements OnInit, AfterViewInit {
     return capitalized.trim();
   }
 
+  toggleAllSelect = () => {
+    if(this.selectAll) {
+      this.paginatedProducts$.subscribe(
+        products => {
+          let i = 0;
+          products.forEach(() => {
+            this.checkedItems.push(i);
+            i++;
+          });
+        }
+      )
+    } else {
+      this.checkedItems = [];
+    }
+  }
+
+  toggleItemSelect = (index: number) => {
+    if(this.checkedItems.includes(index)) {
+      this.checkedItems = this.checkedItems.filter(
+        (item) => item !== index
+      );
+    } else {
+      this.checkedItems.push(index);
+    }
+
+    // Update "Select All" checkbox based on whether all items are selected
+    this.paginatedProducts$.subscribe(
+      products => {
+        this.selectAll = this.checkedItems.length === products.length;
+      }
+    );
+  }
+
+  isItemSelected = (index: number): boolean => {
+    return this.checkedItems.includes(index);
+  }
+
   onCheck = (index: number) => {
     if(this.checkedItems.includes(index)) {
       this.checkedItems = this.checkedItems.filter(
@@ -515,7 +553,7 @@ export class ProductsComponent implements OnInit, AfterViewInit {
     console.log(this.checkedItems);
 
     this.checkedItems.forEach((item) => {
-      this.productsList$.pipe(
+      this.paginatedProducts$.pipe(
         map(products => products[item])
       ).subscribe(
         product => {

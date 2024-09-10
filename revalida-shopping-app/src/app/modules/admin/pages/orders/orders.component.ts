@@ -200,7 +200,7 @@ export class OrdersComponent implements OnInit {
 
   // Method for updating order status
   updateOrderStatus = (index: number, status: string) => {
-    this.orders$.pipe(map((orders) => orders[index])).subscribe((order) => {
+    this.paginatedOrders$.pipe(map((orders) => orders[index])).subscribe((order) => {
       order.status = status;
       this.orderService.updateOrder(order as Order).subscribe(
         (response) => {

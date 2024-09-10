@@ -44,7 +44,7 @@
                   <tr>
                     <th>
                       <span class="custom-checkbox">
-                        <input type="checkbox" id="selectAll" />
+                        <input type="checkbox" id="selectAll" [(ngModel)]="selectAll" (change)="toggleAllSelect()" />
                         <label for="selectAll"></label>
                       </span>
                     </th>
@@ -67,7 +67,8 @@
                           id="checkbox-{{ i }}"
                           name="options[]"
                           value="{{ i }}"
-                          (change)="onCheck(i)"
+                          [checked]="isItemSelected(i)"
+                          (change)="toggleItemSelect(i)"
                         />
                         <label for="checkbox-{{ i }}"></label>
                       </span>

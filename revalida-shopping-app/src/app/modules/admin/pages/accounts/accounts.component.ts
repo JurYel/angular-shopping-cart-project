@@ -41,6 +41,7 @@ export class AccountsComponent implements OnInit, AfterViewInit{
   accountIndex!: number;
   deactDesc!: string;
   checkedUsers : number[] = [];
+  selectAll: boolean = false;
 
   constructor(private fb: FormBuilder,
               private accountsService: AccountsService,
@@ -181,7 +182,7 @@ export class AccountsComponent implements OnInit, AfterViewInit{
   getIndex = (index: number) => {
     this.accountIndex = index;
 
-    this.accountsList$.pipe(
+    this.paginatedAccounts$.pipe(
       map(users => users[index])
     ).subscribe(
       user => {
@@ -189,6 +190,44 @@ export class AccountsComponent implements OnInit, AfterViewInit{
       }
     );
   }
+
+  toggleAllSelect = () => {
+    if(this.selectAll) {
+      this.paginatedAccounts$.subscribe(
+        accounts => {
+          let i = 0;
+          accounts.forEach(() => {
+            this.checkedUsers.push(i);
+            i++;
+          });
+        }
+      )
+    } else {
+      this.checkedUsers = [];
+    }
+  }
+
+  toggleItemSelect = (index: number) => {
+    if(this.checkedUsers.includes(index)) {
+      this.checkedUsers = this.checkedUsers.filter(
+        (item) => item !== index
+      );
+    } else {
+      this.checkedUsers.push(index);
+    }
+
+    // Update "Select All" checkbox based on whether all items are selected
+    this.paginatedAccounts$.subscribe(
+      accounts => {
+        this.selectAll = this.checkedUsers.length === accounts.length;
+      }
+    );
+  }
+
+  isItemSelected = (index: number): boolean => {
+    return this.checkedUsers.includes(index);
+  }
+
 
   onCheck = (index: number) => {
     if(this.checkedUsers.includes(index)) {
@@ -203,7 +242,7 @@ export class AccountsComponent implements OnInit, AfterViewInit{
   populateEditForm = (index: number) => {
     this.accountIndex = index;
 
-    this.accountsList$.pipe(
+    this.paginatedAccounts$.pipe(
       map(accounts => accounts[index])
     ).subscribe(
       account => {
@@ -267,7 +306,7 @@ export class AccountsComponent implements OnInit, AfterViewInit{
       return;
     }
 
-    this.accountsList$.pipe(
+    this.paginatedAccounts$.pipe(
       map(users => users[index])
     ).subscribe(
       user => {
@@ -292,7 +331,7 @@ export class AccountsComponent implements OnInit, AfterViewInit{
 
   onSubmitDeactivateUser = (index: number) => {
     
-    this.accountsList$.pipe(
+    this.paginatedAccounts$.pipe(
       map(users => users[index])
     ).subscribe(
       user => {
@@ -317,7 +356,7 @@ export class AccountsComponent implements OnInit, AfterViewInit{
   onSubmitDeactivateChecked = () => {
 
     this.checkedUsers.forEach((index) => {
-      this.accountsList$.pipe(
+      this.paginatedAccounts$.pipe(
         map(users => users[index])
       ).subscribe(
         user => {
