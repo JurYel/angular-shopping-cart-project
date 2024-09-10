@@ -4,21 +4,22 @@ import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { SharedModule } from '../../shared/shared.module';
-import { ReactiveFormsModule } from '@angular/forms';
-import { ShoppingCartComponent } from './pages/shoppingcart/shoppingcart.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CartComponent } from './pages/cart/cart.component';
 
 
 @NgModule({
   declarations: [
     DashboardComponent,
     ProfileComponent,
-    ShoppingCartComponent
+    CartComponent
   ],
   imports: [
     CommonModule,
     DashboardRoutingModule,
     SharedModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    FormsModule
   ]
 })
 export class DashboardModule { }

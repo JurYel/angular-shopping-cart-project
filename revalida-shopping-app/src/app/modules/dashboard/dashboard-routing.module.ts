@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { ProfileComponent } from './pages/profile/profile.component';
-import { ShoppingCartComponent } from './pages/shoppingcart/shoppingcart.component';
+import { CartComponent } from './pages/cart/cart.component';
 
 const routes: Routes = [
   {
@@ -15,8 +15,8 @@ const routes: Routes = [
     component: ProfileComponent
   },
   {
-    path: 'shoppingcart',
-    component: ShoppingCartComponent
+    path: 'cart',
+    component: CartComponent
   }
 ]
 
