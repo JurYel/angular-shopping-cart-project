@@ -37,6 +37,7 @@ export class ProfileComponent implements OnInit, AfterViewChecked {
   s3Folder: string;
   customerName: string;
 
+
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
@@ -83,6 +84,8 @@ export class ProfileComponent implements OnInit, AfterViewChecked {
           this.profileImgName = (response[0].profile_img) ? imageSignedUrl : 'default_profile_img-100.png';
           this.imageUrl = imageSignedUrl;
           this.savedImageUrl = imageSignedUrl;
+          // this.imageUrl = `${this.awsS3Service.cloudfrontDomain}/${this.s3Folder}/${response[0].profile_img}`;
+          // this.savedImageUrl = `${this.awsS3Service.cloudfrontDomain}/${this.s3Folder}/${response[0].profile_img}`;
           this.isDefaultImg = this.profileImgName.includes("default");
 
           if (this.profileForm.get('username')?.value === this.username) {
@@ -137,8 +140,9 @@ export class ProfileComponent implements OnInit, AfterViewChecked {
           try {
             const imageKey = `assets/users/${this.profileImgName}`;
             // Upload file to S3 and get the URL
-            this.imageUrl = await this.awsS3Service.uploadFile(fileList[0], this.profileImgName);
+            await this.awsS3Service.uploadFile(fileList[0], this.profileImgName);
             this.imageUrl = await this.awsS3Service.getSignedUrl(`${this.s3Folder}/${this.profileImgName}`);
+            // this.imageUrl = `${this.awsS3Service.cloudfrontDomain}/${this.s3Folder}/${this.profileImgName}`;
 
             // Log or use the URL to display the image
             console.log("File uploaded successfully. Image URL: ", this.imageUrl);
@@ -258,24 +262,24 @@ export class ProfileComponent implements OnInit, AfterViewChecked {
             //   });
 
             this.authService.updateUser(user[0].id, postData as AuthUser).subscribe(
-              response => {
+              async response => {
                 console.log("Updated user: ", response);
                 let objectsList: string[] = [];
                 this.savedImageUrl = this.imageUrl;
                 this.updateCustomerOrderImage(postData['username'], this.savedImageUrl);
 
-                this.awsS3Service.listObjectsWithName(this.s3Folder).pipe(
+                (await this.awsS3Service.listObjectsWithName(this.s3Folder)).pipe(
                   map(objects => objects?.Contents?.filter(
                             object => 
                               object.Key?.includes(postData['username']) && 
                               !object.Key?.includes(postData['profile_img'].split('.')[0].split('-')[1]) && 
                               !object.Key?.includes('default')))
                 ).subscribe(
-                  (objects: any) => {
+                  async (objects: any) => {
                     objectsList = objects.map((item: any) => item.Key);
                     console.log("Objects containing name: ", objectsList);
 
-                    this.awsS3Service.deleteObjectsWithName(objectsList).subscribe(
+                    (await this.awsS3Service.deleteObjectsWithName(objectsList)).subscribe(
                       (response: any) => {
                         console.log("Deleted objects: ", response.Deleted);
                       },

@@ -8,6 +8,7 @@ import { DataTable } from 'simple-datatables';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { Modal } from 'bootstrap';
+import { S3UploadService } from '../../../dashboard/services/s3-upload.service';
 
 @Component({
   selector: 'app-products',
@@ -47,13 +48,16 @@ export class ProductsComponent implements OnInit, AfterViewInit {
 
   // variables for S3
   s3Folder: string;
-  imageUrl: string;
+  imageUrls: string[] = [];
   itemImgName: string;
   timestamp: string;
 
+  // https://dbfiqowsfx2io.cloudfront.net
+
   constructor(private fb: FormBuilder,
               private productsService: ProductsService,
-              private messageService: MessageService) {
+              private messageService: MessageService,
+              private awsS3Service: S3UploadService) {
 
     this.adminSection = document.querySelector(".sb-nav-fixed") as HTMLDivElement;
     
@@ -86,6 +90,8 @@ export class ProductsComponent implements OnInit, AfterViewInit {
       "Cooking Essentials"
     ]
 
+    
+
     console.log(this.f['item_img'].value);
     this.itemImgValue = (this.f['item_img'].value) ? this.f['item_img'].value : 'default_item_img.jpg'; 
     this.deleteDescription = "these products";
@@ -93,7 +99,7 @@ export class ProductsComponent implements OnInit, AfterViewInit {
     // S3 variables
     this.s3Folder = "assets/items";
     this.itemImgName = (this.f['item_img'].value) ? `${this.s3Folder}/${this.f['item_img'].value}` : `${this.s3Folder}/default_item_img.jpg`; 
-    this.imageUrl = `${this.s3Folder}/default_item_img.jpg`;
+    // this.imageUrl = `${this.s3Folder}/default_item_img.jpg`;
     this.timestamp = Date.now().toString();
   }
 
@@ -120,6 +126,10 @@ export class ProductsComponent implements OnInit, AfterViewInit {
       this.productsList$.subscribe(products => {
         this.totalLength = products.length;
         this.updatePagination(products);
+
+        products.forEach((product) => {
+          this.imageUrls.push(`${this.awsS3Service.cloudfrontDomain}/${this.s3Folder}/${product.item_img}`);
+        });
       })
 
       // Initially show the first page of data
@@ -151,6 +161,10 @@ export class ProductsComponent implements OnInit, AfterViewInit {
           this.currentPageLength += endIndex - this.currentPageLength;
           this.totalLength = products.length;
           this.generatePageNumbers();
+
+          products.forEach((product) => {
+            this.imageUrls.push(`${this.awsS3Service.cloudfrontDomain}/${this.s3Folder}/${product.item_img}`);
+          });
           return products.slice(startIndex, endIndex);
         })
       );

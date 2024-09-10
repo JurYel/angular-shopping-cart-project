@@ -14,7 +14,8 @@ export class S3UploadService {
   private bucketName: string = environment.BUCKET_NAME;
   private region: string = environment.S3_REGION;
   private accessKeyId: string = environment.ACCESS_KEY;
-  private secretAccessKey: string= environment.SECRET_ACCESS_KEY;
+  private secretAccessKey: string = environment.SECRET_ACCESS_KEY;
+  public cloudfrontDomain: string = environment.CLOUDFRONT_DOMAIN;
 
   constructor() { 
     // Initialize the S3 client with the credentials
@@ -29,7 +30,7 @@ export class S3UploadService {
 
   // List objects in a specific folder in the S3 bucket
   // listObjectsWithName(folderPath: string, fileName: string) {
-  listObjectsWithName(folderPath: string) {
+  async listObjectsWithName(folderPath: string) {
     const command = new ListObjectsV2Command({
       Bucket: this.bucketName,
       Prefix: folderPath // List objects in the folder
@@ -40,11 +41,11 @@ export class S3UploadService {
     //           data.Contents?.filter((item) => item.Key?.includes(fileName) || [])
     // ));
 
-    return from(this.s3.send(command));
+    return await from(this.s3.send(command));
   }
 
   // Delete objects with the specified names in the S3 bucket
-  deleteObjectsWithName(objectKeys: string[]) {
+  async deleteObjectsWithName(objectKeys: string[]) {
     const deleteParams = {
       Bucket: this.bucketName,
       Delete: {
@@ -53,11 +54,11 @@ export class S3UploadService {
     };
 
     const command = new DeleteObjectsCommand(deleteParams);
-    return from(this.s3.send(command));
+    return await from(this.s3.send(command));
   }
 
   // Upload file to S3
-  async uploadFile(file: File, fileName: string): Promise<string> {
+  async uploadFile(file: File, fileName: string): Promise<void> {
     const params = {
       Bucket: this.bucketName,
       Key: `assets/users/${fileName}`,
@@ -70,7 +71,7 @@ export class S3UploadService {
       const command = new PutObjectCommand(params);
       await this.s3.send(command);
 
-      return `https://${this.bucketName}.s3.${this.region}.amazonaws.com/${params.Key}`;
+      // return `https://${this.bucketName}.s3.${this.region}.amazonaws.com/${params.Key}`;
     } catch (error) {
       console.error("Error uploading file: ", error);
       throw error;
