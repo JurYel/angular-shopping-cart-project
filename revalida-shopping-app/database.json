@@ -1,22 +1,26 @@
 {
   "users": [
     {
-      "id": "7f82",
       "username": "admin",
       "first_name": "Juriel",
       "last_name": "Botoy",
       "email": "juriel.botoy182@gmail.com",
-      "is_admin": true,
+      "profile_img": "admin-1725890396.jpeg",
       "mobile_num": "9155671750",
-      "password": "admin123"
+      "is_admin": true,
+      "password": "admin123",
+      "deactivated": true,
+      "id": "7f82"
     },
     {
       "id": "f947",
       "username": "juryel1",
       "first_name": "jur1",
       "last_name": "yel1",
+      "profile_img": "default_profile_img-100.png",
       "email": "juryel@gmail.com1",
       "is_admin": false,
+      "deactivated": false,
       "mobile_num": "9155671751",
       "password": "1234"
     },
@@ -25,8 +29,10 @@
       "first_name": "Alex",
       "last_name": "Gonzaga",
       "username": "alex.gonzaga",
+      "profile_img": "default_profile_img-100.png",
       "email": "alex.gonzaga@gmail.com",
       "is_admin": false,
+      "deactivated": false,
       "mobile_num": "9122378472",
       "password": "1234"
     },
@@ -35,8 +41,10 @@
       "first_name": "Jason",
       "last_name": "Silver",
       "username": "jason.silver",
+      "profile_img": "default_profile_img-100.png",
       "email": "jason.silver@gmail.com",
       "is_admin": false,
+      "deactivated": false,
       "mobile_num": "9123456789",
       "password": "1234"
     },
@@ -45,8 +53,10 @@
       "first_name": "Jur",
       "last_name": "Yel",
       "username": "juryel",
+      "profile_img": "default_profile_img-100.png",
       "email": "juryel@gmail.com",
       "is_admin": false,
+      "deactivated": true,
       "mobile_num": "9181733784",
       "password": "1234"
     },
@@ -56,35 +66,487 @@
       "last_name": "Frogoso",
       "username": "domvpf",
       "email": "domvpf@gmail.com",
-      "is_admin": false,
+      "profile_img": "default_profile_img-100.png",
+      "is_admin": true,
+      "deactivated": false,
       "mobile_num": "9474338866",
       "password": "password"
+    },
+    {
+      "id": "3362",
+      "first_name": "Edith",
+      "last_name": "Heimer",
+      "username": "edith.heimer",
+      "profile_img": "default_profile_img-100.png",
+      "email": "edith.heimer@gmail.com",
+      "is_admin": false,
+      "deactivated": false,
+      "mobile_num": "9156783433",
+      "password": "1234"
+    },
+    {
+      "id": "3bbb",
+      "first_name": "Lisa",
+      "last_name": "Poirot",
+      "username": "lisa.poirot",
+      "profile_img": "default_profile_img-100.png",
+      "email": "lisa.poirot@gmail.com",
+      "is_admin": false,
+      "deactivated": false,
+      "mobile_num": "9113985322",
+      "password": "1234"
     }
   ],
   "inventory": [
     {
-      "id": "90f2",
-      "item_img": "pancit_canton.jpg",
-      "item_name": "Pancit Canton",
+      "id": "0aa1",
+      "item_img": "gardenia-white-bread.png",
+      "item_name": "Gardenia White Bread",
       "category": "Food",
+      "quantity": 20,
+      "unit_price": 58
+    },
+    {
+      "id": "9ffb",
+      "item_img": "gardenia-wheat-bread.png",
+      "item_name": "Gardenia Wheat Bread",
+      "category": "Food",
+      "quantity": 20,
+      "unit_price": 88
+    },
+    {
+      "id": "3db5",
+      "item_img": "lala-fishcracker.png",
+      "item_name": "Lala Fishcracker",
+      "category": "Food",
+      "quantity": 20,
+      "unit_price": 25
+    },
+    {
+      "id": "5177",
+      "item_img": "fit-n-right.png",
+      "item_name": "Fit N' Right",
+      "category": "Drinks",
+      "quantity": 12,
+      "unit_price": 23
+    },
+    {
+      "id": "5677",
+      "item_img": "itlog.jpg",
+      "item_name": "Itlog",
+      "category": "Food",
+      "quantity": 12,
+      "unit_price": 12
+    },
+    {
+      "id": "afe0",
+      "item_img": "grocery-bundle-crop.png",
+      "item_name": "Assorted Products Gift Bundle",
+      "category": "Food",
+      "quantity": 20,
+      "unit_price": 799
+    },
+    {
+      "id": "b133",
+      "item_img": "oreo-ice-cream-450ml.png",
+      "item_name": "Oreo Ice Cream 450ml",
+      "category": "Food",
+      "quantity": 20,
+      "unit_price": 350.9
+    },
+    {
+      "id": "9919",
+      "item_img": "mogu_mogu.png",
+      "item_name": "Mogu Mogu 250ml",
+      "category": "Drinks",
       "quantity": 50,
-      "unit_price": 15.5
+      "unit_price": 48.99
+    }
+  ],
+  "cart_items": [
+    {
+      "id": "5113",
+      "username": "admin",
+      "item_img": [
+        "gardenia-white-bread.png",
+        "gardenia-wheat-bread.png",
+        "lala-fishcracker.png",
+        "itlog.jpg",
+        "fit-n-right.png"
+      ],
+      "item_name": [
+        "Gardenia White Bread",
+        "Gardenia Wheat Bread",
+        "Lala Fishcracker",
+        "Itlog",
+        "Fit N' Right"
+      ],
+      "quantity": [
+        19,
+        13,
+        6,
+        63,
+        15
+      ],
+      "unit_price": [
+        58,
+        88,
+        25,
+        12,
+        23
+      ],
+      "subtotal": [
+        1102,
+        1144,
+        150,
+        756,
+        345
+      ]
+    },
+    {
+      "id": "5113",
+      "username": "admin",
+      "item_img": [
+        "gardenia-white-bread.png",
+        "gardenia-wheat-bread.png",
+        "lala-fishcracker.png",
+        "itlog.jpg",
+        "fit-n-right.png",
+        "grocery-bundle-crop.png"
+      ],
+      "item_name": [
+        "Gardenia White Bread",
+        "Gardenia Wheat Bread",
+        "Lala Fishcracker",
+        "Itlog",
+        "Fit N' Right",
+        "Assorted Products Gift Bundle"
+      ],
+      "quantity": [
+        19,
+        13,
+        6,
+        63,
+        15,
+        1
+      ],
+      "unit_price": [
+        58,
+        88,
+        25,
+        12,
+        23,
+        799
+      ],
+      "subtotal": [
+        1102,
+        1144,
+        150,
+        756,
+        345,
+        799
+      ]
+    }
+  ],
+  "orders": [
+    {
+      "id": "3362",
+      "username": "alex.gonzaga",
+      "customer_img": "1.jpg",
+      "customer": "Alex Gonzaga",
+      "location": "Pasig City",
+      "datetime": "",
+      "payment_mode": "Gcash",
+      "status": "Shipped",
+      "item_name": "Gardenia Wheat Bread",
+      "quantity": 4,
+      "subtotal": 336.5
+    },
+    {
+      "id": "0aa1",
+      "username": "juryel",
+      "customer_img": "2.jpg",
+      "customer": "Juriel Botoy",
+      "location": "Magallanes, Agusan del Norte",
+      "datetime": "",
+      "payment_mode": "Gcash",
+      "status": "Delivered",
+      "item_name": "Vitasoy Classic",
+      "quantity": 3,
+      "subtotal": 120.43
+    },
+    {
+      "id": "3db5",
+      "username": "edith.heimer",
+      "customer_img": "3.jpg",
+      "customer": "Liah Mendoza",
+      "location": "Plaridel",
+      "datetime": "",
+      "payment_mode": "COD",
+      "status": "Cancelled",
+      "item_name": "Energy Booster",
+      "quantity": 2,
+      "subtotal": 45.67
+    },
+    {
+      "id": "f947",
+      "username": "jason.silver",
+      "customer_img": "4.jpg",
+      "customer": "Justin Silver",
+      "location": "Muntinlupa City",
+      "datetime": "",
+      "payment_mode": "Paypal",
+      "status": "Cancelled",
+      "item_name": "Magnum Praline 400ml",
+      "quantity": 1,
+      "subtotal": 680.55
     },
     {
       "id": "16c5",
-      "item_img": "magic-flakes.jpg",
-      "item_name": "Magic Flakes",
-      "category": "Food",
-      "quantity": 100,
-      "unit_price": 8.5
+      "username": "lisa.poirot",
+      "customer_img": "5.jpg",
+      "customer": "Lisa Poirot",
+      "location": "Cebu City",
+      "datetime": "",
+      "payment_mode": "COD",
+      "status": "Delivered",
+      "item_name": "Oreo Ice Cream 400ml",
+      "quantity": 2,
+      "subtotal": 789.23
     },
     {
-      "id": "7068",
-      "item_img": "beef_loaf.jpg",
-      "item_name": "Beef Loaf",
-      "category": "Food",
-      "quantity": 50,
-      "unit_price": 28.5
+      "id": "2345",
+      "username": "alex.gonzaga",
+      "customer_img": "1.jpg",
+      "customer": "Alex Gonzaga",
+      "location": "Pasig City",
+      "datetime": "",
+      "payment_mode": "Gcash",
+      "status": "Delivered",
+      "item_name": "Gardenia Wheat Bread",
+      "quantity": 4,
+      "subtotal": 336.5
+    },
+    {
+      "id": "56e4",
+      "username": "juryel",
+      "customer_img": "2.jpg",
+      "customer": "Juriel Botoy",
+      "location": "Magallanes, Agusan del Norte",
+      "datetime": "",
+      "payment_mode": "Gcash",
+      "status": "Delivered",
+      "item_name": "Vitasoy Classic",
+      "quantity": 3,
+      "subtotal": 120.43
+    },
+    {
+      "id": "6g4r",
+      "username": "edith.heimer",
+      "customer_img": "3.jpg",
+      "customer": "Liah Mendoza",
+      "location": "Plaridel",
+      "datetime": "",
+      "payment_mode": "COD",
+      "status": "Shipped",
+      "item_name": "Energy Booster",
+      "quantity": 2,
+      "subtotal": 45.67
+    },
+    {
+      "id": "34rf",
+      "username": "jason.silver",
+      "customer_img": "4.jpg",
+      "customer": "Justin Silver",
+      "location": "Muntinlupa City",
+      "datetime": "",
+      "payment_mode": "Paypal",
+      "status": "Delivered",
+      "item_name": "Magnum Praline 400ml",
+      "quantity": 1,
+      "subtotal": 680.55
+    },
+    {
+      "id": "2d4r",
+      "username": "lisa.poirot",
+      "customer_img": "5.jpg",
+      "customer": "Lisa Poirot",
+      "location": "Cebu City",
+      "datetime": "",
+      "payment_mode": "COD",
+      "status": "Cancelled",
+      "item_name": "Oreo Ice Cream 400ml",
+      "quantity": 2,
+      "subtotal": 789.23
+    },
+    {
+      "id": "56tf",
+      "username": "alex.gonzaga",
+      "customer_img": "1.jpg",
+      "customer": "Alex Gonzaga",
+      "location": "Pasig City",
+      "datetime": "",
+      "payment_mode": "Gcash",
+      "status": "Delivered",
+      "item_name": "Gardenia Wheat Bread",
+      "quantity": 4,
+      "subtotal": 336.5
+    },
+    {
+      "id": "124s",
+      "username": "juryel",
+      "customer_img": "2.jpg",
+      "customer": "Juriel Botoy",
+      "location": "Magallanes, Agusan del Norte",
+      "datetime": "",
+      "payment_mode": "Gcash",
+      "status": "Delivered",
+      "item_name": "Vitasoy Classic",
+      "quantity": 3,
+      "subtotal": 120.43
+    },
+    {
+      "id": "56fg",
+      "username": "edith.heimer",
+      "customer_img": "3.jpg",
+      "customer": "Liah Mendoza",
+      "location": "Plaridel",
+      "datetime": "",
+      "payment_mode": "COD",
+      "status": "Shipped",
+      "item_name": "Energy Booster",
+      "quantity": 2,
+      "subtotal": 45.67
+    },
+    {
+      "id": "678w",
+      "username": "jason.silver",
+      "customer_img": "4.jpg",
+      "customer": "Justin Silver",
+      "location": "Muntinlupa City",
+      "datetime": "",
+      "payment_mode": "Paypal",
+      "status": "Delivered",
+      "item_name": "Magnum Praline 400ml",
+      "quantity": 1,
+      "subtotal": 680.55
+    },
+    {
+      "id": "125t",
+      "username": "lisa.poirot",
+      "customer_img": "5.jpg",
+      "customer": "Lisa Poirot",
+      "location": "Cebu City",
+      "datetime": "",
+      "payment_mode": "COD",
+      "status": "Cancelled",
+      "item_name": "Oreo Ice Cream 400ml",
+      "quantity": 2,
+      "subtotal": 789.23
+    },
+    {
+      "id": "37fs",
+      "username": "alex.gonzaga",
+      "customer_img": "1.jpg",
+      "customer": "Alex Gonzaga",
+      "location": "Pasig City",
+      "datetime": "",
+      "payment_mode": "Gcash",
+      "status": "Cancelled",
+      "item_name": "Gardenia Wheat Bread",
+      "quantity": 4,
+      "subtotal": 336.5
+    },
+    {
+      "id": "sd42",
+      "username": "juryel",
+      "customer_img": "2.jpg",
+      "customer": "Juriel Botoy",
+      "location": "Magallanes, Agusan del Norte",
+      "datetime": "",
+      "payment_mode": "Gcash",
+      "status": "Delivered",
+      "item_name": "Vitasoy Classic",
+      "quantity": 3,
+      "subtotal": 120.43
+    },
+    {
+      "id": "f54e",
+      "username": "edith.heimer",
+      "customer_img": "3.jpg",
+      "customer": "Liah Mendoza",
+      "location": "Plaridel",
+      "datetime": "",
+      "payment_mode": "COD",
+      "status": "Shipped",
+      "item_name": "Energy Booster",
+      "quantity": 2,
+      "subtotal": 45.67
+    },
+    {
+      "id": "f3s4",
+      "username": "jason.silver",
+      "customer_img": "4.jpg",
+      "customer": "Justin Silver",
+      "location": "Muntinlupa City",
+      "datetime": "",
+      "payment_mode": "Paypal",
+      "status": "Delivered",
+      "item_name": "Magnum Praline 400ml",
+      "quantity": 1,
+      "subtotal": 680.55
+    },
+    {
+      "id": "bmw3",
+      "username": "lisa.poirot",
+      "customer_img": "5.jpg",
+      "customer": "Lisa Poirot",
+      "location": "Cebu City",
+      "datetime": "",
+      "payment_mode": "COD",
+      "status": "Cancelled",
+      "item_name": "Oreo Ice Cream 400ml",
+      "quantity": 2,
+      "subtotal": 789.23
+    },
+    {
+      "id": "psp5",
+      "username": "alex.gonzaga",
+      "customer_img": "1.jpg",
+      "customer": "Alex Gonzaga",
+      "location": "Pasig City",
+      "datetime": "",
+      "payment_mode": "Gcash",
+      "status": "Cancelled",
+      "item_name": "Gardenia Wheat Bread",
+      "quantity": 4,
+      "subtotal": 336.5
+    },
+    {
+      "id": "wow2",
+      "username": "juryel",
+      "customer_img": "2.jpg",
+      "customer": "Juriel Botoy",
+      "location": "Magallanes, Agusan del Norte",
+      "datetime": "",
+      "payment_mode": "Gcash",
+      "status": "Delivered",
+      "item_name": "Vitasoy Classic",
+      "quantity": 3,
+      "subtotal": 120.43
+    },
+    {
+      "id": "w42w",
+      "username": "edith.heimer",
+      "customer_img": "3.jpg",
+      "customer": "Liah Mendoza",
+      "location": "Plaridel",
+      "datetime": "",
+      "payment_mode": "COD",
+      "status": "Shipped",
+      "item_name": "Energy Booster",
+      "quantity": 2,
+      "subtotal": 45.67
     }
   ]
 }

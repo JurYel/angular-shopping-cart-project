@@ -1,10 +1,13 @@
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AfterContentInit, AfterViewChecked, AfterViewInit, Component, ElementRef, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { Grid, h, html } from 'gridjs';
 import 'gridjs/dist/theme/mermaid.css';
 import { ProductsService } from '../../services/products.service';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { Product } from '../../../models/product.interface';
 import { DataTable } from 'simple-datatables';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MessageService } from 'primeng/api';
+import { Modal } from 'bootstrap';
 
 @Component({
   selector: 'app-products',
@@ -14,16 +17,73 @@ import { DataTable } from 'simple-datatables';
 export class ProductsComponent implements OnInit, AfterViewInit {
   
   @ViewChild('datatablesSimple', { static: false }) datatablesSimple!: ElementRef;
+  @ViewChild('closeModalAdd') closeModalAdd !: ElementRef;
+  @ViewChild('closeModalDelete') closeModalDelete !: ElementRef;
+  @ViewChild('closeModalEdit') closeModalEdit !: ElementRef;
+  @ViewChild('closeModalDeleteSel') closeModalDeleteSel !: ElementRef;
   adminSection: HTMLDivElement;
   productsList$: Observable<Product[]>;
+  
+  // variables for pagination
+  paginatedProducts$!: Observable<Product[]>;
+  currentPage: number = 1;
+  pageSize: number = 5;
+  totalPages: number = 0;
+  pageNumbers: number[] = [];
+  totalLength: number = 0;
+  currentPageLength: number = 0;
 
-  constructor(private productsService: ProductsService) {
+  // variables for form
+  productForm: FormGroup;
+  updateProductForm: FormGroup;
+  categories: string[];
+  itemImgValue: string;
+  submitted: boolean = false;
+  productIndex!: number;
+  modalInstance: any; 
+  deleteDescription: string;
+  checkedItems: number[] = [];
+  adminName: string | undefined;
+
+
+  constructor(private fb: FormBuilder,
+              private productsService: ProductsService,
+              private messageService: MessageService) {
+
     this.adminSection = document.querySelector(".sb-nav-fixed") as HTMLDivElement;
     
+    this.adminName = `${sessionStorage.getItem('first_name')} ${sessionStorage.getItem('last_name')}`;
     this.productsList$ = this.productsService.getProducts();
     this.productsList$.subscribe(
       data => console.log(data)
     )
+
+    this.productForm = this.fb.group({
+      item_img: ['', [Validators.required]],
+      item_name: ['', Validators.required],
+      category: ['Select category', Validators.required],  
+      quantity: ['', Validators.required],
+      unit_price: ['', Validators.required]
+    });
+
+    this.updateProductForm = this.fb.group({
+      item_img: ['', [Validators.required]],
+      item_name: ['', Validators.required],
+      category: ['Select category', Validators.required],  
+      quantity: ['', Validators.required],
+      unit_price: ['', Validators.required]
+    });
+
+    this.categories = [
+      "Food",
+      "Drinks",
+      "Hygiene",
+      "Cooking Essentials"
+    ]
+
+    console.log(this.f['item_img'].value);
+    this.itemImgValue = (this.f['item_img'].value) ? this.f['item_img'].value : 'default_item_img.jpg'; 
+    this.deleteDescription = "these products";
   }
 
   ngOnInit(): void {
@@ -45,115 +105,296 @@ export class ProductsComponent implements OnInit, AfterViewInit {
           })
       }
 
+      // calculate total number of pages based on the data
+      this.productsList$.subscribe(products => {
+        this.totalLength = products.length;
+        this.updatePagination(products);
+      })
+
+      // Initially show the first page of data
+      this.paginateProducts();
   }
 
   ngAfterViewInit(): void {
-    if(this.datatablesSimple) {
-      // new DataTable(this.datatablesSimple.nativeElement, {
-      //   searchable: true,
-      //   columns: [
-      //      // Sort the first column in ascending order
-      //     // { select: 0, sort: "asc" },
-      //     // { select: 1, sort: "asc" },
-
-      //     // Set the second column as datetime string matching the format "DD/MM/YYY"
-      //     // { select: 2 },
-
-      //     // Disable sorting on the third and fourth columns
-      //     // { select: [3, 4], sortable: false },
-          
-      //     // Set the fourth column as datetime string matching the format "DD/MM/YYY"
-      //     // { select: 4, type: "date", format: "DD/MM/YYYY" },
-         
-      //     // Hide the fifth column
-      //     // { select: 4, hidden: true },
-
-      //     // Append a button to the sixth column
-      //     // {
-      //     //     select: 5,
-      //     //     type: 'string',
-      //     //     render: function(data, td, rowIndex, cellIndex) {
-      //     //         return `${data}<button type='button' data-row='${rowIndex}'>Select</button>`;
-      //     //     }
-      //     // }
-      //   ]
-      // });
-    }
-    // new Grid({
-    //   from: document.getElementById("myTable") as HTMLTableElement,
-    //   columns: [
-    //     "Item Image",
-    //     "Item Name",
-    //     "Category",
-    //     "Quantity",
-    //     "Unit Price",
-    //     {
-    //       name: 'Actions',
-    //       formatter: (cell, row) => {
-    //         // return html(`
-    //         //   <button class="btn btn-sm btn-warning" (click)="editRow(row)"><i class="fa fa-pencil"></i> </button>
-    //         //   <button class="btn btn-sm btn-danger (click)="deleteRow(row)"><i class="fa fa-trash"></i> </button>
-    //         // `);
-    //         return h('span', { className: 'btn-group' }, [
-    //           h('button', {
-    //             className: 'btn btn-sm btn-primary me-2',
-    //             onClick: () => alert(`Editing: ${row.cells[0].data} ${row.cells[1].data}`)
-    //           }, [
-    //             // h('i', { className: 'fa fa-pencil' }),
-    //             // h('img', { src: "assets/img/pencil-solid.svg", className: "btn-img" }),
-    //             'Edit'
-    //           ]),
-    //           h('button', {
-    //             className: 'btn btn-sm btn-danger',
-    //             onClick: () => alert(`Deleting: ${row.cells[0].data} ${row.cells[1].data}`)
-    //           }, [
-    //             // h('i', { className: 'fa fa-trash' }),
-    //             'Delete'
-    //           ])
-    //         ]);
-    //       }
-    //     }
-    //   ],
-    //   data: [
-    //     ['Tiger Nixon', 'System Architect', 61, '2011/04/25', '$320,800'],
-    //     ['Garrett Winters', 'Accountant', 63, '2011/07/25', '$170,750'],
-    //     ['Ashton Cox', 'Junior Technical Author', 66, '2009/01/12', '$86,000'],
-    //     ['Cedric Kelly', 'Senior Javascript Developer',  22, '2012/03/29', '$433,060'],
-    //     ['Airi Satou', 'Accountant', 33, '2008/11/28', '$162,700'],
-    //     ['Brielle Williamson', 'Integration Specialist', 61, '2012/12/02', '$372,000'],
-    //     ['Herrod Chandler', 'Sales Assistant',  59, '2012/08/06', '$137,500'],
-    //     ['Rhona Davidson', 'Integration Specialist', 55, '2010/10/14', '$327,900'],
-    //     ['Colleen Hurst', 'Javascript Developer', 39, '2009/09/15', '$205,500'],
-    //     ['Sonya Frost', 'Software Engineer', 23, '2008/12/13', '$103,600'],
-    //   ],
-    //   search: true,
-    //   pagination: true,
-    //   sort: true,
-    //   resizable: false,
-    //   language: {
-    //     'search': {
-    //       'placeholder': '🔍 Search...'
-    //     },
-    //     'pagination': {
-    //       'previous': '⬅️',
-    //       'next': '➡️',
-    //       'showing': '😃 Displaying',
-    //       'results': () => 'Records'
-    //     }
-    //   }
-    // }).render(document.getElementById('myProductsTable') as HTMLDivElement);
+    
   }
 
-  editRow(row: any) {
-    alert(`Edit row with Name: ${row.cells[0].data}`);
-    // Implement your edit logic here
+  // Method to generate page numbers from totalPages
+  generatePageNumbers = () => {
+    this.pageNumbers = Array.from({ length: this.totalPages }, (_, i) => i + 1);
   }
 
-  deleteRow(row: any) {
-    if (confirm(`Are you sure you want to delete ${row.cells[0].data}?`)) {
-      alert(`Deleted row with Name: ${row.cells[0].data}`);
-      // Implement your delete logic here
+  // Method for updating pagination upon selecting shown entries limit
+  updatePagination = (products: Product[]) => {
+    this.totalPages = Math.ceil(products.length / this.pageSize);
+    this.generatePageNumbers();
+  }
+
+  // Method to paginate products based on the current page
+  paginateProducts = () => {
+    this.paginatedProducts$ = this.productsList$
+      .pipe(
+        map(products => {
+          const startIndex = (this.currentPage - 1) * this.pageSize;
+          const endIndex = Math.min(startIndex + this.pageSize, products.length);
+          this.currentPageLength += endIndex - this.currentPageLength;
+          this.totalLength = products.length;
+          this.generatePageNumbers();
+          return products.slice(startIndex, endIndex);
+        })
+      );
+  }
+
+  // Method to go to next page
+  nextPage = () => {
+    if(this.currentPage < this.totalPages) {
+      this.currentPage++;
+      this.paginateProducts();
     }
+  }
+
+  // Method to go to previous page
+  prevPage = () => {
+    if(this.currentPage > 1) {
+      this.currentPage--;
+      this.paginateProducts();
+    }
+  }
+
+  // Method to go to a specific page
+  gotoPage = (page: number) => {
+    this.currentPage = page;
+    this.paginateProducts();
+  }
+
+  uploadFile = (event: Event) => {
+    const element = event.currentTarget as HTMLInputElement;
+    let fileList: FileList | null = element.files;
+    if(fileList){
+      console.log("uploadFile: ", fileList[0].name)
+      console.log("uploadFile: ", fileList[0].type)
+      this.itemImgValue = fileList[0].name;
+    }
+  }
+
+  get f() {
+    return this.productForm.controls;
+  }
+
+  getIndex = (index: number) => {
+    this.productIndex = index;
+    this.deleteDescription = "this product";
+
+    this.productsList$.pipe(
+      map(products => products[index])
+    ).subscribe(
+      product => {
+        this.deleteDescription = `${product.item_name}`;
+      }
+    );
+  }
+
+  loadURLToInputFiled = (url: string) => {
+    this.getImgURL(url, (imgBlob: Blob)=>{
+      // Load img blob to input
+      // WIP: UTF8 character error
+      let fileName = url;
+      let file = new File([imgBlob], fileName,{type:"image/jpeg", lastModified:new Date().getTime()});
+      let container = new DataTransfer(); 
+      container.items.add(file);
+      console.log(container.files[0]);
+      (document.querySelector('#item-img-input-edit') as HTMLInputElement).files = container.files;
+      
+    })
+  }
+
+  // xmlHTTP return blob respond
+  getImgURL = (url: string, callback:any) => {
+    var xhr = new XMLHttpRequest();
+    xhr.onload = function() {
+        callback(xhr.response);
+    };
+    url = "assets/img/" + url;
+    xhr.open('GET', url);
+    xhr.responseType = 'blob';
+    xhr.send();
+  }
+
+  populateEditForm = (index: number) => {
+    this.productIndex = index;
+    
+    this.productsList$.pipe(
+      map(products => products[index])
+    ).subscribe(
+      product => {
+        this.itemImgValue = product.item_img;
+        // console.log();
+        // fetch(this.itemImgValue)
+        //   .then((response) => {
+        //     return response.blob()
+        //   })
+        //   .then((blob) => {
+        //     console.log(blob);
+        //     const file = new File([blob], this.itemImgValue, {type: "text/image"})
+        //     console.log(file);
+        //     this.productForm.patchValue({item_img: file});
+        //   })
+
+        this.loadURLToInputFiled(this.itemImgValue);
+        this.productForm.patchValue({
+          // item_img: product.item_img,
+          item_name: product.item_name,
+          category: product.category,
+          quantity: product.quantity,
+          unit_price: product.unit_price
+        })
+      }
+    );
+  }
+
+  changeDeleteDesc = () => {
+    this.deleteDescription = "these products";
+  }
+
+  capitalizeWord = (word: string) => {
+    let words: string[] = word.split(' ');
+    let capitalized = " ";
+    words.forEach((token: string) => {
+      capitalized += token.charAt(0).toUpperCase() + token.slice(1) + " ";
+    })
+
+    console.log(capitalized.trim());
+    return capitalized;
+  }
+
+  onCheck = (index: number) => {
+    if(this.checkedItems.includes(index)) {
+      this.checkedItems = this.checkedItems.filter(
+        (item) => item !== index
+      );
+    } else {
+      this.checkedItems.push(index);
+    }
+  }
+
+  onSubmitAdd = () => {
+    this.submitted = true;
+    const postData = {...this.productForm.getRawValue()};
+    postData['item_name'] = this.capitalizeWord(postData['item_name']).trim();
+    postData['item_img'] = (postData['item_img'] as string).split('fakepath\\')[1].trim();
+
+    if(this.productForm.invalid){
+      return;
+    }
+
+   this.productsService.checkIfProductExists(postData['item_name'] as string).subscribe(
+    exists => {
+      if(!exists) {
+        
+        this.productsService.addProduct(postData as Product).subscribe(
+          response => {
+            
+            this.productsList$ = this.productsService.getProducts();
+            this.paginateProducts();
+            this.closeModalAdd.nativeElement.click();
+            this.messageService.add({ severity:'success', summary: 'Success', detail: 'New product has been added' });
+          },
+          error => {
+            this.messageService.add({ severity:'error', summary: 'Error', detail: 'Failed to add new product' });
+          }
+        )
+      } else {
+        this.messageService.add({ severity:'error', summary: 'Error', detail: 'This product already exists' });
+      }
+    }
+   );
+
+   this.productForm.reset();
+   this.productForm.patchValue({category: "Select category"});
+   this.itemImgValue = "default_item_img.jpg";
+   this.submitted = false;
+  }
+
+  onSubmitEdit = (index: number) => {
+    this.submitted = true;
+    const updatedProduct: Product = this.productForm.getRawValue();
+
+    if(this.productForm.invalid && updatedProduct.item_img){
+      return;
+    }
+
+    this.productsList$.pipe(
+      map(products => products[index])
+    ).subscribe(
+      product => {
+        updatedProduct.id = product.id;
+        updatedProduct.item_img = (!updatedProduct.item_img) ? product.item_img : updatedProduct.item_img;
+        this.productsService.updateProduct(updatedProduct as Product).subscribe(
+          response => {
+            console.log("Updated item: ", response);
+            this.productsList$ = this.productsService.getProducts();
+            this.paginateProducts();
+            this.closeModalEdit.nativeElement.click();
+            this.messageService.add({ severity:'success', summary: 'Success', detail: 'Product has been updated' });
+          },
+          error => {
+            this.messageService.add({ severity:'error', summary: 'Error', detail: 'Failed to update product' });
+          }
+        )
+      }
+    )
+
+    this.submitted = false;
+  }
+
+  onSubmitDeleteItem = (index: number) => {
+    
+    this.productsList$.pipe(
+      map(products => products[index])
+    ).subscribe(
+      product => {
+        this.productsService.deleteProduct(product.id as string).subscribe(
+          response => {
+            console.log("Deleted item: ", response);
+            this.productsList$ = this.productsService.getProducts();
+            this.paginateProducts();
+            this.closeModalDelete.nativeElement.click();
+            this.messageService.add({ severity:'success', summary: 'Success', detail: 'Product has been removed' });
+          },
+          error => {
+            this.messageService.add({ severity:'error', summary: 'Error', detail: 'Failed to remove product' });
+          }
+        );
+      }
+    );
+  }
+
+  onSubmitDeleteSelected = () => {
+    console.log(this.checkedItems);
+
+    this.checkedItems.forEach((item) => {
+      this.productsList$.pipe(
+        map(products => products[item])
+      ).subscribe(
+        product => {
+          this.productsService.deleteProduct(product.id as string).subscribe(
+            response => {
+              console.log("removed item: ", response);
+              this.productsList$ = this.productsService.getProducts();
+              this.paginateProducts();
+            },  
+            error => {
+              console.log(error);
+              this.messageService.add({ severity:'error', summary: 'Error', detail: 'Failed to remove product' });
+            }
+          )
+        }
+      );
+    });
+    
+    // this.productsList$ = this.productsService.getProducts();
+    this.closeModalDeleteSel.nativeElement.click();
+    this.messageService.add({ severity:'success', summary: 'Success', detail: `Removed ${this.checkedItems.length} products from inventory.` });
   }
   
 }

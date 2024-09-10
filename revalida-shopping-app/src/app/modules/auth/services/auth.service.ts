@@ -2,13 +2,14 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map, Observable, tap } from 'rxjs';
 import { AuthUser } from '../../models/auth-user.interface';
+import { environment } from '../../../../environment/environment.dev';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  private serverUrl = 'http://localhost:3000';
+  private serverUrl = environment.SERVER_URL;
 
   constructor(private http: HttpClient) { }
 
@@ -28,7 +29,7 @@ export class AuthService {
     const users$: Observable<AuthUser[]> = this.getUsers();
 
     return users$.pipe(
-      map(users => users.some(user => user.username === username))
+      map(users => users.some(user => user.username.toLowerCase() === username.toLowerCase()))
     );
   }
 
@@ -43,7 +44,7 @@ export class AuthService {
   // Getting ERROR TypeError: Failed to fetch dynamically imported module:
   updateUser = (id: string, user: AuthUser) => {
     return this.http.put<AuthUser>(`${this.serverUrl}/users/${id}`, user).pipe(
-      tap(x => console.log("updating: ", x))
+      // tap(x => console.log("updating: ", x))
     );
   }
 }

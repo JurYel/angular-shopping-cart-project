@@ -6,6 +6,8 @@ import { ProductsComponent } from './pages/products/products.component';
 import { SharedModule } from '../../shared/shared.module';
 import { AccountsComponent } from './pages/accounts/accounts.component';
 import { ProductItemComponent } from './components/product-item/product-item.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { OrdersComponent } from './pages/orders/orders.component';
 
 
 
@@ -14,12 +16,15 @@ import { ProductItemComponent } from './components/product-item/product-item.com
     AdminDashboardComponent,
     ProductsComponent,
     AccountsComponent,
-    ProductItemComponent
+    ProductItemComponent,
+    OrdersComponent
   ],
   imports: [
     CommonModule,
     AdminRoutingModule,
-    SharedModule
+    SharedModule,
+    ReactiveFormsModule,
+    FormsModule
   ]
 })
 export class AdminModule { }

@@ -4,6 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { AdminDashboardComponent } from './pages/admin-dashboard/admin-dashboard.component';
 import { ProductsComponent } from './pages/products/products.component';
 import { AccountsComponent } from './pages/accounts/accounts.component';
+import { OrdersComponent } from './pages/orders/orders.component';
 
 const routes: Routes = [
   {
@@ -15,8 +16,12 @@ const routes: Routes = [
     component: ProductsComponent
   },
   {
-    path: 'accounts',
+    path: 'users',
     component: AccountsComponent
+  },
+  {
+    path: 'orders',
+    component: OrdersComponent
   }
 ]
 

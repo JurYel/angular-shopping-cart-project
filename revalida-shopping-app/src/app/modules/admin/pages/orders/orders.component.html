@@ -1,0 +1,488 @@
+<section class="sb-nav-fixed">
+  <app-admin-topnav></app-admin-topnav>
+  <div id="layoutSidenav">
+    <div id="layoutSidenav_nav">
+      <app-admin-sidenav [adminName]="adminName"></app-admin-sidenav>
+      <!-- <app-admin-sidenav  [sidebarToggleInput]="sideToggleBtn" [adminSidenavInput]="adminSection"></app-admin-sidenav> -->
+    </div>
+    <div id="layoutSidenav_content">
+      <div class="title">
+        <h2><b>Order</b> Records</h2>
+      </div>
+      <main>
+        <div class="table-container">
+          <div class="table-responsive">
+            <div class="table-wrapper">
+              <div class="table-title">
+                <div class="row">
+                  <div class="col-sm-4">
+                    <h2>Order <b>Details</b></h2>
+                  </div>
+                  <div class="col-sm-8">
+                    <a (click)="refreshOrdersTable()" class="btn btn-primary"
+                      ><i class="material-icons">&#xE863;</i>
+                      <span>Refresh List</span></a
+                    >
+                    <a href="#" class="btn btn-secondary"
+                      ><i class="material-icons">&#xE24D;</i>
+                      <span>Export to Excel</span></a
+                    >
+                  </div>
+                </div>
+              </div>
+              <div class="table-filter">
+                <div class="row">
+                  <div class="col-sm-3">
+                    <div class="show-entries">
+                      <span>Show</span>
+                      <select class="page-select form-select" (change)="onPageSizeChange($event)">
+                        <option *ngFor="let size of availablePageSizes" [value]="size">{{ size }}</option>
+                      </select>
+                      <span>entries</span>
+                    </div>
+                  </div>
+                  <div class="filter-right col-sm-9">
+                    <div class="filter-search-group">
+                      <button type="button" class="btn btn-primary">
+                        <i class="fa fa-search"></i>
+                      </button>
+                      <div class="filter-group">
+                        <label>Search</label>
+                        <input
+                          type="search"
+                          [(ngModel)]="searchQuery"
+                          (keyup)="searchOrder()"
+                          class="form-control"
+                        />
+                      </div>
+                    </div>
+                    <div class="filter-loc-group filter-group">
+                      <label>Location</label>
+                      <select
+                        class="form-select"
+                        (change)="onLocationChange($event)"
+                      >
+                        <option
+                          *ngFor="let location of locationList"
+                          [value]="location"
+                        >
+                          {{ location }}
+                        </option>
+                      </select>
+                    </div>
+                    <div class="filter-status-group filter-group">
+                      <label>Status</label>
+                      <select
+                        class="form-select"
+                        (change)="onStatusChange($event)"
+                      >
+                        <option
+                          *ngFor="let status of statusList"
+                          [value]="status"
+                        >
+                          {{ status }}
+                        </option>
+                      </select>
+                    </div>
+                    <span class="filter-icon"
+                      ><i class="fa fa-filter"></i
+                    ></span>
+                  </div>
+                </div>
+              </div>
+              <table class="table table-striped table-hover">
+                <thead>
+                  <tr>
+                    <th>Customer</th>
+                    <th>Location</th>
+                    <th>Order Date</th>
+                    <th>Payment Mode</th>
+                    <th>Status</th>
+                    <th>Item Name</th>
+                    <th>Quantity</th>
+                    <th>Subtotal</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr
+                    *ngFor="
+                      let order of paginatedOrders$ | async;
+                      let i = index
+                    "
+                  >
+                    <td>
+                      <a href="#"
+                        ><img
+                          src="assets/users/{{ order.customer_img }}"
+                          class="avatar"
+                          alt="Avatar"
+                        />
+                        {{ order.customer }}</a
+                      >
+                    </td>
+                    <td
+                      (click)="viewOrderSummary(i)"
+                      data-bs-toggle="modal"
+                      data-bs-target="#viewOrderModal"
+                    >
+                      {{ order.location }}
+                    </td>
+                    <td
+                      (click)="viewOrderSummary(i)"
+                      data-bs-toggle="modal"
+                      data-bs-target="#viewOrderModal"
+                    >
+                      {{ order.datetime }}
+                    </td>
+                    <td
+                      (click)="viewOrderSummary(i)"
+                      data-bs-toggle="modal"
+                      data-bs-target="#viewOrderModal"
+                    >
+                      {{ order.payment_mode }}
+                    </td>
+                    <td
+                      (click)="viewOrderSummary(i)"
+                      data-bs-toggle="modal"
+                      data-bs-target="#viewOrderModal"
+                    >
+                      <small class="badge bg-{{ badgeStyle[order.status] }}">{{
+                        order.status
+                      }}</small>
+                    </td>
+                    <td
+                      (click)="viewOrderSummary(i)"
+                      data-bs-toggle="modal"
+                      data-bs-target="#viewOrderModal"
+                    >
+                      {{ order.item_name }}
+                    </td>
+                    <td
+                      (click)="viewOrderSummary(i)"
+                      data-bs-toggle="modal"
+                      data-bs-target="#viewOrderModal"
+                    >
+                      {{ order.quantity }}
+                    </td>
+                    <td
+                      (click)="viewOrderSummary(i)"
+                      data-bs-toggle="modal"
+                      data-bs-target="#viewOrderModal"
+                    >
+                      {{ order.subtotal | currency : "PHP" }}
+                    </td>
+                    <td class="dropdown">
+                      <a
+                        href="#"
+                        class="view dropdown-toggle"
+                        title="View Details"
+                        data-toggle="tooltip"
+                        role="button"
+                        data-bs-toggle="dropdown"
+                        ><i class="fa-solid fa-gear"></i
+                      ></a>
+                      <ul class="dropdown-menu dropdown-menu-end">
+                        <li>
+                          <a
+                            class="dropdown-item"
+                            (click)="updateOrderStatus(i, 'Pending')"
+                            ><i class="fa-solid fa-spinner"></i> Pending</a
+                          >
+                        </li>
+                        <li><hr class="dropdown-divider" /></li>
+                        <li>
+                          <a
+                            class="dropdown-item"
+                            (click)="updateOrderStatus(i, 'Shipped')"
+                            ><i class="fa-solid fa-ship"></i> Shipped</a
+                          >
+                        </li>
+                        <li><hr class="dropdown-divider" /></li>
+                        <li>
+                          <a
+                            class="dropdown-item"
+                            (click)="updateOrderStatus(i, 'Delivered')"
+                            ><i class="fa-solid fa-truck-fast"></i> Delivered</a
+                          >
+                        </li>
+                        <li><hr class="dropdown-divider" /></li>
+                        <li>
+                          <a
+                            class="dropdown-item"
+                            (click)="updateOrderStatus(i, 'Cancelled')"
+                            ><i class="fa-solid fa-ban"></i> Cancelled</a
+                          >
+                        </li>
+                      </ul>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <div class="clearfix">
+                <div class="hint-text">
+                  Showing <b>{{ currentPageLength }}</b> out of
+                  <b>{{ totalLength }}</b> entries
+                </div>
+                <ul class="pagination">
+                  <li class="page-item">
+                    <button
+                      class="btn btn-link"
+                      (click)="prevPage()"
+                      [disabled]="currentPage === 1"
+                    >
+                      Previous
+                    </button>
+                  </li>
+                  <ng-container *ngFor="let page of pageNumbers">
+                    <li class="page-item"
+                        [ngClass]="{ 'active': currentPage === page }">
+                      <button
+                        class="btn btn-link"
+                        (click)="gotoPage(page)"
+                        [disabled]="currentPage === page" 
+                      >
+                        {{ page }}
+                      </button>
+                    </li>
+                  </ng-container>
+                  <li class="page-item">
+                    <button
+                      (click)="nextPage()"
+                      [disabled]="currentPage === totalPages"
+                      class="btn btn-link"
+                    >
+                      Next
+                    </button>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <!-- <div class="table-responsive">
+                      <div class="table-wrapper">
+                        <div class="table-title">
+                          <div class="row">
+                            <div class="col-sm-6">
+                              <h2>Customer <b>Orders</b></h2>
+                            </div>
+                            <div class="col-sm-6">
+                              <a href="" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addUserModal"><i class="material-icons">&#xE147;</i> <span>Add New User</span></a>
+                              <a href="" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deactivateSelectedUserModal"><i class="material-icons">&#xE15C;</i> <span>Deactivate</span></a>						
+                            </div>
+                          </div>
+                        </div>
+                        <table class="table table-striped table-hover">
+                          <thead>
+                            <tr>    
+                              <th>
+                                <span class="custom-checkbox">
+                                  <input type="checkbox" id="selectAll">
+                                  <label for="selectAll"></label>
+                                </span>
+                              </th>
+                              <th>Date & Time</th>
+                              <th>Customer</th>
+                              <th>Item Name</th>
+                              <th>Payment Mode</th>
+                              <th>Quantity</th>
+                              <th>Subtotal</th>
+                              <th>Status</th>
+                              <th>Actions</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr *ngFor="let order of orders$ | async; let i = index">
+                              <td>
+                                <span class="custom-checkbox"> 
+                                  <input type="checkbox" id="checkbox-{{i}}" name="options[]" value="{{ i }}" (change)="onCheck(i)">
+                                  <label for="checkbox-{{i}}"></label>
+                                </span>
+                              </td>
+                              <td>{{order.datetime}}</td>
+                              <td>{{order.customer}}</td>
+                              <td>{{order.item_name}}</td>
+                              <td>{{order.payment_mode}}</td>
+                              <td>{{order.quantity}}</td>
+                              <td>{{order.subtotal}}</td>
+                              <td>{{order.status}}</td>
+                              <td>
+                                <a href="#editUserModal" class="edit" data-bs-toggle="modal"><i class="material-icons" data-bs-toggle="tooltip" title="Edit">&#xE254;</i></a>
+                                <a href="#deactivateUserModal" class="delete" data-bs-toggle="modal"><i class="fa-solid fa-user-large-slash" data-bs-toggle="tooltip" title="Deactivate"></i></a>
+                              </td>
+                          </tr>     
+                          </tbody>
+                        </table>
+                        <div class="clearfix">
+                          <div class="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
+                          <ul class="pagination">
+                            <li class="page-item disabled"><a href="#">Previous</a></li>
+                            <li class="page-item"><a href="#" class="page-link">1</a></li>
+                            <li class="page-item"><a href="#" class="page-link">2</a></li>
+                            <li class="page-item active"><a href="#" class="page-link">3</a></li>
+                            <li class="page-item"><a href="#" class="page-link">4</a></li>
+                            <li class="page-item"><a href="#" class="page-link">5</a></li>
+                            <li class="page-item"><a href="#" class="page-link">Next</a></li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>         -->
+        </div>
+        <!-- View Modal HTML -->
+        <div id="viewOrderModal" class="modal fade">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <form>
+                <div class="modal-header">
+                  <h5 class="modal-title">Order Summary</h5>
+                  <button
+                    #closeModalEdit
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                  ></button>
+                </div>
+                <div class="modal-body">
+                  <div class="card">
+                    <div class="card-body mx-4">
+                      <div class="container">
+                        <!-- <p class="my-3 mx-5 text-center" style="font-size: 24px;">Thank for your purchase!</p> -->
+                        <div class="row">
+                          <ul class="list-unstyled">
+                            <div class="order-date">
+                              <li class="text-muted mt-1" *ngIf="selectedOrder">
+                                <strong
+                                  ><span class="text-black">Order</span>
+                                  #{{ selectedOrder.id | uppercase }}</strong
+                                >
+                              </li>
+                              <li class="text-black mt-1">
+                                Jun 23, 2023, 11:37 AM
+                              </li>
+                            </div>
+                            <div class="customer-loc">
+                              <li *ngIf="selectedOrder" class="text-black mt-1">
+                                {{ selectedOrder.customer }}
+                              </li>
+                              <li *ngIf="selectedOrder" class="text-black mt-1">
+                                {{ selectedOrder.location }}
+                              </li>
+                            </div>
+                            <div class="payment-status">
+                              <li *ngIf="selectedOrder" class="text-black mt-1">
+                                Status:
+                                <small
+                                  class="badge bg-{{
+                                    badgeStyle[selectedOrder.status]
+                                  }}"
+                                  >{{ selectedOrder.status }}</small
+                                >
+                              </li>
+                              <li *ngIf="selectedOrder" class="text-black mt-1">
+                                Payment: {{ selectedOrder.payment_mode }}
+                              </li>
+                            </div>
+                          </ul>
+                          <table class="table table-striped table-hover">
+                            <thead>
+                              <tr>
+                                <th>Item</th>
+                                <th>Qty</th>
+                                <th>Unit Price</th>
+                                <th>Subtotal</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr *ngIf="selectedOrder">
+                                <td>{{ selectedOrder.item_name }}</td>
+                                <td>{{ selectedOrder.quantity }}</td>
+                                <td>
+                                  {{
+                                    selectedOrder.subtotal /
+                                      selectedOrder.quantity
+                                      | currency : "PHP" : "symbol" : "1.1-2"
+                                  }}
+                                </td>
+                                <td>
+                                  {{
+                                    selectedOrder.subtotal
+                                      | currency : "PHP" : "symbol" : "1.1-2"
+                                  }}
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                        <div class="row text-black">
+                          <div class="col-xl-12">
+                            <p *ngIf="selectedOrder" class="float-end fw-bold">
+                              Total:
+                              {{
+                                selectedOrder.subtotal
+                                  | currency : "PHP" : "symbol" : "1.1-2"
+                              }}
+                            </p>
+                          </div>
+                          <hr style="border: 2px solid black" />
+                        </div>
+                        <p class="store">Click&Get Online Convenience Store</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <input
+                    type="button"
+                    class="btn btn-primary"
+                    data-bs-dismiss="modal"
+                    value="Understood"
+                  />
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+        <!-- Deactivate Selected Modal HTML -->
+        <div id="deactivateSelectedUserModal" class="modal fade">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <form>
+                <div class="modal-header">
+                  <h4 class="modal-title">Deactivate User</h4>
+                  <button
+                    #closeModalDeactChecked
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-hidden="true"
+                  ></button>
+                </div>
+                <div class="modal-body">
+                  <p>Are you sure you want to deactivate these users?</p>
+                  <p class="text-warning">
+                    <small>This action cannot be undone.</small>
+                  </p>
+                </div>
+                <div class="modal-footer">
+                  <input
+                    type="button"
+                    class="btn btn-default"
+                    data-bs-dismiss="modal"
+                    value="Cancel"
+                  />
+                  <input
+                    type="submit"
+                    class="btn btn-danger"
+                    value="Deactivate"
+                  />
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </main>
+      <app-admin-footer></app-admin-footer>
+    </div>
+  </div>
+  <!-- <app-footer></app-footer> -->
+</section>

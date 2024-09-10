@@ -8,18 +8,18 @@
 
   <body>
     <app-navbar></app-navbar>
-    <div class="container mt-4">
+    <div class="container mt-4 profile-container">
       <div class="row">
         <!-- Side Menu -->
         <div class="col-md-3">
           <div class="side-menu">
-            <div class="text-center mb-4">
+            <div class="small-profile text-center mb-4">
               <img
-                src="assets/img/default_profile_img-50.png"
+                src="{{ savedImageUrl }}"
                 class="rounded-circle"
                 alt="User Avatar"
               />
-              <p class="mt-2">John Doe</p>
+              <p class="mt-2">{{ customerName }}</p>
             </div>
             <hr />
             <ul class="nav nav-pills flex-column mb-auto">
@@ -64,160 +64,182 @@
           <div class="profile-container">
             <h4>My Profile</h4>
             <p>Manage and protect your account</p>
+            <hr>
             <div class="account-form">
-              <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
-                <div class="mb-3">
-                  <label for="username" class="form-label">Username</label>
-                  <input
-                    type="text"
-                    id="username"
-                    formControlName="username"
-                    class="form-control"
-                    [ngClass]="{ 'is-invalid': (submitted && f['username'].errors) || (usernameAlreadyTaken && f['username'].touched)}"
-                    value="johndoe"
-                  />
-                  <small class="form-text-muted"
-                    >Username can only be changed once.</small
-                  >
-                  <small *ngIf="f['username'].invalid && (f['username'].dirty || f['username'].touched)" class="invalid-feedback">
-                    <div *ngIf="f['username'].errors?.['required']">User name is required</div>
-                </small>
-                  <small class="invalid-feedback" *ngIf="usernameAlreadyTaken">
-                    Username already exists
-                  </small>
-                </div>
-                <div class="fullname form-group">
+              <form enctype="multipart/form-data" [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+                <div class="profile-form">
                   <div class="mb-3">
-                    <label for="firstname" class="form-label">First Name</label>
+                    <label for="username" class="form-label">Username</label>
                     <input
                       type="text"
+                      id="username"
+                      formControlName="username"
                       class="form-control"
-                      [ngClass]="{ 'is-invalid': submitted && f['first_name'].errors}"
-                      formControlName="first_name"
-                      id="firstname"
-                      placeholder="Type your first name"
+                      [ngClass]="{ 'is-invalid': (submitted && f['username'].errors) || (usernameAlreadyTaken && f['username'].touched)}"
+                      value="johndoe"
                     />
-                    <small *ngIf="f['first_name'].invalid && (f['first_name'].dirty || f['last_name'].touched)" class="invalid-feedback">
-                        <div *ngIf="f['first_name'].errors?.['required']">First name is required</div>
+                    <small class="form-text-muted"
+                      >Username can only be changed once.</small
+                    >
+                    <small *ngIf="f['username'].invalid && (f['username'].dirty || f['username'].touched)" class="invalid-feedback">
+                      <div *ngIf="f['username'].errors?.['required']">User name is required</div>
+                  </small>
+                    <small class="invalid-feedback" *ngIf="usernameAlreadyTaken">
+                      Username already exists
+                    </small>
+                  </div>
+                  <div class="fullname form-group">
+                    <div class="mb-3">
+                      <label for="firstname" class="form-label">First Name</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        [ngClass]="{ 'is-invalid': submitted && f['first_name'].errors}"
+                        formControlName="first_name"
+                        id="firstname"
+                        placeholder="Type your first name"
+                      />
+                      <small *ngIf="f['first_name'].invalid && (f['first_name'].dirty || f['last_name'].touched)" class="invalid-feedback">
+                          <div *ngIf="f['first_name'].errors?.['required']">First name is required</div>
+                      </small>
+                    </div>
+                    <div class="mb-3">
+                      <label for="lastname" class="form-label">Last Name</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        [ngClass]="{ 'is-invalid': submitted && f['last_name'].errors}"
+                        formControlName="last_name"
+                        id="lastname"
+                        placeholder="Type your last name"
+                      />
+                      <small *ngIf="f['last_name'].invalid && (f['last_name'].dirty || f['last_name'].touched)" class="invalid-feedback">
+                          <div *ngIf="f['last_name'].errors?.['required']">Last name is required</div>
+                      </small>
+                    </div>
+                  </div>
+                  <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input
+                      type="email"
+                      id="email"
+                      formControlName="email"
+                      class="form-control"
+                      [ngClass]="{ 'is-invalid': submitted && f['email'].errors}"
+                      placeholder="john.doe@gmail.com"
+                    />
+                    <small *ngIf="f['email'].invalid && (f['email'].dirty || f['email'].touched)" class="invalid-feedback">
+                      <div *ngIf="f['email'].errors?.['required']">Email is required</div>
+                      <div *ngIf="f['email'].errors?.['email']">Email should be valid</div>
                     </small>
                   </div>
                   <div class="mb-3">
-                    <label for="lastname" class="form-label">Last Name</label>
+                    <label for="phone" class="form-label">Phone Number</label>
                     <input
                       type="text"
+                      id="phone"
+                      formControlName="mobile_num"
                       class="form-control"
-                      [ngClass]="{ 'is-invalid': submitted && f['last_name'].errors}"
-                      formControlName="last_name"
-                      id="lastname"
-                      placeholder="Type your last name"
+                      [ngClass]="{ 'is-invalid': (submitted && f['mobile_num'].errors) || (f['mobile_num'].touched && (f['mobile_num'].errors?.['pattern'] || f['mobile_num'].errors?.['maxlength']))}"
+                      value="********50"
                     />
-                    <small *ngIf="f['last_name'].invalid && (f['last_name'].dirty || f['last_name'].touched)" class="invalid-feedback">
-                        <div *ngIf="f['last_name'].errors?.['required']">Last name is required</div>
-                    </small>
+                    <a href="#" class="form-text">Change</a>
+                    <small *ngIf="f['mobile_num'].invalid && (f['mobile_num'].dirty || f['mobile_num'].touched)" class="invalid-feedback">
+                      <div *ngIf="f['mobile_num'].errors?.['required']">Mobile number is required</div>
+                      <div *ngIf="f['mobile_num'].errors?.['pattern'] || f['mobile_num'].errors?.['maxlength']">Mobile number is invalid</div>
+                      <!-- <div *ngIf="f['mobile_num'].errors?.['maxlength']">Mobile number exceeds max length</div> -->
+                   </small>
                   </div>
-                </div>
-                <div class="mb-3">
-                  <label for="email" class="form-label">Email</label>
-                  <input
-                    type="email"
-                    id="email"
-                    formControlName="email"
-                    class="form-control"
-                    [ngClass]="{ 'is-invalid': submitted && f['email'].errors}"
-                    placeholder="john.doe@gmail.com"
-                  />
-                  <small *ngIf="f['email'].invalid && (f['email'].dirty || f['email'].touched)" class="invalid-feedback">
-                    <div *ngIf="f['email'].errors?.['required']">Email is required</div>
-                    <div *ngIf="f['email'].errors?.['email']">Email should be valid</div>
-                  </small>
-                </div>
-                <div class="mb-3">
-                  <label for="phone" class="form-label">Phone Number</label>
-                  <input
-                    type="text"
-                    id="phone"
-                    formControlName="mobile_num"
-                    class="form-control"
-                    [ngClass]="{ 'is-invalid': (submitted && f['mobile_num'].errors) || (f['mobile_num'].touched && (f['mobile_num'].errors?.['pattern'] || f['mobile_num'].errors?.['maxlength']))}"
-                    value="********50"
-                  />
-                  <a href="#" class="form-text">Change</a>
-                  <small *ngIf="f['mobile_num'].invalid && (f['mobile_num'].dirty || f['mobile_num'].touched)" class="invalid-feedback">
-                    <div *ngIf="f['mobile_num'].errors?.['required']">Mobile number is required</div>
-                    <div *ngIf="f['mobile_num'].errors?.['pattern'] || f['mobile_num'].errors?.['maxlength']">Mobile number is invalid</div>
-                    <!-- <div *ngIf="f['mobile_num'].errors?.['maxlength']">Mobile number exceeds max length</div> -->
-                 </small>
-                </div>
-                <div class="mb-3">
-                  <label class="form-label">Gender</label>
-                  <div>
-                    <div class="form-check form-check-inline">
-                      <input
-                        class="form-check-input"
-                        type="radio"
-                        name="gender"
-                        id="male"
-                        value="male"
-                      />
-                      <label class="form-check-label" for="male">Male</label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                      <input
-                        class="form-check-input"
-                        type="radio"
-                        name="gender"
-                        id="female"
-                        value="female"
-                      />
-                      <label class="form-check-label" for="female"
-                        >Female</label
-                      >
-                    </div>
-                    <div class="form-check form-check-inline">
-                      <input
-                        class="form-check-input"
-                        type="radio"
-                        name="gender"
-                        id="other"
-                        value="other"
-                      />
-                      <label class="form-check-label" for="other">Other</label>
+                  <div class="mb-3">
+                    <label class="form-label">Gender</label>
+                    <div>
+                      <div class="form-check form-check-inline">
+                        <input
+                          class="form-check-input"
+                          type="radio"
+                          name="gender"
+                          id="male"
+                          value="male"
+                        />
+                        <label class="form-check-label" for="male">Male</label>
+                      </div>
+                      <div class="form-check form-check-inline">
+                        <input
+                          class="form-check-input"
+                          type="radio"
+                          name="gender"
+                          id="female"
+                          value="female"
+                        />
+                        <label class="form-check-label" for="female"
+                          >Female</label
+                        >
+                      </div>
+                      <div class="form-check form-check-inline">
+                        <input
+                          class="form-check-input"
+                          type="radio"
+                          name="gender"
+                          id="other"
+                          value="other"
+                        />
+                        <label class="form-check-label" for="other">Other</label>
+                      </div>
                     </div>
                   </div>
+                  <div class="mb-3">
+                    <label for="dob" class="form-label">Date of Birth</label>
+                    <input
+                      type="text"
+                      id="dob"
+                      class="form-control"
+                      value="**/10/19**"
+                      disabled
+                    />
+                    <small class="form-text-muted"
+                      >You have already done KYC. Changing your birthday is not
+                      permitted.</small
+                    >
+                  </div>
+                  <button type="submit" class="btn btn-save btn-primary">
+                    Save
+                  </button>
                 </div>
-                <div class="mb-3">
-                  <label for="dob" class="form-label">Date of Birth</label>
-                  <input
-                    type="text"
-                    id="dob"
-                    class="form-control"
-                    value="**/10/19**"
-                    disabled
-                  />
-                  <small class="form-text-muted"
-                    >You have already done KYC. Changing your birthday is not
-                    permitted.</small
-                  >
-                </div>
-                <button type="submit" class="btn btn-save btn-primary">
-                  Save
-                </button>
-              </form>
-
-              <div class="profile-image">
-                <img
-                  src="assets/img/default_profile_img-100.png"
+                
+                <div class="profile-image" >
+                  <!-- <img
+                  src="assets/users/{{ profileImgName }}"
                   alt="Profile Image"
-                />
-                <br />
-                <button class="btn btn-secondary">Select Image</button>
-                <small class="form-text-muted d-block mt-2"
+                  /> -->
+                  <ng-container *ngIf="imageUrl">
+                    <img
+                      [src]="imageUrl"
+                      alt="Profile Image"
+                    />
+                  </ng-container>
+                  <br />
+                  <input type="file" name="" id="profile-img-input"
+                         placeholder="Choose an image" accept="image/png, image/jpeg"
+                         formControlName="profile_img" class="form-control"
+                         [ngClass]="{'is-invalid': submitted && isDefaultImg && !f['profile_img'].value}"
+                         (change)="uploadFile($event)">
+                  <!-- <button class="btn btn-secondary">Select Image</button> -->
+                  <small
+                      *ngIf="isDefaultImg && submitted"
+                      class="invalid-feedback"
+                    >
+                      <div *ngIf="f['profile_img'].errors?.['required']">
+                        Item image is required
+                      </div>
+                  </small>
+                  <small class="form-text-muted d-block mt-2"
                   >File size: maximum 1 MB</small
-                >
-                <small class="form-text-muted"
+                  >
+                  <small class="form-text-muted"
                   >File extension: .JPEG, .PNG</small
-                >
-              </div>
+                  >
+                </div>
+              </form>
             </div>
           </div>
         </div>

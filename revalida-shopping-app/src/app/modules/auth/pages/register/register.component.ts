@@ -31,6 +31,7 @@ export class RegisterComponent {
       username: ['', [Validators.required], this.usernameIsUnique.bind(this)], // check if username already exists -> create fn in backend for checking username -> use it in validator
       email: ['', [Validators.required, Validators.email]],
       is_admin: [false],
+      deactivated: [false],
       mobile_num: ['', [Validators.required, Validators.pattern(/^(9)\d{9}/), Validators.maxLength(10)]], // add regex validation for mobile num
       password: ['', Validators.required],
       confirm_password: ['', Validators.required]
@@ -56,10 +57,25 @@ export class RegisterComponent {
                     );
   }
 
+  capitalizeWord = (word: string) => {
+    let words: string[] = word.split(' ');
+    let capitalized = " ";
+    words.forEach((token: string) => {
+      capitalized += token.charAt(0).toUpperCase() + token.slice(1) + " ";
+    })
+
+    console.log(capitalized.trim());
+    return capitalized;
+  }
+
   onSubmit = () => {
     this.submitted = true;
     const postData = {...this.registerForm.getRawValue()};
     delete postData.confirm_password; // do not need to pass confirm_password to backend
+
+    postData['first_name'] = this.capitalizeWord(postData['first_name']);
+    postData['last_name'] = this.capitalizeWord(postData['last_name']);
+    postData['profile_img'] = "default_profile_img-100.png";
 
     if(this.registerForm.invalid) {
       return;

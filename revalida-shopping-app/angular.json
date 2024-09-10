@@ -39,6 +39,7 @@
               }
             ],
             "styles": [
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "node_modules/datatables.net-dt/css/dataTables.dataTables.css",
               "src/styles.scss",
               "node_modules/primeng/resources/themes/lara-light-blue/theme.css",
@@ -46,6 +47,7 @@
               "node_modules/simple-datatables/src/css/style.css"
             ],
             "scripts": [
+              "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js",
               "node_modules/datatables.net/js/dataTables.js"
             ]
           },
@@ -75,6 +77,8 @@
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+          },
           "configurations": {
             "production": {
               "buildTarget": "revalida-shopping-app:build:production"
@@ -104,6 +108,7 @@
               }
             ],
             "styles": [
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "node_modules/datatables.net-dt/css/dataTables.dataTables.css",
               "src/styles.scss",
               "node_modules/primeng/resources/themes/lara-light-blue/theme.css",
@@ -111,6 +116,7 @@
               "node_modules/simple-datatables/src/css/style.css"
             ],
             "scripts": [
+              "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js",
               "node_modules/datatables.net/js/dataTables.js"
             ]
           }
