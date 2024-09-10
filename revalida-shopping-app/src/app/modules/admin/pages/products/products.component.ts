@@ -2,13 +2,14 @@ import { AfterContentInit, AfterViewChecked, AfterViewInit, Component, ElementRe
 import { Grid, h, html } from 'gridjs';
 import 'gridjs/dist/theme/mermaid.css';
 import { ProductsService } from '../../services/products.service';
-import { map, Observable } from 'rxjs';
+import { map, Observable, pipe } from 'rxjs';
 import { Product } from '../../../models/product.interface';
 import { DataTable } from 'simple-datatables';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { Modal } from 'bootstrap';
 import { S3UploadService } from '../../../dashboard/services/s3-upload.service';
+import { DeleteObjectsCommandOutput } from '@aws-sdk/client-s3';
 
 @Component({
   selector: 'app-products',
@@ -51,6 +52,7 @@ export class ProductsComponent implements OnInit, AfterViewInit {
   imageUrls: string[] = [];
   itemImgName: string;
   timestamp: string;
+  selectedFile!: File;
 
   // https://dbfiqowsfx2io.cloudfront.net
 
@@ -90,17 +92,16 @@ export class ProductsComponent implements OnInit, AfterViewInit {
       "Cooking Essentials"
     ]
 
-    
-
-    console.log(this.f['item_img'].value);
-    this.itemImgValue = (this.f['item_img'].value) ? this.f['item_img'].value : 'default_item_img.jpg'; 
-    this.deleteDescription = "these products";
-
     // S3 variables
     this.s3Folder = "assets/items";
     this.itemImgName = (this.f['item_img'].value) ? `${this.s3Folder}/${this.f['item_img'].value}` : `${this.s3Folder}/default_item_img.jpg`; 
     // this.imageUrl = `${this.s3Folder}/default_item_img.jpg`;
     this.timestamp = Date.now().toString();
+
+    console.log(this.f['item_img'].value);
+    // this.itemImgValue = (this.f['item_img'].value) ? this.f['item_img'].value : 'default_item_img.jpg'; 
+    this.itemImgValue = `${this.s3Folder}/default_item_img.jpg`; 
+    this.deleteDescription = "these products";
   }
 
   ngOnInit(): void {
@@ -192,14 +193,48 @@ export class ProductsComponent implements OnInit, AfterViewInit {
     this.paginateProducts();
   }
 
-  uploadFile = (event: Event) => {
+  async uploadFile (event: Event) {
     const element = event.currentTarget as HTMLInputElement;
     let fileList: FileList | null = element.files;
     if(fileList){
-      console.log("uploadFile: ", fileList[0].name)
-      console.log("uploadFile: ", fileList[0].type)
-      this.itemImgValue = fileList[0].name;
+      if(fileList[0].type.match('image.jpeg') ||
+         fileList[0].type.match('image.jpg') ||
+         fileList[0].type.match('image.png')){
+          this.selectedFile = fileList[0];
+          this.itemImgValue = fileList[0].name;
+
+          // Testing file upload to S3 bucket with
+          this.itemImgName = `${this.generateItemName(this.f['item_name'].value)}-${this.timestamp.slice(0, -3)}.${fileList[0].type.split('/')[1]}`;
+          console.log('itemImgname: ', this.itemImgName);
+          try {
+            
+            // Upload file to S3
+            const s3Path = await this.awsS3Service.uploadFile(this.s3Folder, fileList[0], this.itemImgName);
+            this.imageUrls[this.productIndex] = `${this.awsS3Service.cloudfrontDomain}/${this.s3Folder}/${this.itemImgName}`;
+            
+            // Log or use the URL to display the image
+            console.log("File uploaded successfully. Image URL: ", s3Path);
+
+          } catch(error) {
+            console.error("Error uploading file: ", error);
+          }
+        } else {
+          this.messageService.add({ severity:'error', summary: 'Error', detail: 'Uploaded file must be an image (JPEG/PNG)' });
+        }
     }
+  }
+
+  generateItemName = (name: string) => {
+    
+    const words = name.split(' ');
+    let itemName = "";
+
+    words.forEach((word) => {
+      itemName += word.toLowerCase() + "_";
+    });
+
+    console.log(itemName);
+    return itemName.trim();
   }
 
   get f() {
@@ -289,7 +324,7 @@ export class ProductsComponent implements OnInit, AfterViewInit {
     })
 
     console.log(capitalized.trim());
-    return capitalized;
+    return capitalized.trim();
   }
 
   onCheck = (index: number) => {
@@ -351,14 +386,71 @@ export class ProductsComponent implements OnInit, AfterViewInit {
     this.productsList$.pipe(
       map(products => products[index])
     ).subscribe(
-      product => {
+      async (product) => {
         updatedProduct.id = product.id;
-        updatedProduct.item_img = (!updatedProduct.item_img) ? product.item_img : updatedProduct.item_img;
+        
+        // Reinitialized item name in case it was changed before submit
+        // updatedProduct.item_img = (!updatedProduct.item_img) ? product.item_img : updatedProduct.item_img;
+        this.itemImgName = `${this.generateItemName(this.f['item_name'].value)}-${this.timestamp.slice(0, -3)}.${this.itemImgName.split('.')[1]}`;
+        this.imageUrls[this.productIndex] = `${this.awsS3Service.cloudfrontDomain}/${this.s3Folder}/${this.itemImgName}`;
+        // updatedProduct.item_img = (!updatedProduct.item_img) ? product.item_img : updatedProduct.item_img;
+        updatedProduct.item_img = (!updatedProduct.item_img) ? product.item_img : this.itemImgName;
+        
         this.productsService.updateProduct(updatedProduct as Product).subscribe(
-          response => {
-            console.log("Updated item: ", response);
+          async (response) => {
+            let objectsList: string[] = [];            
             this.productsList$ = this.productsService.getProducts();
             this.paginateProducts();
+
+            try {
+              if(this.selectedFile) {
+                // Upload file to S3
+                const s3Path = await this.awsS3Service.uploadFile(this.s3Folder, this.selectedFile, this.itemImgName);
+                this.imageUrls[this.productIndex] = `${this.awsS3Service.cloudfrontDomain}/${this.s3Folder}/${this.itemImgName}`;
+                
+                // Log or use the URL to display the image
+                console.log("File uploaded successfully. Image URL: ", s3Path);
+              }
+            } catch(error) {
+              console.error("Error uploading file: ", error);
+            }
+            
+            console.log("item img split: ", this.itemImgName.split('-')[0]);
+            console.log("item image timestamp: ", this.itemImgName.split('-')[1].split('.')[0]);
+            // List objects in s3 folder
+            (await this.awsS3Service.listObjectsWithName(this.s3Folder)).pipe(
+              // Filter objects with item name only and not matched timestamp for item img
+              map(objects => objects.Contents?.filter(
+                object => 
+                  object.Key?.includes(this.itemImgName.split('-')[0]) && 
+                  !object.Key?.includes(this.itemImgName.split('-')[1].split('.')[0]) && 
+                  !object.Key?.includes('default')
+              ))
+            ).subscribe(
+              async (objects: any) => {
+                // Get the filtered list of objects
+                objectsList = objects.map((item: any) => item.Key);
+                console.log("Objects containing name: ", objectsList);
+
+                if(objectsList.length > 0) {
+                  // Delete these objects (deletes previous item images of the same item) 
+                  (await this.awsS3Service.deleteObjectsWithName(objectsList)).subscribe(
+                    (responseDelete: any) => {
+                      console.log("Deleted objects: ", responseDelete.Deleted)
+                    },
+                    (errorDelete) => {
+                      console.error("Error deleting objects: ", errorDelete);
+                    }
+                  )
+                } else {
+                  console.log("Failed object deletion: No objects with such name");
+                }
+                
+              },
+              (errorList) => {
+                console.error("Error listing objects: ", errorList);
+              }
+            )
             this.closeModalEdit.nativeElement.click();
             this.messageService.add({ severity:'success', summary: 'Success', detail: 'Product has been updated' });
           },

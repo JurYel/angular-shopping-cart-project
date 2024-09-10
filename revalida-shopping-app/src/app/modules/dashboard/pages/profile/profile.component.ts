@@ -140,7 +140,7 @@ export class ProfileComponent implements OnInit, AfterViewChecked {
           try {
             const imageKey = `assets/users/${this.profileImgName}`;
             // Upload file to S3 and get the URL
-            await this.awsS3Service.uploadFile(fileList[0], this.profileImgName);
+            this.imageUrl = await this.awsS3Service.uploadFile(this.s3Folder, fileList[0], this.profileImgName);
             this.imageUrl = await this.awsS3Service.getSignedUrl(`${this.s3Folder}/${this.profileImgName}`);
             // this.imageUrl = `${this.awsS3Service.cloudfrontDomain}/${this.s3Folder}/${this.profileImgName}`;
 
@@ -278,15 +278,20 @@ export class ProfileComponent implements OnInit, AfterViewChecked {
                   async (objects: any) => {
                     objectsList = objects.map((item: any) => item.Key);
                     console.log("Objects containing name: ", objectsList);
-
-                    (await this.awsS3Service.deleteObjectsWithName(objectsList)).subscribe(
-                      (response: any) => {
-                        console.log("Deleted objects: ", response.Deleted);
-                      },
-                      (error) => {
-                        console.error("Error deleting objects: ", error);
-                      }
-                    )
+                    
+                    if(objectsList.length > 0){
+                      (await this.awsS3Service.deleteObjectsWithName(objectsList)).subscribe(
+                        (response: any) => {
+                          console.log("Deleted objects: ", response.Deleted);
+                        },
+                        (error) => {
+                          console.error("Error deleting objects: ", error);
+                        }
+                      )
+                    } else {
+                      console.log("Failed object deletion: No objects with such name");
+                    }
+                    
                   },
                   (error) => {
                     console.error("Error listing objects: ", error);

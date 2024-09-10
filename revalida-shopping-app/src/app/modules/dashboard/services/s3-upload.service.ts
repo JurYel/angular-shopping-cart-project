@@ -58,10 +58,10 @@ export class S3UploadService {
   }
 
   // Upload file to S3
-  async uploadFile(file: File, fileName: string): Promise<void> {
+  async uploadFile(folderPath: string, file: File, fileName: string): Promise<string> {
     const params = {
       Bucket: this.bucketName,
-      Key: `assets/users/${fileName}`,
+      Key: `${folderPath}/${fileName}`,
       Body: file,
       ContentType: file.type,
       // ACL: 'public-read',
@@ -71,7 +71,7 @@ export class S3UploadService {
       const command = new PutObjectCommand(params);
       await this.s3.send(command);
 
-      // return `https://${this.bucketName}.s3.${this.region}.amazonaws.com/${params.Key}`;
+      return `https://${this.bucketName}.s3.${this.region}.amazonaws.com/${folderPath}/${params.Key}`;
     } catch (error) {
       console.error("Error uploading file: ", error);
       throw error;
