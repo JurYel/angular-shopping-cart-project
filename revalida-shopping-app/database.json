@@ -184,107 +184,12 @@
         "Mogu Mogu 250ml"
       ],
       "quantity": [
+        21,
         20,
-        14,
-        7,
-        64,
-        16,
-        3,
-        1,
-        1
-      ],
-      "unit_price": [
-        58,
-        88,
-        25,
         12,
-        23,
-        799,
-        350.9,
-        48.99
-      ],
-      "subtotal": [
-        1160,
-        1232,
-        175,
-        768,
-        368,
-        2397,
-        350.9,
-        48.99
-      ]
-    },
-    {
-      "id": "5113",
-      "username": "admin",
-      "item_img": [
-        "gardenia-white-bread.png",
-        "gardenia-wheat-bread.png",
-        "lala-fishcracker.png",
-        "itlog.jpg",
-        "fit-n-right.png",
-        "grocery-bundle-crop.png"
-      ],
-      "item_name": [
-        "Gardenia White Bread",
-        "Gardenia Wheat Bread",
-        "Lala Fishcracker",
-        "Itlog",
-        "Fit N' Right",
-        "Assorted Products Gift Bundle"
-      ],
-      "quantity": [
-        19,
-        13,
-        6,
-        63,
-        15,
-        1
-      ],
-      "unit_price": [
-        58,
-        88,
-        25,
-        12,
-        23,
-        799
-      ],
-      "subtotal": [
-        1102,
-        1144,
-        150,
-        756,
-        345,
-        799
-      ]
-    },
-    {
-      "id": "5113",
-      "username": "admin",
-      "item_img": [
-        "gardenia-white-bread.png",
-        "gardenia-wheat-bread.png",
-        "lala-fishcracker.png",
-        "itlog.jpg",
-        "fit-n-right.png",
-        "grocery-bundle-crop.png",
-        "oreo-ice-cream-450ml.png"
-      ],
-      "item_name": [
-        "Gardenia White Bread",
-        "Gardenia Wheat Bread",
-        "Lala Fishcracker",
-        "Itlog",
-        "Fit N' Right",
-        "Assorted Products Gift Bundle",
-        "Oreo Ice Cream 450ml"
-      ],
-      "quantity": [
-        20,
-        14,
-        7,
-        63,
-        16,
+        65,
+        17,
+        4,
         2,
         1
       ],
@@ -295,70 +200,77 @@
         12,
         23,
         799,
-        350.9
+        350.9,
+        48.99
       ],
       "subtotal": [
-        1160,
-        1232,
-        175,
-        756,
-        368,
-        1598,
-        350.9
+        1218,
+        1760,
+        300,
+        780,
+        391,
+        3196,
+        701.8,
+        48.99
       ]
     },
     {
-      "id": "5113",
-      "username": "admin",
+      "id": "7da0",
+      "username": "juryel1",
       "item_img": [
-        "gardenia-white-bread.png",
-        "gardenia-wheat-bread.png",
         "lala-fishcracker.png",
+        "pepsi.jpg",
+        "mogu_mogu.png",
         "itlog.jpg",
-        "fit-n-right.png",
-        "grocery-bundle-crop.png",
         "oreo-ice-cream-450ml.png",
-        "mogu_mogu.png"
+        "fit-n-right.png",
+        "gardenia-white-bread.png",
+        "grocery-bundle-crop.png",
+        "gardenia-wheat-bread.png"
       ],
       "item_name": [
-        "Gardenia White Bread",
-        "Gardenia Wheat Bread",
         "Lala Fishcracker",
+        "Pepsi",
+        "Mogu Mogu 250ml",
         "Itlog",
-        "Fit N' Right",
-        "Assorted Products Gift Bundle",
         "Oreo Ice Cream 450ml",
-        "Mogu Mogu 250ml"
+        "Fit N' Right",
+        "Gardenia White Bread",
+        "Assorted Products Gift Bundle",
+        "Gardenia Wheat Bread"
       ],
       "quantity": [
-        20,
-        14,
-        7,
-        63,
-        16,
+        17,
+        9,
+        1,
+        2,
+        10,
         2,
         1,
-        1
+        153,
+        118
       ],
       "unit_price": [
-        58,
-        88,
         25,
+        25.59,
+        48.99,
         12,
-        23,
-        799,
         350.9,
-        48.99
+        23,
+        58,
+        799,
+        88
       ],
       "subtotal": [
-        1160,
-        1232,
-        175,
-        756,
-        368,
-        1598,
-        350.9,
-        48.99
+        425,
+        230.31,
+        48.99,
+        24,
+        3509,
+        46,
+        58,
+        122247,
+        10384
       ]
     }
   ],

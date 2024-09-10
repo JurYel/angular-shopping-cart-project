@@ -50,13 +50,21 @@
     margin-top: -20px;
     margin-bottom: 15px;
 }
+
 .item .qty-wrapper input {
+    // width: 55px;
     width: 40px;
     text-align: center;
 }
 
 .item .qty-wrapper input::-webkit-outer-spin-button,
 .item .qty-wrapper input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.bundle-form input::-webkit-outer-spin-button,
+.bundle-form input::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
 }

@@ -41,19 +41,21 @@
               quick-fix meals with Lucky Me! Instant Noodles in mouthwatering flavors 
               like Spicy Bulalo and Beef. Perfect for easy, tasty meals!
             </p>
-            <form [formGroup]="addToCartForm" class="d-flex" (ngSubmit)="addToCart(productBundleIndex)">
-              <input
-                class="form-control text-center me-3"
-                id="inputQuantity"
-                formControlName="quantity"
-                type="num"
-                value="1"
-                style="max-width: 3rem"
-              />
-              <button type="submit" class="btn btn-outline-dark flex-shrink-0">
-                <i class="bi-cart-fill me-1"></i>
-                Add to cart
-              </button>
+            <form [formGroup]="addToCartForm" class="bundle-form d-flex" (ngSubmit)="addToCart(productBundleIndex)">
+              <ng-container *ngIf="quantities && quantities.length" formArrayName="quantities">
+                <input
+                  class="form-control text-center me-3"
+                  id="inputQuantity"
+                  [formControlName]="productBundleIndex"
+                  type="number"
+                  value="1"
+                  style="max-width: 3rem"
+                />
+                <button type="submit" class="btn btn-outline-dark flex-shrink-0">
+                  <i class="bi-cart-fill me-1"></i>
+                  Add to cart
+                </button>
+              </ng-container>
             </form>
           </div>
         </div>
@@ -111,17 +113,19 @@
                 <!-- Product actions-->
                 <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
                   <form [formGroup]="addToCartForm" (ngSubmit)="addToCart(i)" class="text-center">
-                    <div class="qty-wrapper">
-                      <a class="btn btn-link px-2"
-                            (click)="stepDown(i)">
-                        <i class="fa-solid fa-minus"></i>
-                      </a>
-                      <input min="0" formControlName="quantity" id="{{ i }}" type="number"
-                              class="form-control form-control-sm qty-input"/>
-                      <a class="btn btn-link px-2"
-                              (click)="stepUp(i)">
-                          <i class="fa-solid fa-plus"></i>
-                      </a>
+                    <div *ngIf="quantities && quantities.length" formArrayName="quantities">
+                      <div class="qty-wrapper">
+                        <a class="btn btn-link px-2"
+                              (click)="stepDown(i)">
+                          <i class="fa-solid fa-minus"></i>
+                        </a>
+                        <input [formControlName]="i" id="{{ i }}" type="number"
+                                class="form-control form-control-sm qty-input" min="1"/>
+                        <a class="btn btn-link px-2"
+                                (click)="stepUp(i)">
+                            <i class="fa-solid fa-plus"></i>
+                        </a>
+                      </div>
                     </div>
                     <button type="submit" class="btn btn-outline-dark mt-auto"
                       >Add to cart</button>

@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { ProductsService } from '../../../admin/services/products.service';
 import { map, Observable } from 'rxjs';
 import { Product } from '../../../models/product.interface';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { OrderService } from '../../../admin/services/order.service';
 import { CartService } from '../../services/cart.service';
 import { CartItem } from '../../../models/cart-item.interface';
@@ -17,11 +17,13 @@ export class DashboardComponent implements OnInit {
 
   products$: Observable<Product[]>;
   productBundle!: Product;
-  productBundleIndex: number;
+  productBundleIndex!: number;
   addToCartForm: FormGroup;
   cartItemCount: number;
   customerUsername: string;
-  groceryCart: CartItem;
+  groceryCart: any;
+  s3Folder: string;
+
   constructor(private router: Router,
               private fb: FormBuilder,
               private productService: ProductsService,
@@ -43,12 +45,20 @@ export class DashboardComponent implements OnInit {
     );
     
     this.addToCartForm = this.fb.group({
-      "quantity": [1, [Validators.required, Validators.min(1)]]
+      // quantity: [1, [Validators.required, Validators.min(1)]]
+      quantities: this.fb.array([])
     });
+
+    this.products$.subscribe(
+      products => {
+        this.populateQuantities(products);
+      }
+    );
+
+    console.log(this.quantities);
 
     this.customerUsername = sessionStorage.getItem('username') as string;
     this.groceryCart  = {
-      id: "",
       username: sessionStorage.getItem('username') as string,
       item_img: [] as string[],
       item_name: [] as string[],
@@ -57,7 +67,10 @@ export class DashboardComponent implements OnInit {
       subtotal: [] as number[]
     }
     this.cartItemCount = 0;
-    this.productBundleIndex = 0;
+    this.getProductBundleIndex();
+
+    // S3 variables
+    this.s3Folder = "assets/users";
   }
 
   ngOnInit(): void {
@@ -69,7 +82,33 @@ export class DashboardComponent implements OnInit {
     //   })
     // ).subscribe();
 
-    this.cartService.getCartItems(this.customerUsername as string).subscribe(
+    // this.cartService.getCartItems(this.customerUsername as string).subscribe(
+    //   response => {
+    //     if(response.length > 0){
+    //       this.groceryCart = response[0];
+    //       this.cartItemCount = response[0].quantity.length;
+    //       console.log("grocery: ", this.groceryCart);
+    //     }
+    //   }
+    // );
+
+    this.retrieverCustomerCart(this.customerUsername as string);
+  }
+
+  get quantities(): FormArray {
+    return this.addToCartForm.get('quantities') as FormArray;
+  }
+
+  // Populate the FormArray with FormControl for each product
+  populateQuantities = (products: Product[]) => {
+    products.forEach(() => {
+      // Initialize quantities to 1
+      this.quantities.push(this.fb.control(1, [Validators.required, Validators.min(1)])); 
+    });
+  }
+
+  retrieverCustomerCart = (username: string) => {
+    this.cartService.getCartItems(username as string).subscribe(
       response => {
         if(response.length > 0){
           this.groceryCart = response[0];
@@ -78,9 +117,7 @@ export class DashboardComponent implements OnInit {
         }
       }
     );
-
-    this.getProductBundleIndex();
-  }
+  } 
 
   logOut = () => {
     sessionStorage.clear();
@@ -102,54 +139,81 @@ export class DashboardComponent implements OnInit {
     ).subscribe();
   }
 
+  // Increase quantity
   stepUp = (index: number) => {
-    const numberInput = document.getElementById(index.toString()) as HTMLInputElement;
+    const control = this.quantities.at(index);
     this.products$.pipe(
       map(products => products[index])
     ).subscribe(
       product => {
-        if(parseInt(numberInput.value) < product.quantity){
-          numberInput.stepUp(); 
+        if(control.value < product.quantity) {
+          control.setValue(control.value + 1);
         }
       }
-    );
+    )
   }
 
   stepDown = (index: number) => {
-    const numberInput = document.getElementById(index.toString()) as HTMLInputElement;
-    if(parseInt(numberInput.value) > 1){
-      numberInput.stepDown(); 
+    const control = this.quantities.at(index);
+    if(control.value > 1) {
+      control.setValue(control.value - 1)
     }
   }
 
   addToCart = (index: number) => {
-    const quantityInput = parseInt(this.addToCartForm.get('quantity')?.value);
-    console.log("index: ", this.productBundleIndex)
+    
 
-    if(parseInt(this.addToCartForm.get('quantity')?.value) > 0) {
+    if(parseInt(this.quantities.at(index).value)) {
       this.products$.pipe(
         map(products => products[index])
       ).subscribe(
         response => {
+          const quantityInput = parseInt(this.quantities.at(index).value);
+          console.log("quantity input: ", quantityInput)
           // const itemIndex = this.groceryCart?.item_name.findIndex((item: string) => item.includes(response.item_name));
-          const itemIndex = this.groceryCart.item_name.indexOf(response.item_name);
-          console.log(itemIndex);
           
-          if(itemIndex !== -1){
-            // const itemIndex = this.groceryCart?.item_name.findIndex((item: string) => item === response.item_name);
-            this.groceryCart.quantity[itemIndex] += quantityInput;
-            this.groceryCart.subtotal[itemIndex] = this.groceryCart.quantity[itemIndex] * this.groceryCart.unit_price[itemIndex];
+          // Check if customer/user has previously ordered
+          if(this.groceryCart.id){
+            // If so, check if such item added is already in his cart
+            const itemIndex = this.groceryCart.item_name.indexOf(response.item_name);
+            console.log(itemIndex);
+            
+            // If yes, just increment the quantity and update the subtotal amount of the order
+            if(itemIndex !== -1){
+              // const itemIndex = this.groceryCart?.item_name.findIndex((item: string) => item === response.item_name);
+              this.groceryCart.quantity[itemIndex] += quantityInput;
+              this.groceryCart.subtotal[itemIndex] = this.groceryCart.quantity[itemIndex] * this.groceryCart.unit_price[itemIndex];
 
-            this.cartService.updateCustomerCart(this.groceryCart as CartItem).subscribe(
-              response => {
-                console.log("Updated customer cart: ", response)
-              },
-              error => {
-                console.error("Error updating customer cart: ", error);
-              }
-            )
-          } else {
-            console.log("inside here: ", itemIndex);
+              this.cartService.updateCustomerCart(this.groceryCart as CartItem).subscribe(
+                response => {
+                  console.log("Updated customer cart: ", response)
+                },
+                error => {
+                  console.error("Error updating customer cart: ", error);
+                }
+              )
+            } 
+            // If not exists, push the new item to the customer's cart
+            else {
+              console.log("inside here: ", itemIndex);
+              this.groceryCart.item_img.push(response.item_img);
+              this.groceryCart.item_name.push(response.item_name);
+              this.groceryCart.quantity.push(quantityInput);
+              this.groceryCart.unit_price.push(response.unit_price);
+              this.groceryCart.subtotal.push(quantityInput * response.unit_price);
+
+              this.cartService.updateCustomerCart(this.groceryCart as CartItem).subscribe(
+                response => {
+                  console.log("Updated customer cart: ", response)
+                },
+                error => {
+                  console.error("Error updating customer cart: ", error);
+                }
+              )
+            }
+          } // If user has no cart or no previous orders, create a new cart with the added item inside
+            else {
+            
             this.groceryCart.username = this.customerUsername;
             this.groceryCart.item_img.push(response.item_img);
             this.groceryCart.item_name.push(response.item_name);
@@ -165,11 +229,14 @@ export class DashboardComponent implements OnInit {
                 console.log("Error adding to cart: ", error)
               }
             );
+
+            this.retrieverCustomerCart(this.customerUsername);
           }
+          
 
           this.cartItemCount = this.groceryCart.quantity.length;
           this.addToCartForm.reset();
-          this.addToCartForm.patchValue({ quantity: 1 });
+          this.quantities.at(index).setValue(1)
         }
       );
     }
