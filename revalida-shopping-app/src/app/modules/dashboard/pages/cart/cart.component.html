@@ -26,7 +26,7 @@
   
       <!-- Cart Items Table -->
       <div class="card">
-        <form [formGroup]="checkoutForm" class="row">
+        <form [formGroup]="checkoutForm" class="row" (ngSubmit)="onCheckout()">
             <div class="col-md-8 cart">
                 <div class="title">
                     <div class=" row">
@@ -75,45 +75,6 @@
                         </div>
                     </ng-container>
                 </div>
-                <!-- <div class="row border-top border-bottom">
-                    <div class="row main align-items-center">
-                        <div class="col-2"><img class="img-fluid" src="https://i.imgur.com/1GrakTl.jpg"></div>
-                        <div class="col">
-                            <div class="row text-muted">Shirt</div>
-                            <div class="row">Cotton T-shirt</div>
-                        </div>
-                        <div class="col">
-                            <a href="#">-</a><a href="#" class="border">1</a><a href="#">+</a>
-                        </div>
-                        <div class="col">&euro; 44.00 <span class="close">&#10005;</span></div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="row main align-items-center">
-                        <div class="col-2"><img class="img-fluid" src="https://i.imgur.com/ba3tvGm.jpg"></div>
-                        <div class="col">
-                            <div class="row text-muted">Shirt</div>
-                            <div class="row">Cotton T-shirt</div>
-                        </div>
-                        <div class="col">
-                            <a href="#">-</a><a href="#" class="border">1</a><a href="#">+</a>
-                        </div>
-                        <div class="col">&euro; 44.00 <span class="close">&#10005;</span></div>
-                    </div>
-                </div>
-                <div class="row border-top border-bottom">
-                    <div class="row main align-items-center">
-                        <div class="col-2"><img class="img-fluid" src="https://i.imgur.com/pHQ3xT3.jpg"></div>
-                        <div class="col">
-                            <div class="row text-muted">Shirt</div>
-                            <div class="row">Cotton T-shirt</div>
-                        </div>
-                        <div class="col">
-                            <a href="#">-</a><a href="#" class="border">1</a><a href="#">+</a>
-                        </div>
-                        <div class="col">&euro; 44.00 <span class="close">&#10005;</span></div>
-                    </div>
-                </div> -->
                 <div class="back-to-shop"><a routerLink="/home"><i class="fa-solid fa-left-long"></i></a><span class="text-muted">Back to shop</span></div>
             </div>
             <div class="col-md-4 summary">
@@ -140,7 +101,7 @@
                     <div class="col">TOTAL PRICE</div>
                     <div class="col text-right">{{ getTotal() + 5 | currency: 'PHP': 'symbol': '1.2' }}</div>
                 </div>
-                <button class="btn">CHECKOUT</button>
+                <button class="submit">CHECKOUT</button>
             </div>
         </form>
         

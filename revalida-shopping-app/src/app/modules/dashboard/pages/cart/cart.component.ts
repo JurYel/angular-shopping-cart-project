@@ -5,6 +5,7 @@ import { S3UploadService } from '../../services/s3-upload.service';
 import { MessageService } from 'primeng/api';
 import { CartService } from '../../services/cart.service';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-cart',
@@ -43,7 +44,8 @@ export class CartComponent implements OnInit {
   constructor(private fb: FormBuilder,
               private awsS3Service: S3UploadService,
               private messageService: MessageService,
-              private cartService: CartService
+              private cartService: CartService,
+              private router: Router
   ) {
     this.customerUsername = sessionStorage.getItem('username') as string;
     this.cartItems$ = this.cartService.getCartItems(this.customerUsername);
@@ -159,5 +161,9 @@ export class CartComponent implements OnInit {
     //   .reduce((total, item) => total + item.price * item.quantity, 0);
 
     return  this.groceryCart.subtotal.reduce((total, subtotal) => total + subtotal, 0);
+  }
+
+  onCheckout = () => {
+    this.router.navigate(['/home/checkout']);
   }
 }
