@@ -128,12 +128,12 @@ export class DashboardComponent implements OnInit {
           this.cartItemCount = response[0].quantity.length;
           console.log("grocery: ", this.groceryCart);
           
-          response.forEach(
-            async (item) => {
+          // response.forEach(
+          //   async (item) => {
 
-              this.imageUrls.push(await this.awsS3Service.getSignedUrl(`${this.s3Folder}/${item.item_img}`));
-            }
-          )
+          //     this.imageUrls.push(await this.awsS3Service.getSignedUrl(`${this.s3Folder}/${item.item_img}`));
+          //   }
+          // )
         }
       }
     );
