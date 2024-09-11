@@ -228,20 +228,21 @@ export class OrdersComponent implements OnInit {
   // Method for searchiing orders
   searchOrder = (): void => {
     if (this.searchQuery) {
-      this.orders$ = this.orderService
-        .getOrders()
-        .pipe(
-          map((orders) =>
-            orders.filter((order) =>
-              order.item_name
-                .toLowerCase()
-                .includes(this.searchQuery.toLowerCase()) ||
-              order.customer
-                .toLowerCase()
-                .includes(this.searchQuery.toLowerCase())
-            )
-          )
-        );
+      // TO FIX item_name is now a list
+      // this.orders$ = this.orderService
+      //   .getOrders()
+      //   .pipe(
+      //     map((orders) =>
+      //       orders.filter((order) =>
+      //         order.item_name
+      //           .toLowerCase()
+      //           .includes(this.searchQuery.toLowerCase()) ||
+      //         order.customer
+      //           .toLowerCase()
+      //           .includes(this.searchQuery.toLowerCase())
+      //       )
+      //     )
+      //   );
     } else {
       this.orders$ = this.orderService.getOrders();
     }

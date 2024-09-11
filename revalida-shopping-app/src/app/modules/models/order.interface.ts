@@ -4,10 +4,11 @@ export interface Order {
     customer_img: string
     customer: string
     location: string
-    datetime: Date
-    item_name: string
+    datetime: number
+    item_name: string[]
+    category: string[]
     payment_mode: string
-    quantity: number
-    subtotal: number
+    quantity: number[]
+    subtotal: number[]
     status: string
 }

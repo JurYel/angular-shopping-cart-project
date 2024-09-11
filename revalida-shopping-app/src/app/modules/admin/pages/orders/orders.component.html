@@ -165,13 +165,14 @@
                     >
                       {{ order.quantity }}
                     </td>
-                    <td
+                    <!-- TO FIX -->
+                    <!-- <td
                       (click)="viewOrderSummary(i)"
                       data-bs-toggle="modal"
                       data-bs-target="#viewOrderModal"
                     >
                       {{ order.subtotal | currency : "PHP" }}
-                    </td>
+                    </td> -->
                     <td class="dropdown">
                       <a
                         href="#"
@@ -393,7 +394,8 @@
                               </tr>
                             </thead>
                             <tbody>
-                              <tr *ngIf="selectedOrder">
+                              <!-- TO FIX -->
+                              <!-- <tr *ngIf="selectedOrder">
                                 <td>{{ selectedOrder.item_name }}</td>
                                 <td>{{ selectedOrder.quantity }}</td>
                                 <td>
@@ -409,19 +411,20 @@
                                       | currency : "PHP" : "symbol" : "1.1-2"
                                   }}
                                 </td>
-                              </tr>
+                              </tr> -->
                             </tbody>
                           </table>
                         </div>
                         <div class="row text-black">
                           <div class="col-xl-12">
-                            <p *ngIf="selectedOrder" class="float-end fw-bold">
+                            <!-- TO FIX -->
+                            <!-- <p *ngIf="selectedOrder" class="float-end fw-bold">
                               Total:
                               {{
                                 selectedOrder.subtotal
                                   | currency : "PHP" : "symbol" : "1.1-2"
                               }}
-                            </p>
+                            </p> -->
                           </div>
                           <hr style="border: 2px solid black" />
                         </div>

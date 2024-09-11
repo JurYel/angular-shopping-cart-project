@@ -216,14 +216,12 @@
       "username": "admin",
       "item_img": [
         "gardenia_white_bread_-1725994139.png",
-        "lala_fishcracker_-1725990887.png",
         "oreo_ice_cream_450ml_-1725994139.png",
         "gardenia_wheat_bread_-1725989990.png",
         "itlog_-1725990887.jpeg"
       ],
       "item_name": [
         "Gardenia White Bread",
-        "Lala Fishcracker",
         "Oreo Ice Cream 450ml",
         "Gardenia Wheat Bread",
         "Itlog"
@@ -232,29 +230,25 @@
         "Food",
         "Food",
         "Food",
-        "Food",
         "Food"
       ],
       "quantity": [
-        1,
-        14,
-        2,
-        11,
-        3
+        4,
+        3,
+        6,
+        9
       ],
       "unit_price": [
         58,
-        25,
         350.9,
         88,
         12
       ],
       "subtotal": [
-        58,
-        100,
-        701.8,
-        1320,
-        36
+        116,
+        1052.6999999999998,
+        176,
+        108
       ]
     },
     {
@@ -296,9 +290,10 @@
       "datetime": "",
       "payment_mode": "Gcash",
       "status": "Shipped",
-      "item_name": "Gardenia Wheat Bread",
-      "quantity": 4,
-      "subtotal": 336.5
+      "item_name": ["Gardenia Wheat Bread"],
+      "category": ["Food"],
+      "quantity": [4],
+      "subtotal": [336.5]
     },
     {
       "id": "0aa1",
@@ -309,9 +304,10 @@
       "datetime": "",
       "payment_mode": "Gcash",
       "status": "Delivered",
-      "item_name": "Vitasoy Classic",
-      "quantity": 3,
-      "subtotal": 120.43
+      "item_name": ["Vitasoy Classic"],
+      "category": ["Drinks"],
+      "quantity": [3],
+      "subtotal": [120.43]
     },
     {
       "id": "3db5",
@@ -322,9 +318,10 @@
       "datetime": "",
       "payment_mode": "COD",
       "status": "Cancelled",
-      "item_name": "Energy Booster",
-      "quantity": 2,
-      "subtotal": 45.67
+      "item_name": ["Energy Booster"],
+      "category": ["Drinks"],
+      "quantity": [2],
+      "subtotal": [45.67]
     },
     {
       "id": "f947",
@@ -335,9 +332,10 @@
       "datetime": "",
       "payment_mode": "Paypal",
       "status": "Cancelled",
-      "item_name": "Magnum Praline 400ml",
-      "quantity": 1,
-      "subtotal": 680.55
+      "item_name": ["Magnum Praline 400ml"],
+      "category": ["Food"],
+      "quantity": [1],
+      "subtotal": [680.55]
     },
     {
       "id": "16c5",
@@ -348,243 +346,10 @@
       "datetime": "",
       "payment_mode": "COD",
       "status": "Delivered",
-      "item_name": "Oreo Ice Cream 400ml",
-      "quantity": 2,
-      "subtotal": 789.23
-    },
-    {
-      "id": "2345",
-      "username": "alex.gonzaga",
-      "customer_img": "1.jpg",
-      "customer": "Alex Gonzaga",
-      "location": "Pasig City",
-      "datetime": "",
-      "payment_mode": "Gcash",
-      "status": "Delivered",
-      "item_name": "Gardenia Wheat Bread",
-      "quantity": 4,
-      "subtotal": 336.5
-    },
-    {
-      "id": "56e4",
-      "username": "juryel",
-      "customer_img": "2.jpg",
-      "customer": "Juriel Botoy",
-      "location": "Magallanes, Agusan del Norte",
-      "datetime": "",
-      "payment_mode": "Gcash",
-      "status": "Delivered",
-      "item_name": "Vitasoy Classic",
-      "quantity": 3,
-      "subtotal": 120.43
-    },
-    {
-      "id": "6g4r",
-      "username": "edith.heimer",
-      "customer_img": "3.jpg",
-      "customer": "Liah Mendoza",
-      "location": "Plaridel",
-      "datetime": "",
-      "payment_mode": "COD",
-      "status": "Shipped",
-      "item_name": "Energy Booster",
-      "quantity": 2,
-      "subtotal": 45.67
-    },
-    {
-      "id": "34rf",
-      "username": "jason.silver",
-      "customer_img": "4.jpg",
-      "customer": "Justin Silver",
-      "location": "Muntinlupa City",
-      "datetime": "",
-      "payment_mode": "Paypal",
-      "status": "Delivered",
-      "item_name": "Magnum Praline 400ml",
-      "quantity": 1,
-      "subtotal": 680.55
-    },
-    {
-      "id": "2d4r",
-      "username": "lisa.poirot",
-      "customer_img": "5.jpg",
-      "customer": "Lisa Poirot",
-      "location": "Cebu City",
-      "datetime": "",
-      "payment_mode": "COD",
-      "status": "Cancelled",
-      "item_name": "Oreo Ice Cream 400ml",
-      "quantity": 2,
-      "subtotal": 789.23
-    },
-    {
-      "id": "56tf",
-      "username": "alex.gonzaga",
-      "customer_img": "1.jpg",
-      "customer": "Alex Gonzaga",
-      "location": "Pasig City",
-      "datetime": "",
-      "payment_mode": "Gcash",
-      "status": "Delivered",
-      "item_name": "Gardenia Wheat Bread",
-      "quantity": 4,
-      "subtotal": 336.5
-    },
-    {
-      "id": "124s",
-      "username": "juryel",
-      "customer_img": "2.jpg",
-      "customer": "Juriel Botoy",
-      "location": "Magallanes, Agusan del Norte",
-      "datetime": "",
-      "payment_mode": "Gcash",
-      "status": "Delivered",
-      "item_name": "Vitasoy Classic",
-      "quantity": 3,
-      "subtotal": 120.43
-    },
-    {
-      "id": "56fg",
-      "username": "edith.heimer",
-      "customer_img": "3.jpg",
-      "customer": "Liah Mendoza",
-      "location": "Plaridel",
-      "datetime": "",
-      "payment_mode": "COD",
-      "status": "Shipped",
-      "item_name": "Energy Booster",
-      "quantity": 2,
-      "subtotal": 45.67
-    },
-    {
-      "id": "678w",
-      "username": "jason.silver",
-      "customer_img": "4.jpg",
-      "customer": "Justin Silver",
-      "location": "Muntinlupa City",
-      "datetime": "",
-      "payment_mode": "Paypal",
-      "status": "Delivered",
-      "item_name": "Magnum Praline 400ml",
-      "quantity": 1,
-      "subtotal": 680.55
-    },
-    {
-      "id": "125t",
-      "username": "lisa.poirot",
-      "customer_img": "5.jpg",
-      "customer": "Lisa Poirot",
-      "location": "Cebu City",
-      "datetime": "",
-      "payment_mode": "COD",
-      "status": "Cancelled",
-      "item_name": "Oreo Ice Cream 400ml",
-      "quantity": 2,
-      "subtotal": 789.23
-    },
-    {
-      "id": "37fs",
-      "username": "alex.gonzaga",
-      "customer_img": "1.jpg",
-      "customer": "Alex Gonzaga",
-      "location": "Pasig City",
-      "datetime": "",
-      "payment_mode": "Gcash",
-      "status": "Cancelled",
-      "item_name": "Gardenia Wheat Bread",
-      "quantity": 4,
-      "subtotal": 336.5
-    },
-    {
-      "id": "sd42",
-      "username": "juryel",
-      "customer_img": "2.jpg",
-      "customer": "Juriel Botoy",
-      "location": "Magallanes, Agusan del Norte",
-      "datetime": "",
-      "payment_mode": "Gcash",
-      "status": "Delivered",
-      "item_name": "Vitasoy Classic",
-      "quantity": 3,
-      "subtotal": 120.43
-    },
-    {
-      "id": "f54e",
-      "username": "edith.heimer",
-      "customer_img": "3.jpg",
-      "customer": "Liah Mendoza",
-      "location": "Plaridel",
-      "datetime": "",
-      "payment_mode": "COD",
-      "status": "Shipped",
-      "item_name": "Energy Booster",
-      "quantity": 2,
-      "subtotal": 45.67
-    },
-    {
-      "id": "f3s4",
-      "username": "jason.silver",
-      "customer_img": "4.jpg",
-      "customer": "Justin Silver",
-      "location": "Muntinlupa City",
-      "datetime": "",
-      "payment_mode": "Paypal",
-      "status": "Delivered",
-      "item_name": "Magnum Praline 400ml",
-      "quantity": 1,
-      "subtotal": 680.55
-    },
-    {
-      "id": "bmw3",
-      "username": "lisa.poirot",
-      "customer_img": "5.jpg",
-      "customer": "Lisa Poirot",
-      "location": "Cebu City",
-      "datetime": "",
-      "payment_mode": "COD",
-      "status": "Cancelled",
-      "item_name": "Oreo Ice Cream 400ml",
-      "quantity": 2,
-      "subtotal": 789.23
-    },
-    {
-      "id": "psp5",
-      "username": "alex.gonzaga",
-      "customer_img": "1.jpg",
-      "customer": "Alex Gonzaga",
-      "location": "Pasig City",
-      "datetime": "",
-      "payment_mode": "Gcash",
-      "status": "Cancelled",
-      "item_name": "Gardenia Wheat Bread",
-      "quantity": 4,
-      "subtotal": 336.5
-    },
-    {
-      "id": "wow2",
-      "username": "juryel",
-      "customer_img": "2.jpg",
-      "customer": "Juriel Botoy",
-      "location": "Magallanes, Agusan del Norte",
-      "datetime": "",
-      "payment_mode": "Gcash",
-      "status": "Delivered",
-      "item_name": "Vitasoy Classic",
-      "quantity": 3,
-      "subtotal": 120.43
-    },
-    {
-      "id": "w42w",
-      "username": "edith.heimer",
-      "customer_img": "3.jpg",
-      "customer": "Liah Mendoza",
-      "location": "Plaridel",
-      "datetime": "",
-      "payment_mode": "COD",
-      "status": "Shipped",
-      "item_name": "Energy Booster",
-      "quantity": 2,
-      "subtotal": 45.67
+      "item_name": ["Oreo Ice Cream 400ml"],
+      "category": ["Food"],
+      "quantity": [2],
+      "subtotal": [789.23]
     }
   ]
 }

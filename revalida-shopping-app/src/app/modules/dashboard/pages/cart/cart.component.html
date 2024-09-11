@@ -89,13 +89,21 @@
                 </div>
                 <!-- <form> -->
                 <div class="formgroup">
-                    <p>Mode of Payment</p>
-                    <select>
-                        <option class="text-muted">Cash on Delivery - {{ '5.00' | currency: 'PHP'}}</option>
-                        <option class="text-muted">Gcash</option>
-                        <option class="text-muted">PayMaya</option>
-                        <option class="text-muted">Pick Up</option>
-                    </select>
+                    <div class="mb-4">
+                        <p>Mode of Payment</p>
+                        <select formControlName="paymentMethod" 
+                                [ngClass]="{'is-invalid': submitted && f['paymentMethod'].value === 'Select payment method'}">
+                            <option selected>Select payment method</option>
+                            <option *ngFor="let method of paymentMethods"
+                                    [value]="method">
+                                        {{method}}
+                            </option>
+                        </select>
+                        <small *ngIf="f['paymentMethod'].value === 'Select payment method' && submitted"
+                            class="invalid-feedback">
+                                Select a payment method
+                        </small>
+                    </div>
                     <p>Voucher</p>
                     <input type="text" id="code" placeholder="Enter your code">
                 </div>
@@ -104,7 +112,7 @@
                     <div class="col">TOTAL PRICE</div>
                     <div class="col text-right">{{ getTotal() + 5 | currency: 'PHP': 'symbol': '1.2' }}</div>
                 </div>
-                <button class="submit">CHECKOUT</button>
+                <button type="submit">CHECKOUT</button>
             </div>
         </form>
         

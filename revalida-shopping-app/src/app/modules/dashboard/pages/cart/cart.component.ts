@@ -4,9 +4,12 @@ import { CartItem } from '../../../models/cart-item.interface';
 import { S3UploadService } from '../../services/s3-upload.service';
 import { MessageService } from 'primeng/api';
 import { CartService } from '../../services/cart.service';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Form, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ProductsService } from '../../../admin/services/products.service';
+import { Order } from '../../../models/order.interface';
+import { AuthService } from '../../../auth/services/auth.service';
+import { OrderService } from '../../../admin/services/order.service';
 
 @Component({
   selector: 'app-cart',
@@ -17,30 +20,20 @@ export class CartComponent implements OnInit {
 
   // Select All Flag
   selectAll: boolean = false;
+  submitted: boolean = false;
   cartItems$: Observable<CartItem[]>;
   groceryCart: CartItem;
   customerUsername: string;
   checkoutForm: FormGroup;
   searchQuery : string = '';
   filteredItems: CartItem;
+  paymentMethods: string[] = [];
+  customerImage: string = '';
 
   // s3 variables
   timestamp: number = Date.now();
   s3Folder: string;
   imageUrls: string[] = [];
-
-  // Sample cart items data
-  cartItems = [
-    {
-      name: 'Berocca 30 Tablets Orange Energy Multivitamins',
-      variation: '30, Orange',
-      price: 469,
-      quantity: 1,
-      image: 'assets/img/oreo-ice-cream-450ml.png', // Replace with the correct image path
-      selected: false,
-    },
-    // Add more items as needed
-  ];
 
   constructor(
     private fb: FormBuilder,
@@ -48,10 +41,20 @@ export class CartComponent implements OnInit {
     private messageService: MessageService,
     private productService: ProductsService,
     private cartService: CartService,
+    private authService: AuthService,
+    private orderService: OrderService,
     private router: Router
   ) {
     this.customerUsername = sessionStorage.getItem('username') as string;
     this.cartItems$ = this.cartService.getCartItems(this.customerUsername);
+
+    this.authService.getUserByUsername(this.customerUsername).subscribe(
+      response => {
+        if(response.length > 0) {
+          this.customerImage = response[0].profile_img;
+        }
+      }
+    )
 
     this.s3Folder = 'assets/items';
     this.groceryCart = {
@@ -68,6 +71,7 @@ export class CartComponent implements OnInit {
 
     this.checkoutForm = this.fb.group({
       quantities: this.fb.array([]),
+      paymentMethod: ['Select payment method', Validators.required]
     });
 
     this.cartItems$.subscribe((cart) => {
@@ -84,15 +88,28 @@ export class CartComponent implements OnInit {
       });
 
       this.populateQuantities(cart[0].quantity);
+
     });
 
     // console.log(this.groceryCart);
     this.searchQuery = '';
     this.searchCart();
+
+    this.paymentMethods = [
+      "Cash on Delivery",
+      "Pickup",
+      "Gcash",
+      "PayMaya",
+      "Credit Card"
+    ]
   }
 
   ngOnInit(): void {
     this.retrieveCustomerCart(this.customerUsername as string);
+  }
+
+  get f() {
+    return this.checkoutForm.controls;
   }
 
   get quantities(): FormArray {
@@ -100,7 +117,7 @@ export class CartComponent implements OnInit {
   }
 
   populateQuantities = (items: number[]) => {
-    items.forEach(() => {
+    items.forEach((qty) => {
       // Initialize quantities to 1
       this.quantities.push(
         this.fb.control(1, [Validators.required, Validators.min(1)])
@@ -137,7 +154,10 @@ export class CartComponent implements OnInit {
         // Filter the cart
         console.log("filtered carts: ", filteredCarts);
         this.filteredItems = filteredCarts[0]; // Replace with the correct cart, if there are multiple carts
+        
+        this.quantities.clear();
         this.populateQuantities(this.filteredItems.quantity);
+        console.log("quantities: ", this.quantities.length)
 
         this.imageUrls = [];
         filteredCarts[0].item_img.forEach((imgName) => {
@@ -148,6 +168,8 @@ export class CartComponent implements OnInit {
       this.cartService.getCartItems(this.customerUsername).subscribe(carts => {
         this.filteredItems = carts[0];
         this.filteredItems.id = carts[0].id;
+
+        this.quantities.clear();
         this.populateQuantities(this.filteredItems.quantity);
 
         this.imageUrls = [];
@@ -156,6 +178,10 @@ export class CartComponent implements OnInit {
         });
       });
     }
+  }
+
+  removeAllQuantities = () => {
+    console.log((this.checkoutForm.get('quantity') as FormArray).length)
   }
 
   retrieveCustomerCart = (username: string) => {
@@ -195,18 +221,16 @@ export class CartComponent implements OnInit {
       // Update grocertCart object and PUT in db
       const itemIndex = this.groceryCart.item_name.indexOf(this.filteredItems.item_name[index]);
       console.log("cart: ", this.groceryCart.item_name[itemIndex]);
-      this.groceryCart.quantity[itemIndex] += 1;
+      this.groceryCart.quantity[itemIndex] -= 1;
       this.groceryCart.subtotal[itemIndex] = control.value * this.groceryCart.unit_price[itemIndex];
       this.updateCustomerGroceryCart(this.groceryCart, null, false);  
+      this.searchCart();
     }
   }
 
   // Increase quantity
   increaseQuantity(index: number) {
     const control = this.quantities.at(index);
-    if (control.value < this.groceryCart.quantity[index]) {
-      control.setValue(control.value + 1);
-    }
     this.productService
       .getProducts()
       .pipe(
@@ -237,7 +261,7 @@ export class CartComponent implements OnInit {
   // Remove item from cart
   removeItem(index: number) {
     
-    const removedItem = this.groceryCart.item_name[index];
+    const removedItem = this.filteredItems.item_name[index];
     this.filteredItems.item_img.splice(index, 1);
     this.filteredItems.item_name.splice(index, 1);
     this.filteredItems.category.splice(index, 1);
@@ -256,6 +280,9 @@ export class CartComponent implements OnInit {
     this.groceryCart.subtotal.splice(itemIndex, 1);
 
     this.updateCustomerGroceryCart(this.groceryCart, removedItem, true);
+    this.imageUrls.splice(index, 1);
+    this.quantities.removeAt(index);
+    this.searchCart();
   }
 
   updateCustomerGroceryCart = (cart: CartItem, itemRemoved: string | null, notify: boolean = false) => {
@@ -288,6 +315,49 @@ export class CartComponent implements OnInit {
   }
 
   onCheckout = () => {
-    this.router.navigate(['/home/checkout']);
+    this.submitted = true;
+    let paymentMethod: string = this.checkoutForm.get('paymentMethod')?.value as string;
+    if(paymentMethod.toLowerCase().startsWith('cash')){
+      paymentMethod = "COD";
+    }
+    console.log(paymentMethod)
+
+    if(this.checkoutForm.invalid) {
+      return;
+    }
+
+    this.retrieveCustomerCart(this.customerUsername);
+    const customerOrder: any = {
+      username: this.customerUsername,
+      customer_img: this.customerImage,
+      customer: `${sessionStorage.getItem('first_name')} ${sessionStorage.getItem('last_name')}`,
+      location: '',
+      datetime: Date.now(),
+      item_name: this.groceryCart.item_name,
+      category: this.groceryCart.category,
+      payment_mode: paymentMethod,
+      quantity: this.groceryCart.quantity,
+      subtotal: this.groceryCart.subtotal,
+      status: 'Pending'
+    }
+  
+    console.log("Order: ", customerOrder);
+
+    this.orderService.createOrder(customerOrder as Order).subscribe(
+      response => {
+        console.log("Order has been created: ", response);
+
+        this.router.navigate(['/home/checkout']);
+      },
+      error => {
+        console.log("Failed to checkout order: ", error);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Failed to checkout order',
+        });
+      }
+    );
+    
   };
 }
