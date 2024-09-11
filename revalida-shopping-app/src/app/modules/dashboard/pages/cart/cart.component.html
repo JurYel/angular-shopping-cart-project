@@ -46,13 +46,13 @@
                             <div class="col">Actions</div>
                         </div>
                     </div>
-                    <ng-container *ngFor="let item of groceryCart.item_name; let i = index">
+                    <ng-container *ngFor="let item of filteredItems.item_name; let i = index">
                         <div class="cart-item-group row border-top border-bottom">
                             <div class="row main align-items-center tbody">
                                 <div class="col-2"><img class="img-fluid" src="{{imageUrls[i]}}"></div>
                                 <!-- {{cloudFrontDomain}}/{{s3Folder}}/{{groceryCart.item_img[i]}} -->
                                 <div class="col">
-                                    <div class="category row text-muted">{{groceryCart.category[i]}}</div>
+                                    <div class="category row text-muted">{{filteredItems.category[i]}}</div>
                                     <div class="row">{{item}}</div>
                                 </div>
                                 <div class="col-2">
@@ -72,7 +72,7 @@
                                         </div>
                                     </ng-container>
                                 </div>
-                                <div class="col-2"> {{groceryCart.subtotal[i] | currency: 'PHP' : 'symbol': '1.2'}}</div>
+                                <div class="col-2"> {{filteredItems.subtotal[i] | currency: 'PHP' : 'symbol': '1.2'}}</div>
                                 <div class="col-sm-1"><a class="close" (click)="removeItem(i)">&#10005;</a></div>
                             </div>
                         </div>

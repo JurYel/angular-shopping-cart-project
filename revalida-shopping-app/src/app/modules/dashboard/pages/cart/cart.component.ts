@@ -136,12 +136,24 @@ export class CartComponent implements OnInit {
       ).subscribe(filteredCarts => {
         // Filter the cart
         console.log("filtered carts: ", filteredCarts);
-        this.groceryCart = filteredCarts[0]; // Replace with the correct cart, if there are multiple carts
+        this.filteredItems = filteredCarts[0]; // Replace with the correct cart, if there are multiple carts
+        this.populateQuantities(this.filteredItems.quantity);
+
+        this.imageUrls = [];
+        filteredCarts[0].item_img.forEach((imgName) => {
+          this.imageUrls.push(`${this.awsS3Service.cloudfrontDomain}/${this.s3Folder}/${imgName}`);
+        });
       });
     } else {
       this.cartService.getCartItems(this.customerUsername).subscribe(carts => {
-        this.groceryCart = carts[0];
-        this.groceryCart.id = carts[0].id;
+        this.filteredItems = carts[0];
+        this.filteredItems.id = carts[0].id;
+        this.populateQuantities(this.filteredItems.quantity);
+
+        this.imageUrls = [];
+        carts[0].item_img.forEach((imgName) => {
+          this.imageUrls.push(`${this.awsS3Service.cloudfrontDomain}/${this.s3Folder}/${imgName}`);
+        });
       });
     }
   }
@@ -177,10 +189,15 @@ export class CartComponent implements OnInit {
     const control = this.quantities.at(index);
     if (control.value > 1) {
       control.setValue(control.value - 1);
-      this.groceryCart.quantity[index] -= 1;
-      this.groceryCart.subtotal[index] = control.value * this.groceryCart.unit_price[index];
+      this.filteredItems.quantity[index] -= 1;
+      this.filteredItems.subtotal[index] = control.value * this.groceryCart.unit_price[index];
 
-      this.updateCustomerGroceryCart(this.groceryCart as CartItem, null, false);
+      // Update grocertCart object and PUT in db
+      const itemIndex = this.groceryCart.item_name.indexOf(this.filteredItems.item_name[index]);
+      console.log("cart: ", this.groceryCart.item_name[itemIndex]);
+      this.groceryCart.quantity[itemIndex] += 1;
+      this.groceryCart.subtotal[itemIndex] = control.value * this.groceryCart.unit_price[itemIndex];
+      this.updateCustomerGroceryCart(this.groceryCart, null, false);  
     }
   }
 
@@ -203,10 +220,16 @@ export class CartComponent implements OnInit {
         console.log(product);
         if (control.value < product[0].quantity) {
           control.setValue(control.value + 1);
-          this.groceryCart.quantity[index] += 1;
-          this.groceryCart.subtotal[index] = control.value * this.groceryCart.unit_price[index];
+          this.filteredItems.quantity[index] += 1;
+          this.filteredItems.subtotal[index] = control.value * this.filteredItems.unit_price[index];
 
-          this.updateCustomerGroceryCart(this.groceryCart as CartItem, null, false);
+          // Update grocertCart object and PUT in db
+          const itemIndex = this.groceryCart.item_name.indexOf(this.filteredItems.item_name[index]);
+          console.log("cart: ", this.groceryCart.item_name[itemIndex]);
+          this.groceryCart.quantity[itemIndex] += 1;
+          this.groceryCart.subtotal[itemIndex] = control.value * this.groceryCart.unit_price[itemIndex];
+          this.updateCustomerGroceryCart(this.groceryCart, null, false);
+          this.searchCart();
         }
       });
   }
@@ -215,30 +238,41 @@ export class CartComponent implements OnInit {
   removeItem(index: number) {
     
     const removedItem = this.groceryCart.item_name[index];
-    this.groceryCart.item_img.splice(index, 1);
-    this.groceryCart.item_name.splice(index, 1);
-    this.groceryCart.category.splice(index, 1);
-    this.groceryCart.quantity.splice(index, 1);
-    this.groceryCart.unit_price.splice(index, 1);
-    this.groceryCart.subtotal.splice(index, 1);
+    this.filteredItems.item_img.splice(index, 1);
+    this.filteredItems.item_name.splice(index, 1);
+    this.filteredItems.category.splice(index, 1);
+    this.filteredItems.quantity.splice(index, 1);
+    this.filteredItems.unit_price.splice(index, 1);
+    this.filteredItems.subtotal.splice(index, 1);
 
-    this.updateCustomerGroceryCart(this.groceryCart as CartItem, removedItem, true);
+    // Update grocertCart object and PUT in db
+    const itemIndex = this.groceryCart.item_name.indexOf(removedItem);
+    console.log("cart: ", this.groceryCart.item_name[itemIndex]);
+    this.groceryCart.item_img.splice(itemIndex, 1);
+    this.groceryCart.item_name.splice(itemIndex, 1);
+    this.groceryCart.category.splice(itemIndex, 1);
+    this.groceryCart.quantity.splice(itemIndex, 1);
+    this.groceryCart.unit_price.splice(itemIndex, 1);
+    this.groceryCart.subtotal.splice(itemIndex, 1);
+
+    this.updateCustomerGroceryCart(this.groceryCart, removedItem, true);
   }
 
   updateCustomerGroceryCart = (cart: CartItem, itemRemoved: string | null, notify: boolean = false) => {
-    this.cartService.updateCustomerCart(this.groceryCart as CartItem).subscribe(
-      response => {
-        if(notify){
-          this.messageService.add({ severity:'success', summary: 'Success', detail: `${itemRemoved} has been removed from your cart.` });
+    
+      this.cartService.updateCustomerCart(cart as CartItem).subscribe(
+        response => {
+          if(notify){
+            this.messageService.add({ severity:'success', summary: 'Success', detail: `${itemRemoved} has been removed from your cart.` });
+          }
+        },
+        error => {
+          console.log("Failed to update cart item: ", error)
+          if(notify) {
+            this.messageService.add({ severity:'error', summary: 'Error', detail: 'Failed to remove cart item' });
+          }
         }
-      },
-      error => {
-        console.log("Failed to update cart item: ", error)
-        if(notify) {
-          this.messageService.add({ severity:'error', summary: 'Error', detail: 'Failed to remove cart item' });
-        }
-      }
-    )
+      )
   }
 
   // Get total price of all items in the cart
