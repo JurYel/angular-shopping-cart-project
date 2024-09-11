@@ -289,11 +289,19 @@
       "location": "Pasig City",
       "datetime": "",
       "payment_mode": "Gcash",
-      "status": "Shipped",
-      "item_name": ["Gardenia Wheat Bread"],
-      "category": ["Food"],
-      "quantity": [4],
-      "subtotal": [336.5]
+      "status": "Delivered",
+      "item_name": [
+        "Gardenia Wheat Bread"
+      ],
+      "category": [
+        "Food"
+      ],
+      "quantity": [
+        4
+      ],
+      "subtotal": [
+        336.5
+      ]
     },
     {
       "id": "0aa1",
@@ -304,10 +312,18 @@
       "datetime": "",
       "payment_mode": "Gcash",
       "status": "Delivered",
-      "item_name": ["Vitasoy Classic"],
-      "category": ["Drinks"],
-      "quantity": [3],
-      "subtotal": [120.43]
+      "item_name": [
+        "Vitasoy Classic"
+      ],
+      "category": [
+        "Drinks"
+      ],
+      "quantity": [
+        3
+      ],
+      "subtotal": [
+        120.43
+      ]
     },
     {
       "id": "3db5",
@@ -318,10 +334,18 @@
       "datetime": "",
       "payment_mode": "COD",
       "status": "Cancelled",
-      "item_name": ["Energy Booster"],
-      "category": ["Drinks"],
-      "quantity": [2],
-      "subtotal": [45.67]
+      "item_name": [
+        "Energy Booster"
+      ],
+      "category": [
+        "Drinks"
+      ],
+      "quantity": [
+        2
+      ],
+      "subtotal": [
+        45.67
+      ]
     },
     {
       "id": "f947",
@@ -332,10 +356,18 @@
       "datetime": "",
       "payment_mode": "Paypal",
       "status": "Cancelled",
-      "item_name": ["Magnum Praline 400ml"],
-      "category": ["Food"],
-      "quantity": [1],
-      "subtotal": [680.55]
+      "item_name": [
+        "Magnum Praline 400ml"
+      ],
+      "category": [
+        "Food"
+      ],
+      "quantity": [
+        1
+      ],
+      "subtotal": [
+        680.55
+      ]
     },
     {
       "id": "16c5",
@@ -346,10 +378,18 @@
       "datetime": "",
       "payment_mode": "COD",
       "status": "Delivered",
-      "item_name": ["Oreo Ice Cream 400ml"],
-      "category": ["Food"],
-      "quantity": [2],
-      "subtotal": [789.23]
+      "item_name": [
+        "Oreo Ice Cream 400ml"
+      ],
+      "category": [
+        "Food"
+      ],
+      "quantity": [
+        2
+      ],
+      "subtotal": [
+        789.23
+      ]
     }
   ]
 }

@@ -156,23 +156,31 @@
                       data-bs-toggle="modal"
                       data-bs-target="#viewOrderModal"
                     >
-                      {{ order.item_name }}
+                      <!-- {{ order.item_name }} -->
+                      <ng-container *ngFor="let item of order.item_name">
+                        <p>{{item}}</p>
+                      </ng-container>
                     </td>
                     <td
                       (click)="viewOrderSummary(i)"
                       data-bs-toggle="modal"
                       data-bs-target="#viewOrderModal"
                     >
-                      {{ order.quantity }}
+                      <!-- {{ order.quantity }} -->
+                      <ng-container *ngFor="let quantity of order.quantity">
+                        <p>{{quantity}}</p>
+                      </ng-container>
                     </td>
-                    <!-- TO FIX -->
-                    <!-- <td
+                    <td
                       (click)="viewOrderSummary(i)"
                       data-bs-toggle="modal"
                       data-bs-target="#viewOrderModal"
                     >
-                      {{ order.subtotal | currency : "PHP" }}
-                    </td> -->
+                      <!-- {{ order.subtotal | currency : "PHP" }} -->
+                      <ng-container *ngFor="let subt of order.subtotal">
+                        <p>{{subt}}</p>
+                      </ng-container>
+                    </td>
                     <td class="dropdown">
                       <a
                         href="#"
@@ -395,36 +403,34 @@
                             </thead>
                             <tbody>
                               <!-- TO FIX -->
-                              <!-- <tr *ngIf="selectedOrder">
-                                <td>{{ selectedOrder.item_name }}</td>
-                                <td>{{ selectedOrder.quantity }}</td>
-                                <td>
-                                  {{
-                                    selectedOrder.subtotal /
-                                      selectedOrder.quantity
-                                      | currency : "PHP" : "symbol" : "1.1-2"
-                                  }}
-                                </td>
-                                <td>
-                                  {{
-                                    selectedOrder.subtotal
-                                      | currency : "PHP" : "symbol" : "1.1-2"
-                                  }}
-                                </td>
-                              </tr> -->
+                              <ng-container *ngIf="selectedOrder">
+                                <tr *ngFor="let item of selectedOrder.item_name; let i = index">
+                                  <td>{{ item }}</td>
+                                  <td>{{ selectedOrder.quantity[i] }}</td>
+                                  <td>
+                                    {{
+                                      selectedOrder.subtotal[i] /
+                                        selectedOrder.quantity[i]
+                                        | currency : "PHP" : "symbol" : "1.1-2"
+                                    }}
+                                  </td>
+                                  <td>
+                                    {{
+                                      selectedOrder.subtotal[i]
+                                        | currency : "PHP" : "symbol" : "1.1-2"
+                                    }}
+                                  </td>
+                                </tr>
+                              </ng-container>
                             </tbody>
                           </table>
                         </div>
                         <div class="row text-black">
                           <div class="col-xl-12">
                             <!-- TO FIX -->
-                            <!-- <p *ngIf="selectedOrder" class="float-end fw-bold">
-                              Total:
-                              {{
-                                selectedOrder.subtotal
-                                  | currency : "PHP" : "symbol" : "1.1-2"
-                              }}
-                            </p> -->
+                            <p *ngIf="selectedOrder" class="float-end fw-bold">
+                              Total: {{ getTotal() | currency: 'PHP': 'symbol': '1.2' }}
+                            </p>
                           </div>
                           <hr style="border: 2px solid black" />
                         </div>

@@ -191,6 +191,17 @@ export class OrdersComponent implements OnInit {
     }
   };
 
+  getTotal = () => {
+
+    if(this.selectedOrder) {
+      return this.selectedOrder.subtotal.reduce(
+        (total, subtotal) => total + subtotal, 0
+      );
+    }
+
+    return 0;
+  }
+
   // Method for populating Order Summary modal
   viewOrderSummary = (index: number) => {
     this.paginatedOrders$.pipe(map((orders) => orders[index])).subscribe((order) => {
@@ -228,21 +239,22 @@ export class OrdersComponent implements OnInit {
   // Method for searchiing orders
   searchOrder = (): void => {
     if (this.searchQuery) {
-      // TO FIX item_name is now a list
-      // this.orders$ = this.orderService
-      //   .getOrders()
-      //   .pipe(
-      //     map((orders) =>
-      //       orders.filter((order) =>
-      //         order.item_name
-      //           .toLowerCase()
-      //           .includes(this.searchQuery.toLowerCase()) ||
-      //         order.customer
-      //           .toLowerCase()
-      //           .includes(this.searchQuery.toLowerCase())
-      //       )
-      //     )
-      //   );
+      this.orders$ = this.orderService
+        .getOrders()
+        .pipe(
+          map((orders: Order[]) => {
+            // Filter based on the keyword for both item_name and category and customer name
+            
+            return orders.filter(order => 
+              // Check if any of the item_name includes the keyword
+              order.item_name.some(item => item.toLowerCase().includes(this.searchQuery.toLowerCase())) || 
+              // Check if the customer name includes the keyword
+              order.customer.toLowerCase().includes(this.searchQuery.toLowerCase()) || 
+              // Check if any of the category includes the keyword
+              order.category.some(cat => cat.toLowerCase().includes(this.searchQuery))
+            );
+          })
+        );
     } else {
       this.orders$ = this.orderService.getOrders();
     }
