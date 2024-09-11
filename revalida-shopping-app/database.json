@@ -216,39 +216,27 @@
       "username": "admin",
       "item_img": [
         "gardenia_white_bread_-1725994139.png",
-        "oreo_ice_cream_450ml_-1725994139.png",
-        "gardenia_wheat_bread_-1725989990.png",
-        "itlog_-1725990887.jpeg"
+        "oreo_ice_cream_450ml_-1725994139.png"
       ],
       "item_name": [
         "Gardenia White Bread",
-        "Oreo Ice Cream 450ml",
-        "Gardenia Wheat Bread",
-        "Itlog"
+        "Oreo Ice Cream 450ml"
       ],
       "category": [
-        "Food",
-        "Food",
         "Food",
         "Food"
       ],
       "quantity": [
         4,
-        3,
-        6,
-        9
+        6
       ],
       "unit_price": [
         58,
-        350.9,
-        88,
-        12
+        350.9
       ],
       "subtotal": [
-        116,
-        1052.6999999999998,
-        176,
-        108
+        232,
+        2105.3999999999996
       ]
     },
     {
@@ -390,6 +378,41 @@
       "subtotal": [
         789.23
       ]
+    },
+    {
+      "id": "b0e5",
+      "username": "admin",
+      "customer_img": "admin-1725983987.png",
+      "customer": "Juriel Botoy",
+      "location": "",
+      "datetime": 1726071985943,
+      "item_name": [
+        "Gardenia White Bread",
+        "Oreo Ice Cream 450ml",
+        "Gardenia Wheat Bread",
+        "Itlog"
+      ],
+      "category": [
+        "Food",
+        "Food",
+        "Food",
+        "Food"
+      ],
+      "payment_mode": "Select payment method",
+      "quantity": [
+        4,
+        3,
+        6,
+        9
+      ],
+      "subtotal": [
+        116,
+        1052.6999999999998,
+        176,
+        108
+      ],
+      "status": "Pending"
     }
-  ]
+  ],
+  "temp_orders": []
 }

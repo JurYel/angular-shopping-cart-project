@@ -28,4 +28,12 @@ export class OrderService {
   getOrdersByUsername = (username: string): Observable<Order[]> => {
     return this.http.get<Order[]>(`${this.serverUrl}/orders?username=${username}`);
   }
+
+  getTempOrders = (username: string): Observable<Order[]> => {
+    return this.http.get<Order[]>(`${this.serverUrl}/temp_orders?username=${username}`);
+  }
+
+  createTempOrder = (order: Order) => {
+    return this.http.post<Order>(`${this.serverUrl}/temp_orders`, order);
+  }
 }

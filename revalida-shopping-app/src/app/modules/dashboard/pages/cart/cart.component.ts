@@ -23,6 +23,7 @@ export class CartComponent implements OnInit {
   submitted: boolean = false;
   cartItems$: Observable<CartItem[]>;
   groceryCart: CartItem;
+  groceryCartLength: number = 0;
   customerUsername: string;
   checkoutForm: FormGroup;
   searchQuery : string = '';
@@ -77,6 +78,7 @@ export class CartComponent implements OnInit {
     this.cartItems$.subscribe((cart) => {
       this.groceryCart = cart[0];
       this.groceryCart.id = cart[0].id;
+      this.groceryCartLength = this.groceryCart.item_name.length;
       this.filteredItems = this.groceryCart;
       console.log('grocery: ', this.groceryCart);
 
@@ -159,6 +161,9 @@ export class CartComponent implements OnInit {
         this.populateQuantities(this.filteredItems.quantity);
         console.log("quantities: ", this.quantities.length)
 
+        // refresh grocery cart and reinitialized form quantities
+        this.retrieveCustomerCart(this.customerUsername);
+
         this.imageUrls = [];
         filteredCarts[0].item_img.forEach((imgName) => {
           this.imageUrls.push(`${this.awsS3Service.cloudfrontDomain}/${this.s3Folder}/${imgName}`);
@@ -171,6 +176,9 @@ export class CartComponent implements OnInit {
 
         this.quantities.clear();
         this.populateQuantities(this.filteredItems.quantity);
+
+        // refresh grocery cart and reinitialized form quantities
+        this.retrieveCustomerCart(this.customerUsername);
 
         this.imageUrls = [];
         carts[0].item_img.forEach((imgName) => {
@@ -191,6 +199,7 @@ export class CartComponent implements OnInit {
         if (response.length > 0) {
           this.groceryCart = response[0];
           this.groceryCart.id = response[0].id;
+          this.groceryCartLength = this.groceryCart.item_name.length;
 
           // this.cartItemCount = response[0].quantity.length;
           console.log('grocery: ', this.groceryCart);
@@ -224,7 +233,12 @@ export class CartComponent implements OnInit {
       this.groceryCart.quantity[itemIndex] -= 1;
       this.groceryCart.subtotal[itemIndex] = control.value * this.groceryCart.unit_price[itemIndex];
       this.updateCustomerGroceryCart(this.groceryCart, null, false);  
-      this.searchCart();
+      // this.searchCart();
+
+      // this.retrieveCustomerCart(this.customerUsername);
+      if(this.filteredItems.item_name.length < this.groceryCartLength) {
+        this.searchCart();
+      }
     }
   }
 
@@ -253,7 +267,12 @@ export class CartComponent implements OnInit {
           this.groceryCart.quantity[itemIndex] += 1;
           this.groceryCart.subtotal[itemIndex] = control.value * this.groceryCart.unit_price[itemIndex];
           this.updateCustomerGroceryCart(this.groceryCart, null, false);
-          this.searchCart();
+          // this.searchCart();
+
+          // this.retrieveCustomerCart(this.customerUsername);
+          if(this.filteredItems.item_name.length < this.groceryCartLength) {
+            this.searchCart();
+          }
         }
       });
   }
@@ -282,6 +301,8 @@ export class CartComponent implements OnInit {
     this.updateCustomerGroceryCart(this.groceryCart, removedItem, true);
     this.imageUrls.splice(index, 1);
     this.quantities.removeAt(index);
+
+    this.retrieveCustomerCart(this.customerUsername);
     this.searchCart();
   }
 
@@ -308,7 +329,7 @@ export class CartComponent implements OnInit {
     //   .filter(item => item.selected)
     //   .reduce((total, item) => total + item.price * item.quantity, 0);
 
-    return this.groceryCart.subtotal.reduce(
+    return this.filteredItems.subtotal.reduce(
       (total, subtotal) => total + subtotal,
       0
     );
@@ -343,7 +364,7 @@ export class CartComponent implements OnInit {
   
     console.log("Order: ", customerOrder);
 
-    this.orderService.createOrder(customerOrder as Order).subscribe(
+    this.orderService.createTempOrder(customerOrder as Order).subscribe(
       response => {
         console.log("Order has been created: ", response);
 
