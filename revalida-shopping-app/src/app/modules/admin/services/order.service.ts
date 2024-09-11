@@ -25,6 +25,14 @@ export class OrderService {
     );
   }
 
+  checkIfOrderExistsById = (id: string): Observable<boolean> => {
+    const orders$: Observable<Order[]> = this.getOrders();
+
+    return orders$.pipe(
+      map((orders: Order[]) => orders.some(order => order.id.toLowerCase() === id.toLowerCase()))
+    );
+  }
+
   createOrder = (order: Order) => {
     return this.http.post<Order>(`${this.serverUrl}/orders`, order);
   }
@@ -35,6 +43,10 @@ export class OrderService {
 
   getOrdersByUsername = (username: string): Observable<Order[]> => {
     return this.http.get<Order[]>(`${this.serverUrl}/orders?username=${username}`);
+  }
+
+  getOrdersById = (id: string): Observable<Order[]> => {
+    return this.http.get<Order[]>(`${this.serverUrl}/orders/${id}`);
   }
 
   checkIfTempOrderExists = (username: string): Observable<boolean> => {

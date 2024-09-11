@@ -34,7 +34,7 @@
                 <div class="title">
                     <div class=" row">
                         <div class="col"><h4><b>Grocery Cart Items</b></h4></div>
-                        <div class="col-sm-2 align-self-center text-right text-muted">{{filteredItems.item_name.length}} items</div>
+                        <div class="col-sm-2 align-self-center text-right text-muted" *ngIf="filteredItems && filteredItems.item_name.length">{{filteredItems.item_name.length}} items</div>
                     </div>
                 </div>   
                 <div class="cart-items">
@@ -49,37 +49,39 @@
                     <div class="text-center no-items m-4" *ngIf="groceryCartLength < 1">
                         No items in your cart
                     </div>
-                    <ng-container *ngFor="let item of filteredItems.item_name; let i = index">
-                        <div class="cart-item-group row border-top border-bottom">
-                            <div class="row main align-items-center tbody">
-                                <div class="col-2"><img class="img-fluid" src="{{imageUrls[i]}}"></div>
-                                <!-- {{cloudFrontDomain}}/{{s3Folder}}/{{groceryCart.item_img[i]}} -->
-                                <div class="col">
-                                    <div class="category row text-muted">{{filteredItems.category[i]}}</div>
-                                    <div class="row">{{item}}</div>
+                    <div *ngIf="filteredItems && filteredItems.item_name.length">
+                        <ng-container *ngFor="let item of filteredItems.item_name; let i = index">
+                            <div class="cart-item-group row border-top border-bottom">
+                                <div class="row main align-items-center tbody">
+                                    <div class="col-2"><img class="img-fluid" src="{{imageUrls[i]}}"></div>
+                                    <!-- {{cloudFrontDomain}}/{{s3Folder}}/{{groceryCart.item_img[i]}} -->
+                                    <div class="col">
+                                        <div class="category row text-muted">{{filteredItems.category[i]}}</div>
+                                        <div class="row">{{item}}</div>
+                                    </div>
+                                    <div class="col-2">
+                                        <ng-container *ngIf="quantities && quantities.length" formArrayName="quantities">
+                                            <div class="qty-wrapper">
+                                                <a class="btn btn-link px-2"
+                                                    (click)="decreaseQuantity(i)">
+                                                <i class="fa-solid fa-minus"></i>
+                                                </a>
+                                                <input  id="{{ i }}" [formControlName]="i" type="number"
+                                                        class="form-control form-control-sm qty-input" min="1"/>
+                                                <a class="btn btn-link px-2"
+                                                     (click)="increaseQuantity(i)"   >
+                                                    <i class="fa-solid fa-plus"></i>
+                                                </a>
+                                                <!-- <a href="#">-</a><a href="#" class="border">{{groceryCart.quantity[i]}}</a><a href="#">+</a> -->
+                                            </div>
+                                        </ng-container>
+                                    </div>
+                                    <div class="col-2"> {{filteredItems.subtotal[i] | currency: 'PHP' : 'symbol': '1.2'}}</div>
+                                    <div class="col-sm-1"><a class="close" (click)="removeItem(i)">&#10005;</a></div>
                                 </div>
-                                <div class="col-2">
-                                    <ng-container *ngIf="quantities && quantities.length" formArrayName="quantities">
-                                        <div class="qty-wrapper">
-                                            <a class="btn btn-link px-2"
-                                                (click)="decreaseQuantity(i)">
-                                            <i class="fa-solid fa-minus"></i>
-                                            </a>
-                                            <input  id="{{ i }}" [formControlName]="i" type="number"
-                                                    class="form-control form-control-sm qty-input" min="1"/>
-                                            <a class="btn btn-link px-2"
-                                                 (click)="increaseQuantity(i)"   >
-                                                <i class="fa-solid fa-plus"></i>
-                                            </a>
-                                            <!-- <a href="#">-</a><a href="#" class="border">{{groceryCart.quantity[i]}}</a><a href="#">+</a> -->
-                                        </div>
-                                    </ng-container>
-                                </div>
-                                <div class="col-2"> {{filteredItems.subtotal[i] | currency: 'PHP' : 'symbol': '1.2'}}</div>
-                                <div class="col-sm-1"><a class="close" (click)="removeItem(i)">&#10005;</a></div>
                             </div>
-                        </div>
-                    </ng-container>
+                        </ng-container>
+                    </div>
                 </div>
                 <div class="back-to-shop"><a routerLink="/home"><i class="fa-solid fa-left-long"></i></a><span class="text-muted">Back to shop</span></div>
             </div>
@@ -87,24 +89,24 @@
                 <div><h5><b>Summary</b></h5></div>
                 <hr>
                 <div class="row">
-                    <div class="col" style="padding-left:0;">{{filteredItems.item_name.length}} ITEMS</div>
-                    <div class="col text-right">{{ getTotal() | currency: 'PHP': 'symbol': '1.2'}}</div>
+                    <div class="col" style="padding-left:0;" *ngIf="filteredItems">{{filteredItems.item_name.length}} ITEMS</div>
+                    <div class="col text-right"  *ngIf="filteredItems">{{ getTotal() | currency: 'PHP': 'symbol': '1.2'}}</div>
                 </div>
                 <!-- <form> -->
                 <div class="formgroup">
                     <div class="mb-4">
-                        <p>Mode of Payment</p>
-                        <select formControlName="paymentMethod" 
-                                [ngClass]="{'is-invalid': submitted && f['paymentMethod'].value === 'Select payment method'}">
-                            <option selected>Select payment method</option>
-                            <option *ngFor="let method of paymentMethods"
+                        <p>Fulfillment Method</p>
+                        <select formControlName="fulfillmentMethod" 
+                                [ngClass]="{'is-invalid': submitted && f['fulfillmentMethod'].value === 'Select fulfillment method'}">
+                            <option selected>Select fulfillment method</option>
+                            <option *ngFor="let method of fulfillmentMethods"
                                     [value]="method">
                                         {{method}}
                             </option>
                         </select>
-                        <small *ngIf="f['paymentMethod'].value === 'Select payment method' && submitted"
+                        <small *ngIf="f['fulfillmentMethod'].value === 'Select fulfillment method' && submitted"
                             class="invalid-feedback">
-                                Select a payment method
+                                Select a fulfillment method
                         </small>
                     </div>
                     <p>Voucher</p>
@@ -113,7 +115,7 @@
                 <!-- </form> -->
                 <div class="row" style="border-top: 1px solid rgba(0,0,0,.1); padding: 2vh 0;">
                     <div class="col">TOTAL PRICE</div>
-                    <div class="col text-right">{{ getTotal() | currency: 'PHP': 'symbol': '1.2' }}</div>
+                    <div class="col text-right"  *ngIf="filteredItems">{{ getTotal() | currency: 'PHP': 'symbol': '1.2' }}</div>
                 </div>
                 <button type="submit">CHECKOUT</button>
             </div>

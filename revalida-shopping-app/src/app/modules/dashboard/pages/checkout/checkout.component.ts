@@ -94,7 +94,6 @@ export class CheckoutComponent implements OnInit {
     this.paymentMethod = 'Select payment method';
     this.paymentMethods = [
       "Cash on Delivery",
-      "Pickup",
       "Gcash",
       "PayMaya",
       "Credit Card"
@@ -220,7 +219,13 @@ export class CheckoutComponent implements OnInit {
       }
     );
 
-    this.orderService.checkIfOrderExists(this.customerUsername).subscribe(
+    this.orderService.getTempOrder(this.customerUsername).subscribe(
+      order => {
+        this.customerOrder = order[0];
+      }
+    );
+
+    this.orderService.checkIfOrderExistsById(this.customerOrder.id).subscribe(
       exists => {
         if(!exists) {
 
@@ -274,7 +279,7 @@ export class CheckoutComponent implements OnInit {
             }
           )
         } else {
-          this.orderService.getOrdersByUsername(this.customerUsername).subscribe(
+          this.orderService.getOrdersById(this.customerOrder.id).subscribe(
             orders => {
               this.customerOrder = orders[0];
               this.customerOrder.id = orders[0].id;

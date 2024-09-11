@@ -328,7 +328,7 @@
       "username": "admin",
       "customer_img": "admin-1725983987.png",
       "customer": "Juriel Botoy",
-      "location": "San Fernando City",
+      "location": "Pasig City",
       "datetime": 1726091439975,
       "item_name": [
         "Gardenia White Bread",
@@ -356,6 +356,44 @@
         125
       ],
       "status": "Pending"
+    },
+    {
+      "id": "b0aa",
+      "username": "admin",
+      "customer_img": "admin-1725983987.png",
+      "customer": "Juriel Botoy",
+      "location": "Pasig City",
+      "datetime": 1726094895145,
+      "item_name": [
+        "Assorted Products Gift Bundle",
+        "Gardenia Wheat Bread",
+        "Gardenia White Bread",
+        "Oreo Ice Cream 450ml",
+        "Mogu Mogu 250ml"
+      ],
+      "category": [
+        "Food",
+        "Food",
+        "Food",
+        "Food",
+        "Drinks"
+      ],
+      "payment_mode": "Gcash",
+      "quantity": [
+        6,
+        6,
+        5,
+        4,
+        5
+      ],
+      "subtotal": [
+        4794,
+        528,
+        290,
+        1403.6,
+        244.95000000000002
+      ],
+      "status": "Pending"
     }
   ],
   "addresses": [
@@ -365,9 +403,9 @@
       "email": "juriel.botoy182@gmail.com",
       "mobile_num": "9155671750",
       "country": "Philippines",
-      "city": "San Fernando City",
-      "province": "Pampanga",
-      "zip_code": "2011",
+      "city": "Pasig City",
+      "province": "Pasig",
+      "zip_code": "1600",
       "username": "admin",
       "id": "d588"
     }

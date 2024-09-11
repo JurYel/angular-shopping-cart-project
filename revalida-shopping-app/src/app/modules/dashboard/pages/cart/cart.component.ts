@@ -28,7 +28,7 @@ export class CartComponent implements OnInit {
   checkoutForm: FormGroup;
   searchQuery : string = '';
   filteredItems: CartItem;
-  paymentMethods: string[] = [];
+  fulfillmentMethods: string[] = [];
   customerImage: string = '';
 
   // s3 variables
@@ -47,6 +47,15 @@ export class CartComponent implements OnInit {
     private router: Router
   ) {
     this.customerUsername = sessionStorage.getItem('username') as string;
+    
+    this.cartService.getCartItems(this.customerUsername).subscribe(
+      items => {
+        if(items.length > 0) {
+          this.groceryCartLength = (items[0].quantity.length)? items[0].quantity.length : 0;
+        }
+      }
+    );
+
     this.cartItems$ = this.cartService.getCartItems(this.customerUsername);
 
     this.authService.getUserByUsername(this.customerUsername).subscribe(
@@ -72,37 +81,36 @@ export class CartComponent implements OnInit {
 
     this.checkoutForm = this.fb.group({
       quantities: this.fb.array([]),
-      paymentMethod: ['Select payment method', Validators.required]
+      fulfillmentMethod: ['Select fulfillment method', Validators.required]
     });
 
-    this.cartItems$.subscribe((cart) => {
-      this.groceryCart = cart[0];
-      this.groceryCart.id = cart[0].id;
-      this.groceryCartLength = this.groceryCart.item_name.length;
-      this.filteredItems = this.groceryCart;
-      console.log('grocery: ', this.groceryCart);
-
-      cart[0].item_img.forEach(async (item_img) => {
-        this.imageUrls.push(
-          `${this.awsS3Service.cloudfrontDomain}/${this.s3Folder}/${item_img}`
-        );
-        // this.imageUrls.push(await this.awsS3Service.getSignedUrl(`${this.s3Folder}/${item_img}`))
+    if(this.groceryCartLength > 0){
+      this.cartItems$.subscribe((cart) => {
+        this.groceryCart = cart[0];
+        this.groceryCart.id = cart[0].id;
+        this.groceryCartLength = this.groceryCart.item_name.length;
+        this.filteredItems = this.groceryCart;
+        console.log('grocery: ', this.groceryCart);
+  
+        cart[0].item_img.forEach(async (item_img) => {
+          this.imageUrls.push(
+            `${this.awsS3Service.cloudfrontDomain}/${this.s3Folder}/${item_img}`
+          );
+          // this.imageUrls.push(await this.awsS3Service.getSignedUrl(`${this.s3Folder}/${item_img}`))
+        });
+  
+        this.populateQuantities(cart[0].quantity);
+  
       });
-
-      this.populateQuantities(cart[0].quantity);
-
-    });
+    }
 
     // console.log(this.groceryCart);
     this.searchQuery = '';
     this.searchCart();
 
-    this.paymentMethods = [
-      "Cash on Delivery",
-      "Pickup",
-      "Gcash",
-      "PayMaya",
-      "Credit Card"
+    this.fulfillmentMethods = [
+      "Pick Up",
+      "Delivery"
     ]
   }
 
@@ -171,19 +179,21 @@ export class CartComponent implements OnInit {
       });
     } else {
       this.cartService.getCartItems(this.customerUsername).subscribe(carts => {
-        this.filteredItems = carts[0];
-        this.filteredItems.id = carts[0].id;
+        if(carts.length > 0) {
+          this.filteredItems = carts[0];
+          this.filteredItems.id = carts[0].id;
 
-        this.quantities.clear();
-        this.populateQuantities(this.filteredItems.quantity);
+          this.quantities.clear();
+          this.populateQuantities(this.filteredItems.quantity);
 
-        // refresh grocery cart and reinitialized form quantities
-        this.retrieveCustomerCart(this.customerUsername);
+          // refresh grocery cart and reinitialized form quantities
+          this.retrieveCustomerCart(this.customerUsername);
 
-        this.imageUrls = [];
-        carts[0].item_img.forEach((imgName) => {
-          this.imageUrls.push(`${this.awsS3Service.cloudfrontDomain}/${this.s3Folder}/${imgName}`);
-        });
+          this.imageUrls = [];
+          carts[0].item_img.forEach((imgName) => {
+            this.imageUrls.push(`${this.awsS3Service.cloudfrontDomain}/${this.s3Folder}/${imgName}`);
+          });
+        }
       });
     }
   }
@@ -337,11 +347,11 @@ export class CartComponent implements OnInit {
 
   onCheckout = () => {
     this.submitted = true;
-    let paymentMethod: string = this.checkoutForm.get('paymentMethod')?.value as string;
-    if(paymentMethod.toLowerCase().startsWith('cash')){
-      paymentMethod = "COD";
-    }
-    console.log(paymentMethod)
+    let fulfillmentMethod: string = this.checkoutForm.get('fulfillmentMethod')?.value as string;
+    // if(paymentMethod.toLowerCase().startsWith('cash')){
+    //   paymentMethod = "COD";
+    // }
+    // console.log(paymentMethod)
 
     if(this.groceryCartLength < 1) {
       this.messageService.add({ severity:'error', summary: 'Error', detail: 'No items in your cart to checkout' });
@@ -349,7 +359,7 @@ export class CartComponent implements OnInit {
     }
 
     if(this.checkoutForm.invalid || 
-      paymentMethod.startsWith('Select')
+      fulfillmentMethod.startsWith('Select')
     ) {
       return;
     }
@@ -363,7 +373,7 @@ export class CartComponent implements OnInit {
       datetime: Date.now(),
       item_name: this.groceryCart.item_name,
       category: this.groceryCart.category,
-      payment_mode: paymentMethod,
+      payment_mode: "COD",
       quantity: this.groceryCart.quantity,
       subtotal: this.groceryCart.subtotal,
       status: 'Pending'
