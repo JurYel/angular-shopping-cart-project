@@ -66,6 +66,7 @@ export class DashboardComponent implements OnInit {
       username: sessionStorage.getItem('username') as string,
       item_img: [] as string[],
       item_name: [] as string[],
+      category: [] as string[], 
       quantity: [] as number[],
       unit_price: [] as number[],
       subtotal: [] as number[]
@@ -188,6 +189,7 @@ export class DashboardComponent implements OnInit {
         map(products => products[index])
       ).subscribe(
         response => {
+          console.log("product image: ", response.item_img);
           const quantityInput = parseInt(this.quantities.at(index).value);
           console.log("quantity input: ", quantityInput)
           // const itemIndex = this.groceryCart?.item_name.findIndex((item: string) => item.includes(response.item_name));
@@ -218,6 +220,7 @@ export class DashboardComponent implements OnInit {
               console.log("inside here: ", itemIndex);
               this.groceryCart.item_img.push(response.item_img);
               this.groceryCart.item_name.push(response.item_name);
+              this.groceryCart.category.push(response.category);
               this.groceryCart.quantity.push(quantityInput);
               this.groceryCart.unit_price.push(response.unit_price);
               this.groceryCart.subtotal.push(quantityInput * response.unit_price);
@@ -237,6 +240,7 @@ export class DashboardComponent implements OnInit {
             this.groceryCart.username = this.customerUsername;
             this.groceryCart.item_img.push(response.item_img);
             this.groceryCart.item_name.push(response.item_name);
+            this.groceryCart.category.push(response.category);
             this.groceryCart.quantity.push(quantityInput);
             this.groceryCart.unit_price.push(response.unit_price);
             this.groceryCart.subtotal.push(quantityInput * response.unit_price);

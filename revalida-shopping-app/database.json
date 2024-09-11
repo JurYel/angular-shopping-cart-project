@@ -153,60 +153,6 @@
   ],
   "cart_items": [
     {
-      "id": "5113",
-      "username": "admin",
-      "item_img": [
-        "gardenia-white-bread.png",
-        "gardenia-wheat-bread.png",
-        "lala-fishcracker.png",
-        "itlog.jpg",
-        "fit-n-right.png",
-        "grocery-bundle-crop.png",
-        "oreo-ice-cream-450ml.png",
-        "mogu_mogu.png"
-      ],
-      "item_name": [
-        "Gardenia White Bread",
-        "Gardenia Wheat Bread",
-        "Lala Fishcracker",
-        "Itlog",
-        "Fit N' Right",
-        "Assorted Products Gift Bundle",
-        "Oreo Ice Cream 450ml",
-        "Mogu Mogu 250ml"
-      ],
-      "quantity": [
-        21,
-        20,
-        12,
-        65,
-        17,
-        4,
-        2,
-        1
-      ],
-      "unit_price": [
-        58,
-        88,
-        25,
-        12,
-        23,
-        799,
-        350.9,
-        48.99
-      ],
-      "subtotal": [
-        1218,
-        1760,
-        300,
-        780,
-        391,
-        3196,
-        701.8,
-        48.99
-      ]
-    },
-    {
       "id": "7da0",
       "username": "juryel1",
       "item_img": [
@@ -263,6 +209,80 @@
         58,
         122247,
         10384
+      ]
+    },
+    {
+      "id": "c9f9",
+      "username": "admin",
+      "item_img": [
+        "gardenia_white_bread_-1725994139.png",
+        "lala_fishcracker_-1725990887.png",
+        "oreo_ice_cream_450ml_-1725994139.png",
+        "itlog_-1725990887.jpeg",
+        "mogu_mogu_250ml_-1725993889.png"
+      ],
+      "item_name": [
+        "Gardenia White Bread",
+        "Lala Fishcracker",
+        "Oreo Ice Cream 450ml",
+        "Itlog",
+        "Mogu Mogu 250ml"
+      ],
+      "category": [
+        "Food",
+        "Food",
+        "Food",
+        "Food",
+        "Drinks"
+      ],
+      "quantity": [
+        1,
+        3,
+        2,
+        3,
+        3
+      ],
+      "unit_price": [
+        58,
+        25,
+        350.9,
+        12,
+        48.99
+      ],
+      "subtotal": [
+        58,
+        75,
+        701.8,
+        36,
+        146.97
+      ]
+    },
+    {
+      "id": "99ed",
+      "username": "admin",
+      "item_img": [
+        "gardenia_white_bread_-1725994139.png",
+        "gardenia_wheat_bread_-1725989990.png"
+      ],
+      "item_name": [
+        "Gardenia White Bread",
+        "Gardenia Wheat Bread"
+      ],
+      "category": [
+        "Food",
+        "Food"
+      ],
+      "quantity": [
+        1,
+        1
+      ],
+      "unit_price": [
+        58,
+        88
+      ],
+      "subtotal": [
+        58,
+        88
       ]
     }
   ],

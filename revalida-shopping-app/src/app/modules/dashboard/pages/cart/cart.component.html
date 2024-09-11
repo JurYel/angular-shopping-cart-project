@@ -1,13 +1,13 @@
 <div class="container-fluid p-0">
     <!-- Top Navigation with Search Bar -->
-    <app-navbar></app-navbar>
+    <!-- <app-navbar></app-navbar> -->
   
     <!-- Main Cart Section -->
-    <div class="container py-5">
+    <div class="container pb-5 pt-3">
       <!-- Heading -->
       <div class="row mb-4">
         <div class="col">
-          <h2 class="fw-bold">Shopping Cart</h2>
+          <h2 class="fw-bold">Grocery Cart</h2>
         </div>
         <div class="col-md-3">
             <form class="d-flex">
@@ -25,94 +25,126 @@
       </div>
   
       <!-- Cart Items Table -->
-      <table class="table table-borderless align-middle mb-0">
-        <thead class="table-light">
-            <tr>
-              <!-- Select All Checkbox -->
-              <th scope="col" class="text-start">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  [(ngModel)]="selectAll"
-                  (change)="toggleAllSelection()"
-                  aria-label="Select All"
-                />
-              </th>
-              <th scope="col" colspan="2" class="text-start">Product</th>
-              <th scope="col" colspan="1">Unit Price</th>
-              <th scope="col" colspan="1">Quantity</th>
-              <th scope="col" colspan="1">Total Price</th>
-              <th scope="col" colspan="1">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let image of imageUrls; let i = index">
-                <td colspan="6">
-                  <!-- Wrapping row content in a div to allow margin -->
-                  <div class="td-item border rounded shadow-sm p-3 mb-2">
-                    <div class="td-item-name d-flex align-items-center">
-                      <!-- Individual Item Checkbox -->
-                      <input
-                        class="form-check-input me-3"
-                        type="checkbox"
-                        (change)="updateSelection()"
-                        aria-label="Select Item"
-                      />
-                      <!-- Product Info -->
-                      <img
-                        src="{{ imageUrls[i] }}"
-                        alt="{{ groceryCart.item_name[i] }}"
-                        width="60"
-                        class="img-thumbnail me-3"
-                      />
-                      <div>
-                        <h6 class="m-0">{{ groceryCart.item_name[i] }}</h6>
-                        <small class="text-muted">Variations: {{ groceryCart.quantity[i] }}</small>
-                      </div>
+      <div class="card">
+        <form [formGroup]="checkoutForm" class="row">
+            <div class="col-md-8 cart">
+                <div class="title">
+                    <div class=" row">
+                        <div class="col"><h4><b>Grocery Cart Items</b></h4></div>
+                        <div class="col-sm-2 align-self-center text-right text-muted">{{groceryCart.item_name.length}} items</div>
                     </div>
-          
-                    <!-- Unit Price, Quantity, Total Price, Actions -->
-                    <div class="td-item-info row mt-2">
-                      <div class="col-md-3">₱{{ groceryCart.unit_price[i] }}</div>
-                      <div class="col-md-3 text-center">
-                        <div class="td-item-qty input-group input-group-sm justify-content-center">
-                          <button class="btn btn-outline-secondary" (click)="decreaseQuantity(i)">-</button>
-                          <input
-                            type="number"
-                            class="form-control text-center"
-                            [min]="1"
-                            [value]="groceryCart.quantity[i]"
-                            style="max-width: 60px;"
-                          />
-                          <button class="btn btn-outline-secondary" (click)="increaseQuantity(i)">+</button>
+                </div>   
+                <div class="cart-items">
+                    <div class="row border-top">
+                        <div class="row main align-items-center thead">
+                            <div class="col-5">Product</div>
+                            <div class="col">Quantity</div>
+                            <div class="col">Subtotal</div>
+                            <div class="col">Actions</div>
                         </div>
-                      </div>
-                      <div class="td-item-price col-sm-3">₱{{ groceryCart.unit_price[i] * groceryCart.quantity[i] }}</div>
-                      <div class="col-md-3 text-end">
-                        <button class="btn btn-link text-danger p-0" (click)="removeItem(i)">Delete</button><br />
-                        <a href="#" class="text-decoration-none text-secondary">Find Similar</a>
-                      </div>
                     </div>
-                  </div>
-                </td>
-              </tr>
-          </tbody>
-      </table>
-  
-      <!-- Shipping & Checkout Section -->
-      <div class="card shadow-sm">
-        <div class="card-body">
-          <div class="row">
-            <div class="col-md-6 text-start">
-              <p class="m-0">₱70 flat for shipping with min order of ₱99</p>
+                    <ng-container *ngFor="let item of groceryCart.item_name; let i = index">
+                        <div class="row border-top border-bottom">
+                            <div class="row main align-items-center tbody">
+                                <div class="col-2"><img class="img-fluid" src="{{imageUrls[i]}}"></div>
+                                <!-- {{cloudFrontDomain}}/{{s3Folder}}/{{groceryCart.item_img[i]}} -->
+                                <div class="col">
+                                    <div class="category row text-muted">{{groceryCart.category[i]}}</div>
+                                    <div class="row">{{item}}</div>
+                                </div>
+                                <div class="col-2">
+                                    <ng-container *ngIf="quantities && quantities.length" formArrayName="quantities">
+                                        <div class="qty-wrapper">
+                                            <a class="btn btn-link px-2"
+                                                (click)="decreaseQuantity(i)">
+                                            <i class="fa-solid fa-minus"></i>
+                                            </a>
+                                            <input  id="{{ i }}" [formControlName]="i" type="number"
+                                                    class="form-control form-control-sm qty-input" min="1"/>
+                                            <a class="btn btn-link px-2"
+                                                 (click)="increaseQuantity(i)"   >
+                                                <i class="fa-solid fa-plus"></i>
+                                            </a>
+                                            <!-- <a href="#">-</a><a href="#" class="border">{{groceryCart.quantity[i]}}</a><a href="#">+</a> -->
+                                        </div>
+                                    </ng-container>
+                                </div>
+                                <div class="col-2"> {{groceryCart.subtotal[i] | currency: 'PHP' : 'symbol': '1.2'}}</div>
+                                <div class="col-sm-1"><span class="close">&#10005;</span></div>
+                            </div>
+                        </div>
+                    </ng-container>
+                </div>
+                <!-- <div class="row border-top border-bottom">
+                    <div class="row main align-items-center">
+                        <div class="col-2"><img class="img-fluid" src="https://i.imgur.com/1GrakTl.jpg"></div>
+                        <div class="col">
+                            <div class="row text-muted">Shirt</div>
+                            <div class="row">Cotton T-shirt</div>
+                        </div>
+                        <div class="col">
+                            <a href="#">-</a><a href="#" class="border">1</a><a href="#">+</a>
+                        </div>
+                        <div class="col">&euro; 44.00 <span class="close">&#10005;</span></div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="row main align-items-center">
+                        <div class="col-2"><img class="img-fluid" src="https://i.imgur.com/ba3tvGm.jpg"></div>
+                        <div class="col">
+                            <div class="row text-muted">Shirt</div>
+                            <div class="row">Cotton T-shirt</div>
+                        </div>
+                        <div class="col">
+                            <a href="#">-</a><a href="#" class="border">1</a><a href="#">+</a>
+                        </div>
+                        <div class="col">&euro; 44.00 <span class="close">&#10005;</span></div>
+                    </div>
+                </div>
+                <div class="row border-top border-bottom">
+                    <div class="row main align-items-center">
+                        <div class="col-2"><img class="img-fluid" src="https://i.imgur.com/pHQ3xT3.jpg"></div>
+                        <div class="col">
+                            <div class="row text-muted">Shirt</div>
+                            <div class="row">Cotton T-shirt</div>
+                        </div>
+                        <div class="col">
+                            <a href="#">-</a><a href="#" class="border">1</a><a href="#">+</a>
+                        </div>
+                        <div class="col">&euro; 44.00 <span class="close">&#10005;</span></div>
+                    </div>
+                </div> -->
+                <div class="back-to-shop"><a routerLink="/home"><i class="fa-solid fa-left-long"></i></a><span class="text-muted">Back to shop</span></div>
             </div>
-            <div class="col-md-6 text-end">
-              <h5>Total: ₱{{ getTotal() }}</h5>
-              <button class="btn btn-danger" [disabled]="cartItems.length === 0">Check Out</button>
+            <div class="col-md-4 summary">
+                <div><h5><b>Summary</b></h5></div>
+                <hr>
+                <div class="row">
+                    <div class="col" style="padding-left:0;">{{groceryCart.item_name.length}} ITEMS</div>
+                    <div class="col text-right">{{ getTotal() | currency: 'PHP': 'symbol': '1.2'}}</div>
+                </div>
+                <!-- <form> -->
+                <div class="formgroup">
+                    <p>Mode of Payment</p>
+                    <select>
+                        <option class="text-muted">Cash on Delivery - {{ '5.00' | currency: 'PHP'}}</option>
+                        <option class="text-muted">Gcash</option>
+                        <option class="text-muted">PayMaya</option>
+                        <option class="text-muted">Pick Up</option>
+                    </select>
+                    <p>Voucher</p>
+                    <input type="text" id="code" placeholder="Enter your code">
+                </div>
+                <!-- </form> -->
+                <div class="row" style="border-top: 1px solid rgba(0,0,0,.1); padding: 2vh 0;">
+                    <div class="col">TOTAL PRICE</div>
+                    <div class="col text-right">{{ getTotal() + 5 | currency: 'PHP': 'symbol': '1.2' }}</div>
+                </div>
+                <button class="btn">CHECKOUT</button>
             </div>
-          </div>
-        </div>
-      </div>
+        </form>
+        
+    </div>
     </div>
   </div>
   
