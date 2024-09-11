@@ -364,21 +364,71 @@ export class CartComponent implements OnInit {
   
     console.log("Order: ", customerOrder);
 
-    this.orderService.createTempOrder(customerOrder as Order).subscribe(
-      response => {
-        console.log("Order has been created: ", response);
-
-        this.router.navigate(['/home/checkout']);
-      },
-      error => {
-        console.log("Failed to checkout order: ", error);
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'Failed to checkout order',
-        });
+    this.orderService.getTempOrders().subscribe(
+      orders => {
+        if(orders.length > 0) {
+          if(orders.some(order => order.username.toLowerCase() === this.customerUsername.toLowerCase())){
+            const order = orders.find(order => order.username.toLowerCase() === this.customerUsername.toLowerCase());
+  
+            this.orderService.updateTempOrder(order as Order).subscribe(
+              response => {
+                console.log("Order has been updated: ", response);
+                this.router.navigate(['/home/checkout']);
+              },
+              error => {
+                console.log("Failed to update order: ", error);
+              }
+            )
+          } else {
+            this.orderService.createTempOrder(customerOrder as Order).subscribe(
+              response => {
+                console.log("Order has been created: ", response);
+                this.router.navigate(['/home/checkout']);
+              },
+              error => {
+                console.log("Failed to created order: ", error);
+              } 
+            )
+          }
+        } else {
+          this.orderService.createTempOrder(customerOrder as Order).subscribe(
+            response => {
+              console.log("Order has been created: ", response);
+              this.router.navigate(['/home/checkout']);
+            },
+            error => {
+              console.log("Failed to created order: ", error);
+            } 
+          )
+        }
+        
       }
-    );
+    )
+
+    // this.orderService.checkIfTempOrderExists(this.customerUsername).subscribe(
+    //   exists => {
+    //     if(!exists) {
+    //       this.orderService.createTempOrder(customerOrder as Order).subscribe(
+    //         response => {
+    //           console.log("Order has been created: ", response);
+      
+    //           this.router.navigate(['/home/checkout']);
+    //         },
+    //         error => {
+    //           console.log("Failed to checkout order: ", error);
+    //           this.messageService.add({
+    //             severity: 'error',
+    //             summary: 'Error',
+    //             detail: 'Failed to checkout order',
+    //           });
+    //         }
+    //       );
+    //     } else {
+    //       this.orderService
+    //     }
+    //   }
+    // );
+    
     
   };
 }

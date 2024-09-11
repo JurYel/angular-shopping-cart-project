@@ -1,167 +1,182 @@
 <section>
-    <div class="cover">
-      <div class="overlap-wrapper">
-        <div class="overlap">
-          <img class="logo" src="assets/img/logo.png" />
-          <div class="furnest-checkout">
-            <div class="frame">
-              <div class="div">
-                <div class="frame-2">
-                  <div class="text-wrapper">Review your cart</div>
-                  <div class="frame-2">
-                    <div class="frame-3">
-                      <div class="image-wrapper"><img class="image" src="assets/img/image-3.png" /></div>
-                      <div class="frame-4">
-                        <div class="frame-5">
-                          <div class="text-wrapper-2">DuoComfort Sofa Premium</div>
-                          <div class="text-wrapper-3">1x</div>
-                        </div>
-                        <div class="text-wrapper-4">$20.00</div>
-                      </div>
-                    </div>
-                    <div class="frame-3">
-                      <div class="image-wrapper"><img class="img" src="assets/img/image-3-1.png" /></div>
-                      <div class="frame-4">
-                        <div class="frame-5">
-                          <div class="text-wrapper-2">IronOne Desk</div>
-                          <div class="text-wrapper-3">1x</div>
-                        </div>
-                        <div class="text-wrapper-4">$25.00</div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="frame-6">
-                  <div class="frame-7">
-                    <div class="frame-8">
-                      <div class="text-wrapper-5">Discount code</div>
-                      <div class="text-wrapper-6">Apply</div>
-                      <img class="vuesax-bold-ticket" src="assets/img/vuesax-bold-ticket-discount-1.svg" />
-                    </div>
-                    <div class="frame-9">
-                      <div class="frame-10">
-                        <div class="text-wrapper-7">Subtotal</div>
-                        <div class="text-wrapper-8">$45.00</div>
-                      </div>
-                      <div class="frame-10">
-                        <div class="text-wrapper-7">Shipping</div>
-                        <div class="text-wrapper-8">$5.00</div>
-                      </div>
-                      <div class="frame-10">
-                        <div class="text-wrapper-7">Discount</div>
-                        <div class="text-wrapper-8">-$10.00</div>
-                      </div>
-                      <div class="frame-10">
-                        <div class="text-wrapper-9">Total</div>
-                        <div class="text-wrapper-9">$40.00</div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="div-wrapper"><div class="text-wrapper-10">Pay Now</div></div>
-                </div>
+  <div class="container">
+    <div class="row">
+      <!-- Customer Information -->
+      <div class="col-md-7">
+        <div class="card p-4">
+          <h4 class="mb-3">Customer Information</h4>
+          <form [formGroup]="addressForm">
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="firstName"  class="form-label">First Name</label>
+                <input type="text" formControlName="first_name" 
+                        class="form-control"
+                        [ngClass]="{ 'is-invalid': submitted && addForm['first_name'].errors}"
+                         id="firstName" placeholder="John" required>
+                <small *ngIf="addForm['first_name'].invalid && (addForm['first_name'].dirty || addForm['last_name'].touched)" class="invalid-feedback">
+                <div *ngIf="addForm['first_name'].errors?.['required']">First name is required</div>
+              </small>
               </div>
-              <div class="frame-11">
-                <div class="frame-12">
-                  <img class="div-wrapper-2" src="assets/img/lock-01-1.svg" />
-                  <p class="p">Secure Checkout - SSL Encrypted</p>
-                </div>
-                <p class="ensuring-your">
-                  Ensuring your financial and personal details are secure <br />during every transaction.
-                </p>
+              <div class="col-md-6 mb-3">
+                <label for="lastName"  class="form-label">Last Name</label>
+                <input type="text" formControlName="last_name" 
+                        class="form-control" 
+                        [ngClass]="{ 'is-invalid': submitted && addForm['last_name'].errors}"
+                        id="lastName" placeholder="Doe">
+                <small *ngIf="addForm['last_name'].invalid && (addForm['last_name'].dirty || addForm['last_name'].touched)" class="invalid-feedback">
+                  <div *ngIf="addForm['last_name'].errors?.['required']">Last name is required</div>
+                </small>
               </div>
             </div>
-            <div class="frame-13">
-              <div class="text-wrapper-11">Checkout</div>
-              <div class="text-wrapper-12">Shipping Information</div>
-              <div class="frame-14">
-                <div class="frame-2">
-                  <div class="frame-15">
-                    <p class="div-2"><span class="span">Full name </span> <span class="text-wrapper-13">*</span></p>
-                    <div class="frame-16"><div class="text-wrapper-14">Enter full name</div></div>
-                  </div>
-                  <div class="frame-15">
-                    <p class="div-2"><span class="span">Email address </span> <span class="text-wrapper-15">*</span></p>
-                    <div class="frame-16"><div class="text-wrapper-14">Enter email address</div></div>
-                  </div>
-                  <div class="frame-15">
-                    <p class="div-2"><span class="span">Phone number </span> <span class="text-wrapper-15">*</span></p>
-                    <div class="frame-16">
-                      <div class="text-wrapper-16">Enter phone number</div>
-                      <div class="frame-17">
-                        <img class="div-wrapper-2" src="assets/img/flag-pack.svg" />
-                        <img class="chevron-down" src="assets/img/chevron-down-1.svg" />
-                      </div>
-                    </div>
-                  </div>
-                  <div class="frame-15">
-                    <p class="div-2"><span class="span">Country </span> <span class="text-wrapper-15">*</span></p>
-                    <div class="frame-16">
-                      <div class="text-wrapper-14">Choose state</div>
-                      <img class="chevron-down-2" src="assets/img/chevron-down-2.svg" />
-                    </div>
-                  </div>
-                  <div class="frame-18">
-                    <div class="frame-19">
-                      <div class="text-wrapper-17">City</div>
-                      <div class="frame-16"><div class="text-wrapper-14">Enter city</div></div>
-                    </div>
-                    <div class="frame-19">
-                      <div class="text-wrapper-17">State</div>
-                      <div class="frame-16"><div class="text-wrapper-14">Enter state</div></div>
-                    </div>
-                    <div class="frame-19">
-                      <div class="text-wrapper-17">ZIP Code</div>
-                      <div class="frame-16"><div class="text-wrapper-14">Enter ZIP code</div></div>
-                    </div>
-                  </div>
-                </div>
-                <div class="frame-20">
-                  <div class="div-wrapper-2">
-                    <div class="checkbox-base"><img class="check" src="assets/img/check-2.svg" /></div>
-                  </div>
-                  <p class="text-wrapper-18">I have read and agree to the Terms and Conditions.</p>
-                </div>
+            <div class="mb-3">
+              <label for="email" class="form-label">Email Address</label>
+              <input type="email" formControlName="email" 
+                    class="form-control"
+                    [ngClass]="{ 'is-invalid': submitted && addForm['email'].errors}"
+                    id="email" placeholder="john.doe@example.com" required>
+              <small *ngIf="addForm['email'].invalid && (addForm['email'].dirty || addForm['email'].touched)" class="invalid-feedback">
+                <div *ngIf="addForm['email'].errors?.['required']">Email is required</div>
+                <div *ngIf="addForm['email'].errors?.['email']">Email should be valid</div>
+              </small>
+            </div>
+            <div class="row mb-3">
+              <div class="col-md-3">
+                <label for="phoneCode" class="form-label">Country Code</label>
+                <select class="form-select" id="phoneCode">
+                  <option value="+63">+63 (PH)</option>
+                  <option value="+1">+1 (US)</option>
+                  <option value="+44">+44 (UK)</option>
+                </select>
               </div>
-              <div class="frame-21">
-                <div class="frame-22">
-                  <div class="div-wrapper-2">
-                    <div class="overlap-group"><div class="circle"></div></div>
-                  </div>
-                  <div class="frame-23">
-                    <img class="img-2" src="assets/img/vuesax-outline-truck-fast-1.svg" />
-                    <div class="text-wrapper-19">Delivery</div>
-                  </div>
-                </div>
-                <div class="frame-24">
-                  <div class="div-wrapper-2"><div class="circle-2"></div></div>
-                  <div class="frame-23">
-                    <img class="img-2" src="assets/img/package-1.svg" />
-                    <div class="text-wrapper-20">Pick up</div>
-                  </div>
-                </div>
+              <div class="col-md-9">
+                <label for="phoneNumber" class="form-label">Phone Number</label>
+                <input type="tel" formControlName="mobile_num" 
+                      class="form-control"
+                      [ngClass]="{ 'is-invalid': (submitted && addForm['mobile_num'].errors) || (addForm['mobile_num'].touched && (addForm['mobile_num'].errors?.['pattern'] || addForm['mobile_num'].errors?.['maxlength']))}"
+                      id="phoneNumber" placeholder="9123456789" required>
+                <small *ngIf="addForm['mobile_num'].invalid && (addForm['mobile_num'].dirty || addForm['mobile_num'].touched)" class="invalid-feedback">
+                  <div *ngIf="addForm['mobile_num'].errors?.['required']">Mobile number is required</div>
+                  <div *ngIf="addForm['mobile_num'].errors?.['pattern'] || addForm['mobile_num'].errors?.['maxlength']">Mobile number is invalid</div>
+                  <!-- <div *ngIf="f['mobile_num'].errors?.['maxlength']">Mobile number exceeds max length</div> -->
+                </small>
               </div>
             </div>
-            <div class="frame-25">
-              <div class="text-wrapper-21">FURNEST</div>
-              <div class="frame-26">
-                <div class="frame-23">
-                  <div class="check-wrapper"><img class="check-2" src="assets/img/check-3.svg" /></div>
-                  <div class="text-wrapper-22">Cart</div>
-                </div>
-                <img class="line" src="assets/img/line-1.svg" />
-                <div class="frame-23">
-                  <div class="check-wrapper"><img class="check-2" src="assets/img/check-4.svg" /></div>
-                  <div class="text-wrapper-22">Review</div>
-                </div>
-                <img class="line" src="assets/img/line-2.svg" />
-                <div class="frame-23">
-                  <div class="frame-27"><div class="text-wrapper-23">3</div></div>
-                  <div class="text-wrapper-22">Checkout</div>
-                </div>
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="country" class="form-label">Country</label>
+                <input type="text" formControlName="country"
+                      class="form-control" 
+                      [ngClass]="{ 'is-invalid': submitted && addForm['country'].errors}"
+                      id="country" placeholder="Philippines" required>
+                <small *ngIf="addForm['country'].invalid && (addForm['country'].dirty || addForm['country'].touched)" class="invalid-feedback">
+                  <div *ngIf="addForm['country'].errors?.['required']">User name is required</div>
+              </small>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label for="city" class="form-label">City</label>
+                <input type="text" formControlName="city" 
+                      class="form-control"
+                      [ngClass]="{ 'is-invalid': submitted && addForm['city'].errors}"
+                      id="city" placeholder="San Fernando City" required>
+                <small *ngIf="addForm['city'].invalid && (addForm['city'].dirty || addForm['city'].touched)" class="invalid-feedback">
+                  <div *ngIf="addForm['city'].errors?.['required']">City is required</div>
+              </small>
               </div>
             </div>
-          </div>
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="state" class="form-label">Province</label>
+                <input type="text" formControlName="province" 
+                      class="form-control"
+                      [ngClass]="{ 'is-invalid': submitted && addForm['province'].errors}"
+                      id="state" placeholder="Pampanga" required>
+                <small *ngIf="addForm['province'].invalid && (addForm['province'].dirty || addForm['province'].touched)" class="invalid-feedback">
+                  <div *ngIf="addForm['province'].errors?.['required']">Province is required</div>
+              </small>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label for="zipCode" class="form-label">Zip Code</label>
+                <input type="text" formControlName="zip_code" 
+                      class="form-control"
+                      [ngClass]="{ 'is-invalid': submitted && addForm['zip_code'].errors}"
+                      id="zipCode" placeholder="2001" required>
+                <small *ngIf="addForm['zip_code'].invalid && (addForm['zip_code'].dirty || addForm['zip_code'].touched)" class="invalid-feedback">
+                  <div *ngIf="addForm['zip_code'].errors?.['required']">Zip Code is required</div>
+              </small>
+              </div>
+            </div>
+            <div class="form-check mb-3">
+              <input class="form-check-input" formControlName="agree" 
+              [ngClass]="{ 'is-invalid': submitted && addForm['agree'].errors}"
+              type="checkbox" id="terms" required>
+              <label class="form-check-label" for="terms">
+                I have read and agree to the Terms and Conditions
+              </label>
+              <small *ngIf="addForm['agree'].invalid && (addForm['agree'].dirty || addForm['agree'].touched)" class="invalid-feedback">
+                <div *ngIf="addForm['agree'].errors?.['required']">Please agree to the Terms and Conditions to continue.</div>
+            </small>
+            </div>
+          </form>
         </div>
       </div>
+
+      <!-- Order Summary and Payment -->
+      <div class="col-md-5">
+        <div class="card p-4 mb-4">
+          <h4 class="mb-3">Your Order</h4>
+          <div class="checkout-summary" *ngIf="customerOrder.item_name.length > 0">
+            <ng-container *ngFor="let item of customerOrder.item_name; let i = index">
+              <!-- Sample Product Items -->
+              <div class="summary-item mb-2">
+                <span>{{ item }} (x{{customerOrder.quantity[i]}})</span>
+                <span>{{ customerOrder.subtotal[i] | currency: 'PHP': 'symbol': '1.2'}}</span>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+
+        <form [formGroup]="checkoutForm" (ngSubmit)="onSubmit()" class="card p-4">
+          <h4 class="mb-3">Payment</h4>
+          <div class="mb-3">
+            <label for="paymentMethod" class="form-label">Select Payment Method</label>
+            <select class="form-select"
+                 formControlName="paymentMethod"
+                 id="paymentMethod"
+                [ngClass]="{'is-invalid': submitted && f['paymentMethod'].value === 'Select payment method'}">
+              <option selected>Select payment method</option>
+              <option *ngFor="let method of paymentMethods" [value]="method">{{method}}</option>
+            </select>
+            <small *ngIf="f['paymentMethod'].value === 'Select payment method' && submitted"
+                class="invalid-feedback">
+                    Select a payment method
+            </small>
+          </div>
+          <div class="mb-3">
+            <label for="voucher" class="form-label">Voucher</label>
+            <input type="text" class="form-control" id="voucher" placeholder="Enter your code">
+          </div>
+          <div class="checkout-summary">
+            <div class="summary-item">
+              <span class="summary-label">Subtotal:</span>
+              <span>{{ getTotal() | currency: 'PHP': 'symbol': '1.2' }}</span>
+            </div>
+            <div class="summary-item">
+              <span class="summary-label">Shipping:</span>
+              <span>₱70.00</span>
+            </div>
+            <div class="summary-item">
+              <span class="summary-label">Discount:</span>
+              <span>-₱0.00</span>
+            </div>
+            <div class="summary-item">
+              <span class="summary-label">Total:</span>
+              <span>{{ getTotal() + 70 | currency: 'PHP': 'symbol': '1.2' }}</span>
+            </div>
+          </div>
+          <button type="submit" class="btn pay-now-btn w-100 mt-4">Pay Now</button>
+        </form>
+      </div>
     </div>
-  </section>
+  </div>
+
+</section>

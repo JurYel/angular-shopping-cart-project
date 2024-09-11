@@ -216,27 +216,39 @@
       "username": "admin",
       "item_img": [
         "gardenia_white_bread_-1725994139.png",
-        "oreo_ice_cream_450ml_-1725994139.png"
+        "oreo_ice_cream_450ml_-1725994139.png",
+        "assorted_products_gift_bundle_-1725991727.png",
+        "lala_fishcracker_-1725990887.png"
       ],
       "item_name": [
         "Gardenia White Bread",
-        "Oreo Ice Cream 450ml"
+        "Oreo Ice Cream 450ml",
+        "Assorted Products Gift Bundle",
+        "Lala Fishcracker"
       ],
       "category": [
+        "Food",
+        "Food",
         "Food",
         "Food"
       ],
       "quantity": [
         4,
-        6
+        6,
+        4,
+        5
       ],
       "unit_price": [
         58,
-        350.9
+        350.9,
+        799,
+        25
       ],
       "subtotal": [
         232,
-        2105.3999999999996
+        2105.3999999999996,
+        3196,
+        125
       ]
     },
     {
@@ -378,19 +390,21 @@
       "subtotal": [
         789.23
       ]
-    },
+    }
+  ],
+  "temp_orders": [
     {
-      "id": "b0e5",
+      "id": "08d1",
       "username": "admin",
       "customer_img": "admin-1725983987.png",
       "customer": "Juriel Botoy",
       "location": "",
-      "datetime": 1726071985943,
+      "datetime": 1726075813943,
       "item_name": [
         "Gardenia White Bread",
         "Oreo Ice Cream 450ml",
-        "Gardenia Wheat Bread",
-        "Itlog"
+        "Assorted Products Gift Bundle",
+        "Lala Fishcracker"
       ],
       "category": [
         "Food",
@@ -401,18 +415,17 @@
       "payment_mode": "Select payment method",
       "quantity": [
         4,
-        3,
         6,
-        9
+        4,
+        5
       ],
       "subtotal": [
-        116,
-        1052.6999999999998,
-        176,
-        108
+        232,
+        2105.3999999999996,
+        3196,
+        125
       ],
       "status": "Pending"
     }
-  ],
-  "temp_orders": []
+  ]
 }
