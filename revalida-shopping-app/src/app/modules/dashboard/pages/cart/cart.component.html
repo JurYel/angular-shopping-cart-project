@@ -46,6 +46,9 @@
                             <div class="col">Actions</div>
                         </div>
                     </div>
+                    <div class="text-center no-items m-4" *ngIf="groceryCartLength < 1">
+                        No items in your cart
+                    </div>
                     <ng-container *ngFor="let item of filteredItems.item_name; let i = index">
                         <div class="cart-item-group row border-top border-bottom">
                             <div class="row main align-items-center tbody">
@@ -110,7 +113,7 @@
                 <!-- </form> -->
                 <div class="row" style="border-top: 1px solid rgba(0,0,0,.1); padding: 2vh 0;">
                     <div class="col">TOTAL PRICE</div>
-                    <div class="col text-right">{{ getTotal() + 5 | currency: 'PHP': 'symbol': '1.2' }}</div>
+                    <div class="col text-right">{{ getTotal() | currency: 'PHP': 'symbol': '1.2' }}</div>
                 </div>
                 <button type="submit">CHECKOUT</button>
             </div>

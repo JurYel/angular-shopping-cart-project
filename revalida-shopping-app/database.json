@@ -210,74 +210,6 @@
         122247,
         10384
       ]
-    },
-    {
-      "id": "c9f9",
-      "username": "admin",
-      "item_img": [
-        "gardenia_white_bread_-1725994139.png",
-        "oreo_ice_cream_450ml_-1725994139.png",
-        "assorted_products_gift_bundle_-1725991727.png",
-        "lala_fishcracker_-1725990887.png"
-      ],
-      "item_name": [
-        "Gardenia White Bread",
-        "Oreo Ice Cream 450ml",
-        "Assorted Products Gift Bundle",
-        "Lala Fishcracker"
-      ],
-      "category": [
-        "Food",
-        "Food",
-        "Food",
-        "Food"
-      ],
-      "quantity": [
-        4,
-        6,
-        4,
-        5
-      ],
-      "unit_price": [
-        58,
-        350.9,
-        799,
-        25
-      ],
-      "subtotal": [
-        232,
-        2105.3999999999996,
-        3196,
-        125
-      ]
-    },
-    {
-      "id": "99ed",
-      "username": "admin",
-      "item_img": [
-        "gardenia_white_bread_-1725994139.png",
-        "gardenia_wheat_bread_-1725989990.png"
-      ],
-      "item_name": [
-        "Gardenia White Bread",
-        "Gardenia Wheat Bread"
-      ],
-      "category": [
-        "Food",
-        "Food"
-      ],
-      "quantity": [
-        1,
-        1
-      ],
-      "unit_price": [
-        58,
-        88
-      ],
-      "subtotal": [
-        58,
-        88
-      ]
     }
   ],
   "orders": [
@@ -390,16 +322,14 @@
       "subtotal": [
         789.23
       ]
-    }
-  ],
-  "temp_orders": [
+    },
     {
       "id": "08d1",
       "username": "admin",
       "customer_img": "admin-1725983987.png",
       "customer": "Juriel Botoy",
-      "location": "",
-      "datetime": 1726075813943,
+      "location": "San Fernando City",
+      "datetime": 1726091439975,
       "item_name": [
         "Gardenia White Bread",
         "Oreo Ice Cream 450ml",
@@ -412,7 +342,7 @@
         "Food",
         "Food"
       ],
-      "payment_mode": "Select payment method",
+      "payment_mode": "Gcash",
       "quantity": [
         4,
         6,
@@ -427,5 +357,20 @@
       ],
       "status": "Pending"
     }
-  ]
+  ],
+  "addresses": [
+    {
+      "first_name": "Juriel",
+      "last_name": "Botoy",
+      "email": "juriel.botoy182@gmail.com",
+      "mobile_num": "9155671750",
+      "country": "Philippines",
+      "city": "San Fernando City",
+      "province": "Pampanga",
+      "zip_code": "2011",
+      "username": "admin",
+      "id": "d588"
+    }
+  ],
+  "temp_orders": []
 }

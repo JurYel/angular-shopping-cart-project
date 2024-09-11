@@ -343,7 +343,14 @@ export class CartComponent implements OnInit {
     }
     console.log(paymentMethod)
 
-    if(this.checkoutForm.invalid) {
+    if(this.groceryCartLength < 1) {
+      this.messageService.add({ severity:'error', summary: 'Error', detail: 'No items in your cart to checkout' });
+      return;
+    }
+
+    if(this.checkoutForm.invalid || 
+      paymentMethod.startsWith('Select')
+    ) {
       return;
     }
 

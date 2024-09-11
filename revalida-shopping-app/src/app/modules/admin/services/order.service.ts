@@ -17,6 +17,14 @@ export class OrderService {
     return this.http.get<Order[]>(`${this.serverUrl}/orders`);
   }
 
+  checkIfOrderExists = (username: string): Observable<boolean> => {
+    const orders$: Observable<Order[]> = this.getOrders();
+
+    return orders$.pipe(
+      map((orders: Order[]) => orders.some(order => order.username.toLowerCase() === username.toLowerCase()))
+    );
+  }
+
   createOrder = (order: Order) => {
     return this.http.post<Order>(`${this.serverUrl}/orders`, order);
   }
@@ -51,5 +59,9 @@ export class OrderService {
 
   updateTempOrder = (order: Order) => {
     return this.http.put<Order>(`${this.serverUrl}/temp_orders/${order.id}`, order);
+  }
+
+  deleteTempOrder = (id: string) => {
+    return this.http.delete<Order>(`${this.serverUrl}/temp_orders/${id}`);
   }
 }

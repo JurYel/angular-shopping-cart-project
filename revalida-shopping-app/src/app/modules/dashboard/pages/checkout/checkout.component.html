@@ -5,7 +5,7 @@
       <div class="col-md-7">
         <div class="card p-4">
           <h4 class="mb-3">Customer Information</h4>
-          <form [formGroup]="addressForm">
+          <form [formGroup]="addressForm" (ngSubmit)="onSubmit()">
             <div class="row">
               <div class="col-md-6 mb-3">
                 <label for="firstName"  class="form-label">First Name</label>
@@ -173,7 +173,125 @@
               <span>{{ getTotal() + 70 | currency: 'PHP': 'symbol': '1.2' }}</span>
             </div>
           </div>
+          <a #openReceiptModal href="#viewReceiptModal" data-bs-toggle="modal"></a>
           <button type="submit" class="btn pay-now-btn w-100 mt-4">Pay Now</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- View Receipt Modal -->
+  <div id="viewReceiptModal" class="modal fade">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <form>
+          <div class="modal-header">
+            <h5 class="modal-title">Receipt</h5>
+            <button
+              #closeReceiptModal
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              (click)="endTransaction()"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <div class="card">
+              <div class="card-body mx-4">
+                <div class="container">
+                  <p class="my-3 mx-5 text-center" style="font-size: 24px;">Thank for your purchase!</p>
+                  <div class="row">
+                    <ul class="list-unstyled">
+                      <div class="order-date">
+                        <li class="text-muted mt-1" *ngIf="customerOrder">
+                          <strong
+                            ><span class="text-black">Order</span>
+                            #{{ customerOrder.id | uppercase }}</strong
+                          >
+                        </li>
+                        <li class="text-black mt-1">
+                          Jun 23, 2023, 11:37 AM
+                        </li>
+                      </div>
+                      <div class="customer-loc">
+                        <li *ngIf="customerOrder" class="text-black mt-1">
+                          {{ customerOrder.customer }}
+                        </li>
+                        <li *ngIf="customerOrder" class="text-black mt-1">
+                          {{ customerOrder.location }}
+                        </li>
+                      </div>
+                      <div class="payment-status">
+                        <li *ngIf="customerOrder" class="text-black mt-1">
+                          Status:
+                          <small
+                            class="badge bg-{{
+                              badgeStyle[customerOrder.status]
+                            }}"
+                            >{{ customerOrder.status }}</small
+                          >
+                        </li>
+                        <li *ngIf="customerOrder" class="text-black mt-1">
+                          Payment: {{ customerOrder.payment_mode }}
+                        </li>
+                      </div>
+                    </ul>
+                    <table class="table table-striped table-hover">
+                      <thead>
+                        <tr>
+                          <th>Item</th>
+                          <th>Qty</th>
+                          <th>Unit Price</th>
+                          <th>Subtotal</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <!-- TO FIX -->
+                        <ng-container *ngIf="customerOrder">
+                          <tr *ngFor="let item of customerOrder.item_name; let i = index">
+                            <td>{{ item }}</td>
+                            <td>{{ customerOrder.quantity[i] }}</td>
+                            <td>
+                              {{
+                                customerOrder.subtotal[i] /
+                                  customerOrder.quantity[i]
+                                  | currency : "PHP" : "symbol" : "1.1-2"
+                              }}
+                            </td>
+                            <td>
+                              {{
+                                customerOrder.subtotal[i]
+                                  | currency : "PHP" : "symbol" : "1.1-2"
+                              }}
+                            </td>
+                          </tr>
+                        </ng-container>
+                      </tbody>
+                    </table>
+                  </div>
+                  <div class="row text-black">
+                    <div class="col-xl-12">
+                      <!-- TO FIX -->
+                      <p *ngIf="customerOrder" class="float-end fw-bold">
+                        Total: {{ getTotal() | currency: 'PHP': 'symbol': '1.2' }}
+                      </p>
+                    </div>
+                    <hr style="border: 2px solid black" />
+                  </div>
+                  <p class="store">Click&Get Online Convenience Store</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <input
+              type="button"
+              class="btn btn-primary"
+              data-bs-dismiss="modal"
+              value="Understood"
+              (click)="endTransaction()"
+            />
+          </div>
         </form>
       </div>
     </div>
