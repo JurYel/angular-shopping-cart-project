@@ -218,43 +218,43 @@
         "gardenia_white_bread_-1725994139.png",
         "lala_fishcracker_-1725990887.png",
         "oreo_ice_cream_450ml_-1725994139.png",
-        "itlog_-1725990887.jpeg",
-        "mogu_mogu_250ml_-1725993889.png"
+        "gardenia_wheat_bread_-1725989990.png",
+        "itlog_-1725990887.jpeg"
       ],
       "item_name": [
         "Gardenia White Bread",
         "Lala Fishcracker",
         "Oreo Ice Cream 450ml",
-        "Itlog",
-        "Mogu Mogu 250ml"
+        "Gardenia Wheat Bread",
+        "Itlog"
       ],
       "category": [
         "Food",
         "Food",
         "Food",
         "Food",
-        "Drinks"
+        "Food"
       ],
       "quantity": [
         1,
         3,
         2,
-        3,
+        5,
         3
       ],
       "unit_price": [
         58,
         25,
         350.9,
-        12,
-        48.99
+        88,
+        12
       ],
       "subtotal": [
         58,
         75,
         701.8,
-        36,
-        146.97
+        440,
+        36
       ]
     },
     {

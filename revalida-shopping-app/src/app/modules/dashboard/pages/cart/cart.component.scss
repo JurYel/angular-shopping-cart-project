@@ -82,6 +82,7 @@ body{
     font-family: sans-serif;
     font-size: 0.8rem;
     font-weight: bold;
+
 }
 .title{
     margin-bottom: 5vh;
@@ -93,6 +94,7 @@ body{
     box-shadow: 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     border-radius: 1rem;
     border: transparent;
+    min-height: 400px;
 }
 @media(max-width:767px){
     .card{
@@ -151,14 +153,23 @@ a{
     padding: 0 1vh;
 }
 .close{
+    all: none;
+    text-decoration: unset;
     margin-left: auto;
-    font-size: 0.7rem;
+    font-size: 1rem;
+    font-weight: bold;
+    color: red;
+    cursor: pointer;
+}
+.close:hover {
+    color: rgb(178, 6, 6);
 }
 img{
     width: 3.5rem;
 }
 .back-to-shop{
-    margin-top: 4.5rem;
+    // margin-top: -1.5rem;
+    padding-top: 1.5rem;
 }
 h5{
     margin-top: 4vh;
@@ -175,12 +186,17 @@ form{
 
 select{
     border: 1px solid rgba(0, 0, 0, 0.137);
-    padding: 1.5vh 1vh;
+    padding: 1.5vh 1vw;
     margin-bottom: 4vh;
     outline: none;
     width: 100%;
     background-color: rgb(247, 247, 247);
+    cursor: pointer;
 }
+select option {
+    cursor: pointer;
+}
+
 .card input[type="text"]{
     border: 1px solid rgba(0, 0, 0, 0.137);
     padding: 1vh;
@@ -230,10 +246,10 @@ a:hover{
 }
 
 .cart-items {
-    overflow-y: scroll;
+    overflow-y: auto;
     height: 100%;
-    max-height: 400px;
-    height: 100%;
+    // max-height: 400px;
+    height: 400px;
 }
 
 .category {
@@ -241,6 +257,7 @@ a:hover{
 }
 
 .thead {
+    // position: relative;
     font-weight: bold;
 }
 

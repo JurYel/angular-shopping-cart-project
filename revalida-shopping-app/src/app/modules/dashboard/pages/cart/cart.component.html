@@ -10,17 +10,20 @@
           <h2 class="fw-bold">Grocery Cart</h2>
         </div>
         <div class="col-md-3">
-            <form class="d-flex">
+            <!-- <form class="d-flex"> -->
+            <div class="d-flex">
                 <input
                   class="form-control me-2"
                   type="search"
                   placeholder="Search for products"
                   aria-label="Search"
+                  [(ngModel)]="searchQuery"
+                  (keyup)="searchCart()"
                 />
                 <button class="btn btn-outline-success" type="submit">
                   Search
                 </button>
-              </form>
+              </div>
         </div>
       </div>
   
@@ -44,7 +47,7 @@
                         </div>
                     </div>
                     <ng-container *ngFor="let item of groceryCart.item_name; let i = index">
-                        <div class="row border-top border-bottom">
+                        <div class="cart-item-group row border-top border-bottom">
                             <div class="row main align-items-center tbody">
                                 <div class="col-2"><img class="img-fluid" src="{{imageUrls[i]}}"></div>
                                 <!-- {{cloudFrontDomain}}/{{s3Folder}}/{{groceryCart.item_img[i]}} -->
@@ -70,7 +73,7 @@
                                     </ng-container>
                                 </div>
                                 <div class="col-2"> {{groceryCart.subtotal[i] | currency: 'PHP' : 'symbol': '1.2'}}</div>
-                                <div class="col-sm-1"><span class="close">&#10005;</span></div>
+                                <div class="col-sm-1"><a class="close" (click)="removeItem(i)">&#10005;</a></div>
                             </div>
                         </div>
                     </ng-container>

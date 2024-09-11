@@ -43,7 +43,7 @@
             </p>
             <form [formGroup]="addToCartForm" class="bundle-form d-flex" (ngSubmit)="addToCart(productBundleIndex)">
               <ng-container *ngIf="quantities && quantities.length" formArrayName="quantities">
-                <input
+                <!-- <input
                   class="form-control text-center me-3"
                   id="inputQuantity"
                   [formControlName]="productBundleIndex"
@@ -51,6 +51,22 @@
                   value="1"
                   style="max-width: 3rem"
                 />
+                <button type="submit" class="btn btn-outline-dark flex-shrink-0">
+                  <i class="bi-cart-fill me-1"></i>
+                  Add to cart
+                </button> -->
+                <div class="bundle-qty-wrapper">
+                  <a class="btn btn-link px-2"
+                        (click)="stepDown(productBundleIndex)">
+                    <i class="fa-solid fa-minus"></i>
+                  </a>
+                  <input [formControlName]="productBundleIndex" id="{{ productBundleIndex }}" type="number"
+                          class="form-control form-control-sm qty-input" min="1"/>
+                  <a class="btn btn-link px-2"
+                          (click)="stepUp(productBundleIndex)">
+                      <i class="fa-solid fa-plus"></i>
+                  </a>
+                </div>
                 <button type="submit" class="btn btn-outline-dark flex-shrink-0">
                   <i class="bi-cart-fill me-1"></i>
                   Add to cart

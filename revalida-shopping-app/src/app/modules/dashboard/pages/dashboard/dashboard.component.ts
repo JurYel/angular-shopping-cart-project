@@ -259,7 +259,7 @@ export class DashboardComponent implements OnInit {
           
 
           this.cartItemCount = this.groceryCart.quantity.length;
-          this.addToCartForm.reset();
+          // this.addToCartForm.reset();
           this.quantities.at(index).setValue(1)
         }
       );
