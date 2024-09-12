@@ -97,6 +97,8 @@ Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The appli
 ![user-records](img/users.png?raw=true)
 
 <hr>
-Authors:
-    - Juriel Botoy
-    - Dominique Frogoso
+<b>Authors</b>:
+<ul>
+    <li>Juriel Botoy</li>
+    <li>Dominique Frogoso</li>
+</ul>
