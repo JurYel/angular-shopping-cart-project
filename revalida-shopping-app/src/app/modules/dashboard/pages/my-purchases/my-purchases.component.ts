@@ -85,11 +85,12 @@ export class MyPurchasesComponent implements OnInit {
             //   subtotal: order.subtotal.slice(0, 3).push('...')
             // });
             this.truncatedOrders.push({
-              item_name: [...order.item_name.slice(0, 1), '...'],  // For string arrays, directly append '...'
-              
-              quantity: [...order.quantity.slice(0, 1).map(qty => qty.toString()), '...'], // Convert numbers to strings and append '...'
-            
-              subtotal: [...order.subtotal.slice(0, 1).map(sub => sub.toString()), '...'] // Same for subtotal, convert to strings and append '...'
+               // For string arrays, directly append '...'
+              item_name: [...order.item_name.slice(0, 1), '...'], 
+               // Convert numbers to strings and append '...'
+              quantity: [...order.quantity.slice(0, 1).map(qty => qty.toString()), '...'],
+              // Same for subtotal, convert to strings and append '...'
+              subtotal: [...order.subtotal.slice(0, 1).map(sub => sub.toString()), '...']
             });
           }
           this.savedImageUrl = await this.awsS3Service.getSignedUrl(`${this.s3Folder}/${order.customer_img}`);

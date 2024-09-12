@@ -6,13 +6,13 @@ import { adminGuard } from './guards/admin.guard';
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'auth',
+    redirectTo: 'home',
     pathMatch: 'full'
   },
   {
     path: 'home',
     loadChildren: () => import("./modules/dashboard/dashboard.module").then((m) => m.DashboardModule),
-    canActivate: [authGuard]
+    // canActivate: [authGuard]
   },
   {
     path: 'auth',

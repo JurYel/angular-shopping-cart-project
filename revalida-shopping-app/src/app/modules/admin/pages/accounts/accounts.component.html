@@ -41,7 +41,7 @@
                               <th>Deactivated</th>
                               <th>Email Address</th>
                               <th>Mobile #</th>
-                              <th>Password</th>
+                              <!-- <th>Password</th> -->
                               <th>Actions</th>
                             </tr>
                           </thead>
@@ -64,7 +64,7 @@
                               </td>
                               <td>{{account.email}}</td>
                               <td>{{account.mobile_num}}</td>
-                              <td>{{account.password}}</td>
+                              <!-- <td>{{account.password}}</td> -->
                               <td>
                                 <a href="#editUserModal" (click)="populateEditForm(i)" class="edit" data-bs-toggle="modal"><i class="material-icons" data-bs-toggle="tooltip" title="Edit">&#xE254;</i></a>
                                 <a href="#deactivateUserModal" (click)="getIndex(i)" class="{{account.deactivated? 'activate' : 'delete'}}" data-bs-toggle="modal"><i class="fa-solid fa-{{account.deactivated? 'circle-check' : 'circle-xmark'}}" data-bs-toggle="tooltip" title="{{account.deactivated? 'Activate' : 'Deactivate'}}"></i></a>

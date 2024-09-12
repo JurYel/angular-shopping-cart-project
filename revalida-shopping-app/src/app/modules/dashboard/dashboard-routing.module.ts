@@ -6,6 +6,7 @@ import { ProfileComponent } from './pages/profile/profile.component';
 import { CartComponent } from './pages/cart/cart.component';
 import { CheckoutComponent } from './pages/checkout/checkout.component';
 import { MyPurchasesComponent } from './pages/my-purchases/my-purchases.component';
+import { authGuard } from '../../guards/auth.guard';
 
 const routes: Routes = [
   {
@@ -14,19 +15,23 @@ const routes: Routes = [
   },
   {
     path: 'profile',
-    component: ProfileComponent
+    component: ProfileComponent,
+    canActivate: [authGuard]
   },
   {
     path: 'cart',
-    component: CartComponent
+    component: CartComponent,
+    canActivate: [authGuard]
   },
   {
     path: 'checkout',
-    component: CheckoutComponent
+    component: CheckoutComponent,
+    canActivate: [authGuard]
   },
   {
     path: 'purchases',
-    component: MyPurchasesComponent
+    component: MyPurchasesComponent,
+    canActivate: [authGuard]
   }
 ]
 

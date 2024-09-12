@@ -3,6 +3,7 @@ import { map, Observable } from 'rxjs';
 import { Order } from '../../../models/order.interface';
 import { OrderService } from '../../services/order.service';
 import { MessageService } from 'primeng/api';
+import { S3UploadService } from '../../../dashboard/services/s3-upload.service';
 
 @Component({
   selector: 'app-orders',
@@ -12,6 +13,9 @@ import { MessageService } from 'primeng/api';
 export class OrdersComponent implements OnInit {
   adminName: string | undefined;
   orders$: Observable<Order[]>;
+  ordersLength: number = 0;
+  truncatedOrders: any[] = [];
+  customerUsername: string;
   
   // variables for pagination
   paginatedOrders$!: Observable<Order[]>;
@@ -36,18 +40,45 @@ export class OrdersComponent implements OnInit {
   selectedLocation: string = "All";
   selectedStatus: string = "Any";
 
+  // s3 variables
+  s3Folder: string;
+  imageUrls: string[] = [];
+  profileDefaultImg: string;
   
   constructor(
     private orderService: OrderService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private awsS3Service: S3UploadService
   ) {
     this.adminName = `${sessionStorage.getItem(
       'first_name'
     )} ${sessionStorage.getItem('last_name')}`;
+    this.customerUsername = sessionStorage.getItem('username') as string;
+
+    // s3 init
+    this.s3Folder = "assets/users";
+    this.profileDefaultImg = `${this.s3Folder}/default_profile_img-100.png`;
 
     this.orders$ = this.orderService.getOrders();
     this.orders$.subscribe(
-      data => console.log(data)
+      (orders) => {
+        this.ordersLength = orders.length;
+
+        orders.forEach(async (order) => {
+          if(order.item_name.length > 2) {
+            this.truncatedOrders.push({
+              // For string arrays, directly append '...'
+             item_name: [...order.item_name.slice(0, 1), '...'], 
+              // Convert numbers to strings and append '...'
+             quantity: [...order.quantity.slice(0, 1).map(qty => qty.toString()), '...'],
+             // Same for subtotal, convert to strings and append '...'
+             subtotal: [...order.subtotal.slice(0, 1).map(sub => sub.toString()), '...']
+           });
+          }
+
+          this.imageUrls.push(await this.awsS3Service.getSignedUrl(`${this.s3Folder}/${order.customer_img}`));
+        });
+      }
     );
     this.badgeStyle = {
       Delivered: 'success',
@@ -144,6 +175,14 @@ export class OrdersComponent implements OnInit {
           const startIndex = (this.currentPage - 1) * this.pageSize;
           const endIndex = Math.min(startIndex + this.pageSize, orders.length); // Ensure we don't exceed the total length of the orders
           this.currentPageLength += endIndex - this.currentPageLength;
+          this.totalLength = orders.length;
+          this.generatePageNumbers();
+
+          this.imageUrls = [];
+          orders.slice(startIndex, endIndex).forEach(async (order) => {
+            this.imageUrls.push(await this.awsS3Service.getSignedUrl(`${this.s3Folder}/${order.customer_img}`));
+          })
+
           return orders.slice(startIndex, endIndex);
         })
       );

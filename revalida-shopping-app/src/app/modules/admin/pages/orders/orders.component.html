@@ -114,7 +114,7 @@
                     <td>
                       <a href="#"
                         ><img
-                          src="assets/users/{{ order.customer_img }}"
+                          src="{{ (imageUrls[i])? imageUrls[i] : profileDefaultImg }}"
                           class="avatar"
                           alt="Avatar"
                         />
@@ -133,7 +133,7 @@
                       data-bs-toggle="modal"
                       data-bs-target="#viewOrderModal"
                     >
-                      {{ order.datetime }}
+                      {{ order.datetime | date: 'short' }}
                     </td>
                     <td
                       (click)="viewOrderSummary(i)"
@@ -157,7 +157,7 @@
                       data-bs-target="#viewOrderModal"
                     >
                       <!-- {{ order.item_name }} -->
-                      <ng-container *ngFor="let item of order.item_name">
+                      <ng-container *ngFor="let item of truncatedOrders[i].item_name">
                         <p>{{item}}</p>
                       </ng-container>
                     </td>
@@ -167,7 +167,7 @@
                       data-bs-target="#viewOrderModal"
                     >
                       <!-- {{ order.quantity }} -->
-                      <ng-container *ngFor="let quantity of order.quantity">
+                      <ng-container *ngFor="let quantity of truncatedOrders[i].quantity">
                         <p>{{quantity}}</p>
                       </ng-container>
                     </td>
@@ -177,8 +177,8 @@
                       data-bs-target="#viewOrderModal"
                     >
                       <!-- {{ order.subtotal | currency : "PHP" }} -->
-                      <ng-container *ngFor="let subt of order.subtotal">
-                        <p>{{subt}}</p>
+                      <ng-container *ngFor="let subt of truncatedOrders[i].subtotal">
+                        <p>{{ (subt !== '...')? (subt | currency: 'PHP') : subt}}</p>
                       </ng-container>
                     </td>
                     <td class="dropdown">

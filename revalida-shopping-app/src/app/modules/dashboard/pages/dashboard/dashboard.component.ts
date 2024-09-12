@@ -21,11 +21,12 @@ export class DashboardComponent implements OnInit {
   productBundleIndex!: number;
   addToCartForm: FormGroup;
   cartItemCount: number;
-  customerUsername: string;
+  customerUsername: string = '';
   groceryCart: any;
   s3Folder: string;
   imageUrls: string[] = [];
   itemImageName: string;
+  isAuthenticated: boolean = false;
 
   constructor(private router: Router,
               private fb: FormBuilder,
@@ -33,6 +34,12 @@ export class DashboardComponent implements OnInit {
               private cartService: CartService,
               private awsS3Service: S3UploadService
   ) {
+    if(sessionStorage.getItem('username')) {
+      this.customerUsername = sessionStorage.getItem('username') as string;
+    }
+
+    this.isAuthenticated = (sessionStorage.getItem('username'))? true : false;
+
     this.products$ = this.productService.getProducts().pipe(
       // map(products => products.filter(product => !product.item_name.includes("Bundle")))
     );
@@ -61,7 +68,6 @@ export class DashboardComponent implements OnInit {
 
     console.log(this.quantities);
 
-    this.customerUsername = sessionStorage.getItem('username') as string;
     this.groceryCart  = {
       username: this.customerUsername,
       item_img: [] as string[],
@@ -126,7 +132,7 @@ export class DashboardComponent implements OnInit {
       async (response) => {
         if(response.length > 0){
           this.groceryCart = response[0];
-          this.cartItemCount = response[0].quantity.length;
+          this.cartItemCount = (this.isAuthenticated) ? response[0].quantity.length : 0;
           console.log("grocery: ", this.groceryCart);
           
           // response.forEach(
@@ -162,6 +168,9 @@ export class DashboardComponent implements OnInit {
 
   // Increase quantity
   stepUp = (index: number) => {
+    if(!sessionStorage.getItem('username')){
+      this.router.navigate(['/auth/login']);
+    }
     const control = this.quantities.at(index);
     this.products$.pipe(
       map(products => products[index])
@@ -175,6 +184,9 @@ export class DashboardComponent implements OnInit {
   }
 
   stepDown = (index: number) => {
+    if(!sessionStorage.getItem('username')){
+      this.router.navigate(['/auth/login']);
+    }
     const control = this.quantities.at(index);
     if(control.value > 1) {
       control.setValue(control.value - 1)
@@ -183,6 +195,9 @@ export class DashboardComponent implements OnInit {
 
   addToCart = (index: number) => {
     
+    if(!sessionStorage.getItem('username')){
+      this.router.navigate(['/auth/login']);
+    }
 
     if(parseInt(this.quantities.at(index).value)) {
       this.products$.pipe(
