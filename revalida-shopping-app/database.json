@@ -61,6 +61,18 @@
       "password": "1234"
     },
     {
+      "id": "fd41",
+      "first_name": "Dom",
+      "last_name": "Frogoso",
+      "username": "domvpf",
+      "email": "domvpf@gmail.com",
+      "profile_img": "default_profile_img-100.png",
+      "is_admin": true,
+      "deactivated": false,
+      "mobile_num": "9474338866",
+      "password": "password"
+    },
+    {
       "id": "3362",
       "first_name": "Edith",
       "last_name": "Heimer",
@@ -186,7 +198,7 @@
         2,
         1,
         153,
-        118
+        119
       ],
       "unit_price": [
         25,
@@ -208,7 +220,35 @@
         46,
         58,
         122247,
-        10384
+        10472
+      ]
+    },
+    {
+      "id": "958d",
+      "username": "admin",
+      "item_img": [
+        "gardenia_white_bread_-1725994139.png",
+        "lala_fishcracker_-1725990887.png"
+      ],
+      "item_name": [
+        "Gardenia White Bread",
+        "Lala Fishcracker"
+      ],
+      "category": [
+        "Food",
+        "Food"
+      ],
+      "quantity": [
+        1,
+        1
+      ],
+      "unit_price": [
+        58,
+        25
+      ],
+      "subtotal": [
+        58,
+        25
       ]
     }
   ],
