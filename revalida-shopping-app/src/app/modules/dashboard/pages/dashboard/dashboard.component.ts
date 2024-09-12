@@ -8,6 +8,7 @@ import { OrderService } from '../../../admin/services/order.service';
 import { CartService } from '../../services/cart.service';
 import { CartItem } from '../../../models/cart-item.interface';
 import { S3UploadService } from '../../services/s3-upload.service';
+import { AuthService } from '../../../auth/services/auth.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -32,13 +33,24 @@ export class DashboardComponent implements OnInit {
               private fb: FormBuilder,
               private productService: ProductsService,
               private cartService: CartService,
-              private awsS3Service: S3UploadService
+              private awsS3Service: S3UploadService,
+              private authService: AuthService
   ) {
     if(sessionStorage.getItem('username')) {
       this.customerUsername = sessionStorage.getItem('username') as string;
     }
 
     this.isAuthenticated = (sessionStorage.getItem('username'))? true : false;
+    if(this.isAuthenticated) {
+      this.customerUsername = sessionStorage.getItem('username') as string;
+      this.authService.getUserByUsername(this.customerUsername).subscribe(
+        users => {
+          if(users.length > 0) {
+            
+          }
+        }
+      )
+    }
 
     this.products$ = this.productService.getProducts().pipe(
       // map(products => products.filter(product => !product.item_name.includes("Bundle")))

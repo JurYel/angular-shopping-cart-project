@@ -78,7 +78,7 @@ export class MyPurchasesComponent implements OnInit {
       orders => {
         this.ordersLength = orders.length;
         orders.forEach(async (order) => {
-          if(order.item_name.length > 2) {
+          if(order.item_name.length > 1) {
             // this.truncatedOrders.push({
             //   item_name: order.item_name.slice(0, 3).push('...'),
             //   quantity: order.quantity.slice(0, 3).map((qty)),
@@ -92,6 +92,15 @@ export class MyPurchasesComponent implements OnInit {
               // Same for subtotal, convert to strings and append '...'
               subtotal: [...order.subtotal.slice(0, 1).map(sub => sub.toString()), '...']
             });
+          } else {
+            this.truncatedOrders.push({
+               // For string arrays, directly append '...'
+             item_name: order.item_name, 
+             // Convert numbers to strings and append '...'
+            quantity: order.quantity,
+            // Same for subtotal, convert to strings and append '...'
+            subtotal: order.subtotal
+            })
           }
           this.savedImageUrl = await this.awsS3Service.getSignedUrl(`${this.s3Folder}/${order.customer_img}`);
           this.imageUrls.push(await this.awsS3Service.getSignedUrl(`${this.s3Folder}/${order.customer_img}`));
