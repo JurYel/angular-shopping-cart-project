@@ -7,6 +7,7 @@ import { SharedModule } from '../../shared/shared.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CartComponent } from './pages/cart/cart.component';
 import { CheckoutComponent } from './pages/checkout/checkout.component';
+import { MyPurchasesComponent } from './pages/my-purchases/my-purchases.component';
 
 
 @NgModule({
@@ -14,7 +15,8 @@ import { CheckoutComponent } from './pages/checkout/checkout.component';
     DashboardComponent,
     ProfileComponent,
     CartComponent,
-    CheckoutComponent
+    CheckoutComponent,
+    MyPurchasesComponent
   ],
   imports: [
     CommonModule,

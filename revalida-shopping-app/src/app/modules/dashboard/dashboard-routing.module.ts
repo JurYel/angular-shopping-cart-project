@@ -5,6 +5,7 @@ import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { CartComponent } from './pages/cart/cart.component';
 import { CheckoutComponent } from './pages/checkout/checkout.component';
+import { MyPurchasesComponent } from './pages/my-purchases/my-purchases.component';
 
 const routes: Routes = [
   {
@@ -22,6 +23,10 @@ const routes: Routes = [
   {
     path: 'checkout',
     component: CheckoutComponent
+  },
+  {
+    path: 'purchases',
+    component: MyPurchasesComponent
   }
 ]
 
