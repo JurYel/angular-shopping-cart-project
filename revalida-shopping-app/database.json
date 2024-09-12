@@ -37,16 +37,16 @@
       "password": "1234"
     },
     {
-      "id": "16c5",
+      "username": "jason.silver",
       "first_name": "Jason",
       "last_name": "Silver",
-      "username": "jason.silver",
-      "profile_img": "default_profile_img-100.png",
       "email": "jason.silver@gmail.com",
-      "is_admin": false,
-      "deactivated": false,
+      "profile_img": "jason.silver-1726159839.jpeg",
       "mobile_num": "9123456789",
-      "password": "1234"
+      "is_admin": false,
+      "password": "1234",
+      "deactivated": false,
+      "id": "16c5"
     },
     {
       "id": "e4c1",
@@ -268,68 +268,6 @@
         36,
         146.97
       ]
-    },
-    {
-      "id": "e11b",
-      "username": "jason.silver",
-      "item_img": [
-        "assorted_products_gift_bundle_-1725991727.png",
-        "gardenia_wheat_bread_-1725989990.png",
-        "mogu_mogu_250ml_-1725993889.png"
-      ],
-      "item_name": [
-        "Assorted Products Gift Bundle",
-        "Gardenia Wheat Bread",
-        "Mogu Mogu 250ml"
-      ],
-      "category": [
-        "Food",
-        "Food",
-        "Drinks"
-      ],
-      "quantity": [
-        3,
-        3,
-        12
-      ],
-      "unit_price": [
-        799,
-        88,
-        48.99
-      ],
-      "subtotal": [
-        2397,
-        264,
-        244.95000000000002
-      ]
-    },
-    {
-      "id": "e71c",
-      "username": "jason.silver",
-      "item_img": [
-        "assorted_products_gift_bundle_-1725991727.png",
-        "gardenia_wheat_bread_-1725989990.png"
-      ],
-      "item_name": [
-        "Assorted Products Gift Bundle",
-        "Gardenia Wheat Bread"
-      ],
-      "category": [
-        "Food",
-        "Food"
-      ],
-      "quantity": [
-        3,
-        3
-      ],
-      "unit_price": [
-        799,
-        88
-      ],
-      "subtotal": [
-        2397,
-        264
-      ]
     }
   ],
   "orders": [
@@ -480,7 +418,7 @@
     {
       "id": "f1b0",
       "username": "jason.silver",
-      "customer_img": "default_profile_img-100.png",
+      "customer_img": "jason.silver-1726159839.jpeg",
       "customer": "Jason Silver",
       "location": "San Fernando",
       "datetime": 1726120258524,
@@ -512,32 +450,6 @@
         701.8,
         342.93,
         75
-      ],
-      "status": "Pending"
-    },
-    {
-      "id": "8d14",
-      "username": "jason.silver",
-      "customer_img": "default_profile_img-100.png",
-      "customer": "Jason Silver",
-      "location": "San Fernando",
-      "datetime": 1726120390342,
-      "item_name": [
-        "Gardenia Wheat Bread",
-        "Gardenia White Bread"
-      ],
-      "category": [
-        "Food",
-        "Food"
-      ],
-      "payment_mode": "Gcash",
-      "quantity": [
-        4,
-        3
-      ],
-      "subtotal": [
-        352,
-        174
       ],
       "status": "Pending"
     },
@@ -578,6 +490,62 @@
         48.99
       ],
       "status": "Pending"
+    },
+    {
+      "id": "be66",
+      "username": "jason.silver",
+      "customer_img": "jason.silver-1726159839.jpeg",
+      "customer": "Jason Silver",
+      "location": "San Fernando",
+      "datetime": 1726154807006,
+      "item_name": [
+        "Assorted Products Gift Bundle",
+        "Gardenia White Bread",
+        "Gardenia Wheat Bread",
+        "Mogu Mogu 250ml"
+      ],
+      "category": [
+        "Food",
+        "Food",
+        "Food",
+        "Drinks"
+      ],
+      "payment_mode": "PayMaya",
+      "quantity": [
+        3,
+        4,
+        2,
+        12
+      ],
+      "subtotal": [
+        2397,
+        232,
+        176,
+        244.95000000000002
+      ],
+      "status": "Pending"
+    },
+    {
+      "id": "d94a",
+      "username": "jason.silver",
+      "customer_img": "jason.silver-1726159839.jpeg",
+      "customer": "Jason Silver",
+      "location": "Pasig City",
+      "datetime": 1726156578095,
+      "item_name": [
+        "Assorted Products Gift Bundle"
+      ],
+      "category": [
+        "Food"
+      ],
+      "payment_mode": "Gcash",
+      "quantity": [
+        1
+      ],
+      "subtotal": [
+        799
+      ],
+      "status": "Pending"
     }
   ],
   "addresses": [
@@ -599,47 +567,12 @@
       "email": "jason.silver@gmail.com",
       "mobile_num": "9123456789",
       "country": "Philippines",
-      "city": "San Fernando",
-      "province": "Pampanga",
-      "zip_code": "2013",
+      "city": "Pasig City",
+      "province": "Pasig",
+      "zip_code": "2001",
       "username": "jason.silver",
       "id": "f84e"
     }
   ],
-  "temp_orders": [
-    {
-      "id": "be66",
-      "username": "jason.silver",
-      "customer_img": "default_profile_img-100.png",
-      "customer": "Jason Silver",
-      "location": "",
-      "datetime": 1726153947432,
-      "item_name": [
-        "Assorted Products Gift Bundle",
-        "Gardenia White Bread",
-        "Gardenia Wheat Bread",
-        "Mogu Mogu 250ml"
-      ],
-      "category": [
-        "Food",
-        "Food",
-        "Food",
-        "Drinks"
-      ],
-      "payment_mode": "COD",
-      "quantity": [
-        3,
-        4,
-        2,
-        12
-      ],
-      "subtotal": [
-        2397,
-        232,
-        176,
-        244.95000000000002
-      ],
-      "status": "Pending"
-    }
-  ]
+  "temp_orders": []
 }

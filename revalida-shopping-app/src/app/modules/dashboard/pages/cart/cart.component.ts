@@ -419,8 +419,9 @@ export class CartComponent implements OnInit {
       }
     
       // this.retrieveCustomerCart(this.customerUsername);
-      this.updateCustomerGroceryCart(this.groceryCart, null, false);
+      // this.updateCustomerGroceryCart(this.groceryCart, null, false);
       console.log("cart onCheckout: ", this.groceryCart);
+      console.log("customer image: ", this.customerImage);
       const customerOrder: any = {
         username: this.customerUsername,
         customer_img: this.customerImage,

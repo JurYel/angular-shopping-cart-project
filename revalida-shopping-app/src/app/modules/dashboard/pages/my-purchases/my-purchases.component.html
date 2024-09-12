@@ -7,7 +7,7 @@
           <div class="side-menu">
             <div class="small-profile text-center mb-4">
               <img
-                src="{{ savedImageUrl }}"
+                src="{{ (savedImageUrl)? savedImageUrl : profileDefaultImg }}"
                 class="rounded-circle"
                 alt="User Avatar"
               />

@@ -92,9 +92,10 @@ export class ProfileComponent implements OnInit, AfterViewChecked {
           this.profileForm.patchValue({ mobile_num: response[0].mobile_num });
 
           const imageSignedUrl = await this.awsS3Service.getSignedUrl(`${this.s3Folder}/${response[0].profile_img}`);
-          this.profileImgName = (response[0].profile_img) ? imageSignedUrl : 'default_profile_img-100.png';
+          this.profileImgName = (response[0].profile_img) ? response[0].profile_img : 'default_profile_img-100.png';
           this.imageUrl = imageSignedUrl;
           this.savedImageUrl = imageSignedUrl;
+          console.log(response[0].profile_img);
           // this.imageUrl = `${this.awsS3Service.cloudfrontDomain}/${this.s3Folder}/${response[0].profile_img}`;
           // this.savedImageUrl = `${this.awsS3Service.cloudfrontDomain}/${this.s3Folder}/${response[0].profile_img}`;
           this.isDefaultImg = this.profileImgName.includes("default");
@@ -211,11 +212,14 @@ export class ProfileComponent implements OnInit, AfterViewChecked {
   };
 
   updateCustomerOrderImage = (username: string, newImgName: string) => {
-    this.orderService.getOrdersByUsername(username as string).subscribe(
+    this.orderService.getOrdersByUsername(username as string).pipe(
+      map(orders => orders.filter(order => order.username.trim().toLowerCase() === username.toLowerCase().trim()))
+    ).subscribe(
       orders => {
         if(orders.length > 0) {
           orders.forEach((order) => {
             order.customer_img = newImgName;
+            console.log(order.customer_img);
             
             this.orderService.updateOrder(order).subscribe(
               response => {
@@ -277,13 +281,13 @@ export class ProfileComponent implements OnInit, AfterViewChecked {
                 console.log("Updated user: ", response);
                 let objectsList: string[] = [];
                 this.savedImageUrl = this.imageUrl;
-                this.updateCustomerOrderImage(postData['username'], this.savedImageUrl);
+                this.updateCustomerOrderImage(postData['username'], postData['profile_img']);
 
                 (await this.awsS3Service.listObjectsWithName(this.s3Folder)).pipe(
                   map(objects => objects?.Contents?.filter(
                             object => 
                               object.Key?.includes(postData['username']) && 
-                              !object.Key?.includes(postData['profile_img'].split('.')[0].split('-')[1]) && 
+                              !object.Key?.includes(postData['profile_img'].split(postData['username'])[1].split('-')[1].split('.')[0]) && 
                               !object.Key?.includes('default')))
                 ).subscribe(
                   async (objects: any) => {

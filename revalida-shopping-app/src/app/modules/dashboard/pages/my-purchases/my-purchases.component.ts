@@ -59,7 +59,9 @@ export class MyPurchasesComponent implements OnInit {
 
     this.customerUsername = sessionStorage.getItem('username') as string;
     this.customerName = `${sessionStorage.getItem('first_name')} ${sessionStorage.getItem('last_name')}`;
-    this.myOrders$ = this.orderService.getOrdersByUsername(this.customerUsername);
+    this.myOrders$ = this.orderService.getOrdersByUsername(this.customerUsername.trim()).pipe(
+      map(orders => orders.filter(order => order.username.toLowerCase().trim() === this.customerUsername.toLowerCase().trim()))
+    );
     // this.cartItemCount = parseInt(sessionStorage.getItem('cartItemCount') as string);
 
     this.cartService.getCartItems(this.customerUsername).subscribe(
@@ -74,9 +76,14 @@ export class MyPurchasesComponent implements OnInit {
     this.profileDefaultImg = `${this.s3Folder}/default_profile_img-100.png`;
     this.savedImageUrl = `${this.s3Folder}/default_profile_img-100.png`;
 
-    this.myOrders$.subscribe(
+    this.myOrders$.pipe(
+      map(orders => orders.filter(order => order.username.trim().toLowerCase() === this.customerUsername.toLowerCase().trim()))
+    ).subscribe(
       orders => {
         this.ordersLength = orders.length;
+        console.log(orders)
+        this.pageSize = (this.ordersLength > 5)? 5 : this.ordersLength;
+        this.totalLength = this.ordersLength;
         orders.forEach(async (order) => {
           if(order.item_name.length > 1) {
             // this.truncatedOrders.push({
@@ -100,10 +107,12 @@ export class MyPurchasesComponent implements OnInit {
             quantity: order.quantity,
             // Same for subtotal, convert to strings and append '...'
             subtotal: order.subtotal
-            })
+            });
           }
+
           this.savedImageUrl = await this.awsS3Service.getSignedUrl(`${this.s3Folder}/${order.customer_img}`);
           this.imageUrls.push(await this.awsS3Service.getSignedUrl(`${this.s3Folder}/${order.customer_img}`));
+          console.log(order.customer_img);
         })
       }
     );
@@ -146,9 +155,15 @@ export class MyPurchasesComponent implements OnInit {
     this.filterStatus(this.selectedStatus);
 
     // calculate total number of pages based on the data
-    this.myOrders$.subscribe(orders => {
+    this.myOrders$.pipe(
+      map(orders => orders.filter(order => order.username.toLowerCase().trim() === this.customerUsername.toLowerCase().trim()))
+    ).subscribe(orders => {
       this.totalLength = orders.length;
       this.updatePagination(orders);
+
+      orders.forEach(async (order) => {
+        this.savedImageUrl = await this.awsS3Service.getSignedUrl(`${this.s3Folder}/${order.customer_img}`);
+      });
     });
 
     // Initially show the first page of data
@@ -168,7 +183,7 @@ export class MyPurchasesComponent implements OnInit {
    updatePagination(orders: Order[]){
     this.totalPages = Math.ceil(orders.length / this.pageSize);
     this.generatePageNumbers();
-    this.paginateOrders();
+    // this.paginateOrders();
   }
 
   // Method to paginate orders based on the current page
@@ -176,12 +191,16 @@ export class MyPurchasesComponent implements OnInit {
     this.paginatedOrders$ = this.myOrders$
       .pipe(
         map(orders => {
+          const myOrders = orders.filter(order => order.username.toLowerCase().trim() === this.customerUsername.toLowerCase().trim());
           const startIndex = (this.currentPage - 1) * this.pageSize;
           const endIndex = Math.min(startIndex + this.pageSize, orders.length); // Ensure we dont exeed the total length of the orders
           this.currentPageLength += endIndex - this.currentPageLength;
-          return orders.slice(startIndex, endIndex);
+
+          console.log("paginatedOrders: ", myOrders.slice(startIndex, endIndex));
+          return myOrders.slice(startIndex, endIndex);
         })
       );
+
   }
 
    // Method to go to next page
