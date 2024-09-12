@@ -223,7 +223,7 @@ export class CartComponent implements OnInit {
     console.log((this.checkoutForm.get('quantity') as FormArray).length)
   }
 
-  retrieveCustomerCart = (username: string) => {
+  retrieveCustomerCart = (username: string, index: number | null = null) => {
     this.cartService
       .getCartItems(username as string)
       .subscribe(async (response) => {
@@ -243,8 +243,17 @@ export class CartComponent implements OnInit {
             );
           });
 
-          for (let i = 0; i < response[0].quantity.length; i++) {
-            this.quantities.at(i).setValue(response[0].quantity[i]);
+          console.log("quantities length (retrieved): ", index);
+          if(index){
+            for (let i = 0; i < response[0].quantity.length; i++) {
+              if(i !== index){
+                this.quantities.at(i).setValue(response[0].quantity[i]);
+              }
+            }
+          } else {
+            for (let i = 0; i < response[0].quantity.length; i++) {
+              this.quantities.at(i).setValue(response[0].quantity[i]);
+            }
           }
         }
       });
@@ -268,9 +277,9 @@ export class CartComponent implements OnInit {
         // this.searchCart();
   
         // this.retrieveCustomerCart(this.customerUsername);
-        if(this.filteredItems.item_name.length < this.groceryCartLength) {
-          this.searchCart();
-        }
+        // if(this.filteredItems.item_name.length < this.groceryCartLength) {
+        //   this.searchCart();
+        // }
       }
     } else {
       this.openPromptModal.nativeElement.click();
@@ -306,9 +315,9 @@ export class CartComponent implements OnInit {
           // this.searchCart();
 
           // this.retrieveCustomerCart(this.customerUsername);
-          if(this.filteredItems.item_name.length < this.groceryCartLength) {
-            this.searchCart();
-          }
+          // if(this.filteredItems.item_name.length < this.groceryCartLength) {
+          //   this.searchCart();
+          // }
         }
       });
     } else {
@@ -341,10 +350,19 @@ export class CartComponent implements OnInit {
 
       this.updateCustomerGroceryCart(this.groceryCart, removedItem, true);
       this.imageUrls.splice(index, 1);
+      console.log("quantities length: ", this.quantities.length);
       this.quantities.removeAt(index);
+      console.log("quantities length: ", this.quantities.length);
 
-      this.retrieveCustomerCart(this.customerUsername);
-      this.searchCart();
+      // this.quantities.clear();
+      // this.populateQuantities(this.filteredItems.quantity);
+      // console.log("quantities: ", this.quantities.length)
+
+      // refresh grocery cart and reinitialized form quantities
+      this.retrieveCustomerCart(this.customerUsername, index);
+
+      // this.retrieveCustomerCart(this.customerUsername);
+      // this.searchCart();
     } else {
       this.openPromptModal.nativeElement.click();
     }
@@ -354,6 +372,7 @@ export class CartComponent implements OnInit {
     
       this.cartService.updateCustomerCart(cart as CartItem).subscribe(
         response => {
+          console.log("Updated/Removed cart item: ", response);
           if(notify){
             this.messageService.add({ severity:'success', summary: 'Success', detail: `${itemRemoved} has been removed from your cart.` });
           }
@@ -399,7 +418,9 @@ export class CartComponent implements OnInit {
         return;
       }
     
-      this.retrieveCustomerCart(this.customerUsername);
+      // this.retrieveCustomerCart(this.customerUsername);
+      this.updateCustomerGroceryCart(this.groceryCart, null, false);
+      console.log("cart onCheckout: ", this.groceryCart);
       const customerOrder: any = {
         username: this.customerUsername,
         customer_img: this.customerImage,

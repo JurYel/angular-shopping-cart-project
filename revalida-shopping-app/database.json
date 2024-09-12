@@ -222,6 +222,114 @@
         122247,
         10472
       ]
+    },
+    {
+      "id": "e028",
+      "username": "admin",
+      "item_img": [
+        "assorted_products_gift_bundle_-1725991727.png",
+        "gardenia_wheat_bread_-1725989990.png",
+        "gardenia_white_bread_-1725994139.png",
+        "itlog_-1725990887.jpeg",
+        "mogu_mogu_250ml_-1725993889.png"
+      ],
+      "item_name": [
+        "Assorted Products Gift Bundle",
+        "Gardenia Wheat Bread",
+        "Gardenia White Bread",
+        "Itlog",
+        "Mogu Mogu 250ml"
+      ],
+      "category": [
+        "Food",
+        "Food",
+        "Food",
+        "Food",
+        "Drinks"
+      ],
+      "quantity": [
+        4,
+        6,
+        3,
+        3,
+        3
+      ],
+      "unit_price": [
+        799,
+        88,
+        58,
+        12,
+        48.99
+      ],
+      "subtotal": [
+        3196,
+        528,
+        174,
+        36,
+        146.97
+      ]
+    },
+    {
+      "id": "e11b",
+      "username": "jason.silver",
+      "item_img": [
+        "assorted_products_gift_bundle_-1725991727.png",
+        "gardenia_wheat_bread_-1725989990.png",
+        "mogu_mogu_250ml_-1725993889.png"
+      ],
+      "item_name": [
+        "Assorted Products Gift Bundle",
+        "Gardenia Wheat Bread",
+        "Mogu Mogu 250ml"
+      ],
+      "category": [
+        "Food",
+        "Food",
+        "Drinks"
+      ],
+      "quantity": [
+        3,
+        3,
+        12
+      ],
+      "unit_price": [
+        799,
+        88,
+        48.99
+      ],
+      "subtotal": [
+        2397,
+        264,
+        244.95000000000002
+      ]
+    },
+    {
+      "id": "e71c",
+      "username": "jason.silver",
+      "item_img": [
+        "assorted_products_gift_bundle_-1725991727.png",
+        "gardenia_wheat_bread_-1725989990.png"
+      ],
+      "item_name": [
+        "Assorted Products Gift Bundle",
+        "Gardenia Wheat Bread"
+      ],
+      "category": [
+        "Food",
+        "Food"
+      ],
+      "quantity": [
+        3,
+        3
+      ],
+      "unit_price": [
+        799,
+        88
+      ],
+      "subtotal": [
+        2397,
+        264
+      ]
     }
   ],
   "orders": [
@@ -432,6 +540,44 @@
         174
       ],
       "status": "Pending"
+    },
+    {
+      "id": "4b94",
+      "username": "admin",
+      "customer_img": "admin-1725983987.png",
+      "customer": "Juriel Botoy",
+      "location": "Malolos City",
+      "datetime": 1726151390244,
+      "item_name": [
+        "Assorted Products Gift Bundle",
+        "Gardenia White Bread",
+        "Lala Fishcracker",
+        "Oreo Ice Cream 450ml",
+        "Mogu Mogu 250ml"
+      ],
+      "category": [
+        "Food",
+        "Food",
+        "Food",
+        "Food",
+        "Drinks"
+      ],
+      "payment_mode": "COD",
+      "quantity": [
+        4,
+        3,
+        3,
+        2,
+        1
+      ],
+      "subtotal": [
+        3196,
+        174,
+        75,
+        701.8,
+        48.99
+      ],
+      "status": "Pending"
     }
   ],
   "addresses": [
@@ -441,9 +587,9 @@
       "email": "juriel.botoy182@gmail.com",
       "mobile_num": "9155671750",
       "country": "Philippines",
-      "city": "Imus",
-      "province": "Cavite",
-      "zip_code": "2001",
+      "city": "Malolos City",
+      "province": "Bulacan",
+      "zip_code": "2012",
       "username": "admin",
       "id": "d588"
     },
@@ -460,5 +606,40 @@
       "id": "f84e"
     }
   ],
-  "temp_orders": []
+  "temp_orders": [
+    {
+      "id": "be66",
+      "username": "jason.silver",
+      "customer_img": "default_profile_img-100.png",
+      "customer": "Jason Silver",
+      "location": "",
+      "datetime": 1726153947432,
+      "item_name": [
+        "Assorted Products Gift Bundle",
+        "Gardenia White Bread",
+        "Gardenia Wheat Bread",
+        "Mogu Mogu 250ml"
+      ],
+      "category": [
+        "Food",
+        "Food",
+        "Food",
+        "Drinks"
+      ],
+      "payment_mode": "COD",
+      "quantity": [
+        3,
+        4,
+        2,
+        12
+      ],
+      "subtotal": [
+        2397,
+        232,
+        176,
+        244.95000000000002
+      ],
+      "status": "Pending"
+    }
+  ]
 }
