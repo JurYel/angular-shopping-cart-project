@@ -9,7 +9,7 @@
       "mobile_num": "9155671750",
       "is_admin": true,
       "password": "admin123",
-      "deactivated": true,
+      "deactivated": false,
       "id": "7f82"
     },
     {
@@ -368,6 +368,70 @@
         36
       ],
       "status": "Pending"
+    },
+    {
+      "id": "f1b0",
+      "username": "jason.silver",
+      "customer_img": "default_profile_img-100.png",
+      "customer": "Jason Silver",
+      "location": "San Fernando",
+      "datetime": 1726120258524,
+      "item_name": [
+        "Gardenia Wheat Bread",
+        "Itlog",
+        "Oreo Ice Cream 450ml",
+        "Mogu Mogu 250ml",
+        "Lala Fishcracker"
+      ],
+      "category": [
+        "Food",
+        "Food",
+        "Food",
+        "Drinks",
+        "Food"
+      ],
+      "payment_mode": "COD",
+      "quantity": [
+        4,
+        1,
+        2,
+        7,
+        3
+      ],
+      "subtotal": [
+        352,
+        12,
+        701.8,
+        342.93,
+        75
+      ],
+      "status": "Pending"
+    },
+    {
+      "id": "8d14",
+      "username": "jason.silver",
+      "customer_img": "default_profile_img-100.png",
+      "customer": "Jason Silver",
+      "location": "San Fernando",
+      "datetime": 1726120390342,
+      "item_name": [
+        "Gardenia Wheat Bread",
+        "Gardenia White Bread"
+      ],
+      "category": [
+        "Food",
+        "Food"
+      ],
+      "payment_mode": "Gcash",
+      "quantity": [
+        4,
+        3
+      ],
+      "subtotal": [
+        352,
+        174
+      ],
+      "status": "Pending"
     }
   ],
   "addresses": [
@@ -382,6 +446,18 @@
       "zip_code": "2001",
       "username": "admin",
       "id": "d588"
+    },
+    {
+      "first_name": "Jason",
+      "last_name": "Silver",
+      "email": "jason.silver@gmail.com",
+      "mobile_num": "9123456789",
+      "country": "Philippines",
+      "city": "San Fernando",
+      "province": "Pampanga",
+      "zip_code": "2013",
+      "username": "jason.silver",
+      "id": "f84e"
     }
   ],
   "temp_orders": []

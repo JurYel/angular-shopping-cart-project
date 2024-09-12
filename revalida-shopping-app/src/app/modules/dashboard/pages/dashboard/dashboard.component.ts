@@ -49,6 +49,8 @@ export class DashboardComponent implements OnInit {
         users => {
           if(users.length > 0) {
             this.isDeactivated = users[0].deactivated;
+            console.log(this.isDeactivated);
+
             if(this.isDeactivated) {
               this.openPromptModal.nativeElement.click();
             }
@@ -56,6 +58,8 @@ export class DashboardComponent implements OnInit {
         }
       )
     }
+
+    console.log(this.isDeactivated);
 
     this.products$ = this.productService.getProducts().pipe(
       // map(products => products.filter(product => !product.item_name.includes("Bundle")))
