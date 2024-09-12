@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { map, Observable } from 'rxjs';
 import { CartItem } from '../../../models/cart-item.interface';
 import { S3UploadService } from '../../services/s3-upload.service';
@@ -18,18 +18,23 @@ import { OrderService } from '../../../admin/services/order.service';
 })
 export class CartComponent implements OnInit {
 
+  @ViewChild('openPromptModal') openPromptModal !: ElementRef;
+  
   // Select All Flag
   selectAll: boolean = false;
   submitted: boolean = false;
   cartItems$: Observable<CartItem[]>;
   groceryCart: CartItem;
   groceryCartLength: number = 0;
-  customerUsername: string;
+  customerUsername: string = ''; 
   checkoutForm: FormGroup;
   searchQuery : string = '';
   filteredItems: CartItem;
   fulfillmentMethods: string[] = [];
   customerImage: string = '';
+
+  isAuthenticated: boolean = false;
+  isDeactivated: boolean = false;
 
   // s3 variables
   timestamp: number = Date.now();
@@ -46,8 +51,24 @@ export class CartComponent implements OnInit {
     private orderService: OrderService,
     private router: Router
   ) {
-    this.customerUsername = sessionStorage.getItem('username') as string;
-    
+    if(sessionStorage.getItem('username')) {
+      this.customerUsername = sessionStorage.getItem('username') as string;
+    }
+
+    this.isAuthenticated = (sessionStorage.getItem('username'))? true : false;
+    if(this.isAuthenticated) {
+      this.customerUsername = sessionStorage.getItem('username') as string;
+      this.authService.getUserByUsername(this.customerUsername).subscribe(
+        users => {
+          if(users.length > 0) {
+            this.isDeactivated = users[0].deactivated;
+            if(this.isDeactivated) {
+              // this.openPromptModal.nativeElement.click();
+            }
+          }
+        }
+      )
+    }    
     this.cartService.getCartItems(this.customerUsername).subscribe(
       items => {
         if(items.length > 0) {
@@ -232,30 +253,35 @@ export class CartComponent implements OnInit {
   // Decrease quantity
   decreaseQuantity(index: number) {
     const control = this.quantities.at(index);
-    if (control.value > 1) {
-      control.setValue(control.value - 1);
-      this.filteredItems.quantity[index] -= 1;
-      this.filteredItems.subtotal[index] = control.value * this.groceryCart.unit_price[index];
-
-      // Update grocertCart object and PUT in db
-      const itemIndex = this.groceryCart.item_name.indexOf(this.filteredItems.item_name[index]);
-      console.log("cart: ", this.groceryCart.item_name[itemIndex]);
-      this.groceryCart.quantity[itemIndex] -= 1;
-      this.groceryCart.subtotal[itemIndex] = control.value * this.groceryCart.unit_price[itemIndex];
-      this.updateCustomerGroceryCart(this.groceryCart, null, false);  
-      // this.searchCart();
-
-      // this.retrieveCustomerCart(this.customerUsername);
-      if(this.filteredItems.item_name.length < this.groceryCartLength) {
-        this.searchCart();
+    if(!this.isDeactivated) {
+      if (control.value > 1) {
+        control.setValue(control.value - 1);
+        this.filteredItems.quantity[index] -= 1;
+        this.filteredItems.subtotal[index] = control.value * this.groceryCart.unit_price[index];
+  
+        // Update grocertCart object and PUT in db
+        const itemIndex = this.groceryCart.item_name.indexOf(this.filteredItems.item_name[index]);
+        console.log("cart: ", this.groceryCart.item_name[itemIndex]);
+        this.groceryCart.quantity[itemIndex] -= 1;
+        this.groceryCart.subtotal[itemIndex] = control.value * this.groceryCart.unit_price[itemIndex];
+        this.updateCustomerGroceryCart(this.groceryCart, null, false);  
+        // this.searchCart();
+  
+        // this.retrieveCustomerCart(this.customerUsername);
+        if(this.filteredItems.item_name.length < this.groceryCartLength) {
+          this.searchCart();
+        }
       }
+    } else {
+      this.openPromptModal.nativeElement.click();
     }
   }
 
   // Increase quantity
   increaseQuantity(index: number) {
     const control = this.quantities.at(index);
-    this.productService
+    if(!this.isDeactivated) {
+      this.productService
       .getProducts()
       .pipe(
         map((products) => {
@@ -285,35 +311,43 @@ export class CartComponent implements OnInit {
           }
         }
       });
+    } else {
+      this.openPromptModal.nativeElement.click();
+    }
+    
   }
 
   // Remove item from cart
   removeItem(index: number) {
     
-    const removedItem = this.filteredItems.item_name[index];
-    this.filteredItems.item_img.splice(index, 1);
-    this.filteredItems.item_name.splice(index, 1);
-    this.filteredItems.category.splice(index, 1);
-    this.filteredItems.quantity.splice(index, 1);
-    this.filteredItems.unit_price.splice(index, 1);
-    this.filteredItems.subtotal.splice(index, 1);
+    if(!this.isDeactivated){
+      const removedItem = this.filteredItems.item_name[index];
+      this.filteredItems.item_img.splice(index, 1);
+      this.filteredItems.item_name.splice(index, 1);
+      this.filteredItems.category.splice(index, 1);
+      this.filteredItems.quantity.splice(index, 1);
+      this.filteredItems.unit_price.splice(index, 1);
+      this.filteredItems.subtotal.splice(index, 1);
 
-    // Update grocertCart object and PUT in db
-    const itemIndex = this.groceryCart.item_name.indexOf(removedItem);
-    console.log("cart: ", this.groceryCart.item_name[itemIndex]);
-    this.groceryCart.item_img.splice(itemIndex, 1);
-    this.groceryCart.item_name.splice(itemIndex, 1);
-    this.groceryCart.category.splice(itemIndex, 1);
-    this.groceryCart.quantity.splice(itemIndex, 1);
-    this.groceryCart.unit_price.splice(itemIndex, 1);
-    this.groceryCart.subtotal.splice(itemIndex, 1);
+      // Update grocertCart object and PUT in db
+      const itemIndex = this.groceryCart.item_name.indexOf(removedItem);
+      console.log("cart: ", this.groceryCart.item_name[itemIndex]);
+      this.groceryCart.item_img.splice(itemIndex, 1);
+      this.groceryCart.item_name.splice(itemIndex, 1);
+      this.groceryCart.category.splice(itemIndex, 1);
+      this.groceryCart.quantity.splice(itemIndex, 1);
+      this.groceryCart.unit_price.splice(itemIndex, 1);
+      this.groceryCart.subtotal.splice(itemIndex, 1);
 
-    this.updateCustomerGroceryCart(this.groceryCart, removedItem, true);
-    this.imageUrls.splice(index, 1);
-    this.quantities.removeAt(index);
+      this.updateCustomerGroceryCart(this.groceryCart, removedItem, true);
+      this.imageUrls.splice(index, 1);
+      this.quantities.removeAt(index);
 
-    this.retrieveCustomerCart(this.customerUsername);
-    this.searchCart();
+      this.retrieveCustomerCart(this.customerUsername);
+      this.searchCart();
+    } else {
+      this.openPromptModal.nativeElement.click();
+    }
   }
 
   updateCustomerGroceryCart = (cart: CartItem, itemRemoved: string | null, notify: boolean = false) => {
@@ -352,50 +386,62 @@ export class CartComponent implements OnInit {
     //   paymentMethod = "COD";
     // }
     // console.log(paymentMethod)
+    if(!this.isDeactivated) {
 
-    if(this.groceryCartLength < 1) {
-      this.messageService.add({ severity:'error', summary: 'Error', detail: 'No items in your cart to checkout' });
-      return;
-    }
+      if(this.groceryCartLength < 1) {
+        this.messageService.add({ severity:'error', summary: 'Error', detail: 'No items in your cart to checkout' });
+        return;
+      }
 
-    if(this.checkoutForm.invalid || 
-      fulfillmentMethod.startsWith('Select')
-    ) {
-      return;
-    }
+      if(this.checkoutForm.invalid || 
+        fulfillmentMethod.startsWith('Select')
+      ) {
+        return;
+      }
+    
+      this.retrieveCustomerCart(this.customerUsername);
+      const customerOrder: any = {
+        username: this.customerUsername,
+        customer_img: this.customerImage,
+        customer: `${sessionStorage.getItem('first_name')} ${sessionStorage.getItem('last_name')}`,
+        location: '',
+        datetime: Date.now(),
+        item_name: this.groceryCart.item_name,
+        category: this.groceryCart.category,
+        payment_mode: "COD",
+        quantity: this.groceryCart.quantity,
+        subtotal: this.groceryCart.subtotal,
+        status: 'Pending'
+      }
+    
+      console.log("Order: ", customerOrder);
 
-    this.retrieveCustomerCart(this.customerUsername);
-    const customerOrder: any = {
-      username: this.customerUsername,
-      customer_img: this.customerImage,
-      customer: `${sessionStorage.getItem('first_name')} ${sessionStorage.getItem('last_name')}`,
-      location: '',
-      datetime: Date.now(),
-      item_name: this.groceryCart.item_name,
-      category: this.groceryCart.category,
-      payment_mode: "COD",
-      quantity: this.groceryCart.quantity,
-      subtotal: this.groceryCart.subtotal,
-      status: 'Pending'
-    }
-  
-    console.log("Order: ", customerOrder);
-
-    this.orderService.getTempOrders().subscribe(
-      orders => {
-        if(orders.length > 0) {
-          if(orders.some(order => order.username.toLowerCase() === this.customerUsername.toLowerCase())){
-            const order = orders.find(order => order.username.toLowerCase() === this.customerUsername.toLowerCase());
-  
-            this.orderService.updateTempOrder(order as Order).subscribe(
-              response => {
-                console.log("Order has been updated: ", response);
-                this.router.navigate(['/home/checkout']);
-              },
-              error => {
-                console.log("Failed to update order: ", error);
-              }
-            )
+      this.orderService.getTempOrders().subscribe(
+        orders => {
+          if(orders.length > 0) {
+            if(orders.some(order => order.username.toLowerCase() === this.customerUsername.toLowerCase())){
+              const order = orders.find(order => order.username.toLowerCase() === this.customerUsername.toLowerCase());
+    
+              this.orderService.updateTempOrder(order as Order).subscribe(
+                response => {
+                  console.log("Order has been updated: ", response);
+                  this.router.navigate(['/home/checkout']);
+                },
+                error => {
+                  console.log("Failed to update order: ", error);
+                }
+              )
+            } else {
+              this.orderService.createTempOrder(customerOrder as Order).subscribe(
+                response => {
+                  console.log("Order has been created: ", response);
+                  this.router.navigate(['/home/checkout']);
+                },
+                error => {
+                  console.log("Failed to created order: ", error);
+                } 
+              )
+            }
           } else {
             this.orderService.createTempOrder(customerOrder as Order).subscribe(
               response => {
@@ -407,20 +453,14 @@ export class CartComponent implements OnInit {
               } 
             )
           }
-        } else {
-          this.orderService.createTempOrder(customerOrder as Order).subscribe(
-            response => {
-              console.log("Order has been created: ", response);
-              this.router.navigate(['/home/checkout']);
-            },
-            error => {
-              console.log("Failed to created order: ", error);
-            } 
-          )
+          
         }
-        
-      }
-    )
+      )
+    } else {
+      this.openPromptModal.nativeElement.click();
+    }
+
+    
 
     // this.orderService.checkIfTempOrderExists(this.customerUsername).subscribe(
     //   exists => {

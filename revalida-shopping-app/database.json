@@ -322,6 +322,52 @@
         25
       ],
       "status": "Pending"
+    },
+    {
+      "id": "3907",
+      "username": "admin",
+      "customer_img": "admin-1725983987.png",
+      "customer": "Juriel Botoy",
+      "location": "Imus",
+      "datetime": 1726116530761,
+      "item_name": [
+        "Assorted Products Gift Bundle",
+        "Gardenia White Bread",
+        "Gardenia Wheat Bread",
+        "Lala Fishcracker",
+        "Fit N' Right",
+        "Oreo Ice Cream 450ml",
+        "Itlog"
+      ],
+      "category": [
+        "Food",
+        "Food",
+        "Food",
+        "Food",
+        "Drinks",
+        "Food",
+        "Food"
+      ],
+      "payment_mode": "COD",
+      "quantity": [
+        5,
+        2,
+        4,
+        6,
+        1,
+        1,
+        3
+      ],
+      "subtotal": [
+        3995,
+        116,
+        352,
+        150,
+        23,
+        350.9,
+        36
+      ],
+      "status": "Pending"
     }
   ],
   "addresses": [
@@ -331,9 +377,9 @@
       "email": "juriel.botoy182@gmail.com",
       "mobile_num": "9155671750",
       "country": "Philippines",
-      "city": "San Fernando City",
-      "province": "Pampanga",
-      "zip_code": "2010",
+      "city": "Imus",
+      "province": "Cavite",
+      "zip_code": "2001",
       "username": "admin",
       "id": "d588"
     }

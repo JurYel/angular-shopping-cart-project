@@ -92,7 +92,7 @@
           class="shop-item row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-flex-start"
           
         > 
-        
+          <input #openPromptModal type="hidden" data-bs-toggle="modal" data-bs-target="#promptModal">
           <ng-container *ngFor="let product of products$ | async; let i = index">
             <div class="item col mb-5" *ngIf="!product.item_name.includes('Bundle')">
               <div class="card h-100">
@@ -153,6 +153,44 @@
         </div>
       </div>
     </section>
+    <!-- Prompt Modal -->
+    <div id="promptModal" class="modal fade">
+      <div class="modal-dialog modal-confirm">
+        <div class="modal-content">
+          <div class="modal-header">
+            <div class="icon-box">
+              <i class="material-icons">&#xE5CD;</i>
+            </div>				
+            <h4 class="modal-title w-100">Sorry!</h4>	
+          </div>
+          <div class="modal-body">
+            <p class="text-center">Your account has been deactivated, &nbsp;you are unable to add items to cart.</p>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-danger w-100" data-bs-dismiss="modal">Understood</button>
+          </div>
+        </div>
+      </div>
+    </div>    
+    <!-- Deactivate Selected Modal HTML -->
+    <div id="deactivateSelectedUserModal" class="modal fade">
+      <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">						
+              <h4 class="modal-title">Deactivate User</h4>
+              <button #closeModalDeactChecked type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+            </div>
+            <div class="modal-body">					
+              <p>Are you sure you want to deactivate these users?</p>
+              <p class="text-warning"><small>This action cannot be undone.</small></p>
+            </div>
+            <div class="modal-footer">
+              <input type="button" class="btn btn-default" data-bs-dismiss="modal" value="Cancel">
+              <input type="button" class="btn btn-danger" value="Understood">
+            </div>
+        </div>
+      </div>
+    </div>
     <!-- Footer-->
     <app-footer></app-footer>
   </body>

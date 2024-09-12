@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { ProductsService } from '../../../admin/services/products.service';
 import { map, Observable } from 'rxjs';
@@ -17,6 +17,7 @@ import { AuthService } from '../../../auth/services/auth.service';
 })
 export class DashboardComponent implements OnInit {
 
+  @ViewChild('openPromptModal') openPromptModal !: ElementRef;
   products$: Observable<Product[]>;
   productBundle!: Product;
   productBundleIndex!: number;
@@ -28,6 +29,7 @@ export class DashboardComponent implements OnInit {
   imageUrls: string[] = [];
   itemImageName: string;
   isAuthenticated: boolean = false;
+  isDeactivated: boolean = false;
 
   constructor(private router: Router,
               private fb: FormBuilder,
@@ -46,7 +48,10 @@ export class DashboardComponent implements OnInit {
       this.authService.getUserByUsername(this.customerUsername).subscribe(
         users => {
           if(users.length > 0) {
-            
+            this.isDeactivated = users[0].deactivated;
+            if(this.isDeactivated) {
+              this.openPromptModal.nativeElement.click();
+            }
           }
         }
       )
@@ -210,86 +215,91 @@ export class DashboardComponent implements OnInit {
     if(!sessionStorage.getItem('username')){
       this.router.navigate(['/auth/login']);
     }
-
-    if(parseInt(this.quantities.at(index).value)) {
-      this.products$.pipe(
-        map(products => products[index])
-      ).subscribe(
-        response => {
-          console.log("product image: ", response.item_img);
-          const quantityInput = parseInt(this.quantities.at(index).value);
-          console.log("quantity input: ", quantityInput)
-          // const itemIndex = this.groceryCart?.item_name.findIndex((item: string) => item.includes(response.item_name));
-          
-          // Check if customer/user has previously ordered
-          if(this.groceryCart.id){
-            // If so, check if such item added is already in his cart
-            const itemIndex = this.groceryCart.item_name.indexOf(response.item_name);
-            console.log(itemIndex);
+    
+    if(!this.isDeactivated){
+      if(parseInt(this.quantities.at(index).value)) {
+        this.products$.pipe(
+          map(products => products[index])
+        ).subscribe(
+          response => {
+            console.log("product image: ", response.item_img);
+            const quantityInput = parseInt(this.quantities.at(index).value);
+            console.log("quantity input: ", quantityInput)
+            // const itemIndex = this.groceryCart?.item_name.findIndex((item: string) => item.includes(response.item_name));
             
-            // If yes, just increment the quantity and update the subtotal amount of the order
-            if(itemIndex !== -1){
-              // const itemIndex = this.groceryCart?.item_name.findIndex((item: string) => item === response.item_name);
-              this.groceryCart.quantity[itemIndex] += quantityInput;
-              this.groceryCart.subtotal[itemIndex] = this.groceryCart.quantity[itemIndex] * this.groceryCart.unit_price[itemIndex];
-
-              this.cartService.updateCustomerCart(this.groceryCart as CartItem).subscribe(
-                response => {
-                  console.log("Updated customer cart: ", response)
-                },
-                error => {
-                  console.error("Error updating customer cart: ", error);
-                }
-              )
-            } 
-            // If not exists, push the new item to the customer's cart
-            else {
-              console.log("inside here: ", itemIndex);
+            // Check if customer/user has previously ordered
+            if(this.groceryCart.id){
+              // If so, check if such item added is already in his cart
+              const itemIndex = this.groceryCart.item_name.indexOf(response.item_name);
+              console.log(itemIndex);
+              
+              // If yes, just increment the quantity and update the subtotal amount of the order
+              if(itemIndex !== -1){
+                // const itemIndex = this.groceryCart?.item_name.findIndex((item: string) => item === response.item_name);
+                this.groceryCart.quantity[itemIndex] += quantityInput;
+                this.groceryCart.subtotal[itemIndex] = this.groceryCart.quantity[itemIndex] * this.groceryCart.unit_price[itemIndex];
+  
+                this.cartService.updateCustomerCart(this.groceryCart as CartItem).subscribe(
+                  response => {
+                    console.log("Updated customer cart: ", response)
+                  },
+                  error => {
+                    console.error("Error updating customer cart: ", error);
+                  }
+                )
+              } 
+              // If not exists, push the new item to the customer's cart
+              else {
+                console.log("inside here: ", itemIndex);
+                this.groceryCart.item_img.push(response.item_img);
+                this.groceryCart.item_name.push(response.item_name);
+                this.groceryCart.category.push(response.category);
+                this.groceryCart.quantity.push(quantityInput);
+                this.groceryCart.unit_price.push(response.unit_price);
+                this.groceryCart.subtotal.push(quantityInput * response.unit_price);
+  
+                this.cartService.updateCustomerCart(this.groceryCart as CartItem).subscribe(
+                  response => {
+                    console.log("Updated customer cart: ", response)
+                  },
+                  error => {
+                    console.error("Error updating customer cart: ", error);
+                  }
+                )
+              }
+            } // If user has no cart or no previous orders, create a new cart with the added item inside
+              else {
+              
+              this.groceryCart.username = this.customerUsername;
               this.groceryCart.item_img.push(response.item_img);
               this.groceryCart.item_name.push(response.item_name);
               this.groceryCart.category.push(response.category);
               this.groceryCart.quantity.push(quantityInput);
               this.groceryCart.unit_price.push(response.unit_price);
               this.groceryCart.subtotal.push(quantityInput * response.unit_price);
-
-              this.cartService.updateCustomerCart(this.groceryCart as CartItem).subscribe(
+  
+              this.cartService.addCartItem(this.groceryCart as CartItem).subscribe(
                 response => {
-                  console.log("Updated customer cart: ", response)
+                  console.log("Added cart item: ", response)
                 },
                 error => {
-                  console.error("Error updating customer cart: ", error);
+                  console.log("Error adding to cart: ", error)
                 }
-              )
+              );
+  
+              this.retrieveCustomerCart(this.customerUsername);
             }
-          } // If user has no cart or no previous orders, create a new cart with the added item inside
-            else {
             
-            this.groceryCart.username = this.customerUsername;
-            this.groceryCart.item_img.push(response.item_img);
-            this.groceryCart.item_name.push(response.item_name);
-            this.groceryCart.category.push(response.category);
-            this.groceryCart.quantity.push(quantityInput);
-            this.groceryCart.unit_price.push(response.unit_price);
-            this.groceryCart.subtotal.push(quantityInput * response.unit_price);
-
-            this.cartService.addCartItem(this.groceryCart as CartItem).subscribe(
-              response => {
-                console.log("Added cart item: ", response)
-              },
-              error => {
-                console.log("Error adding to cart: ", error)
-              }
-            );
-
-            this.retrieveCustomerCart(this.customerUsername);
+  
+            this.cartItemCount = this.groceryCart.quantity.length;
+            // this.addToCartForm.reset();
+            this.quantities.at(index).setValue(1)
           }
-          
-
-          this.cartItemCount = this.groceryCart.quantity.length;
-          // this.addToCartForm.reset();
-          this.quantities.at(index).setValue(1)
-        }
-      );
+        );
+      }
+    } else {
+      this.openPromptModal.nativeElement.click();
     }
+    
   }
 }
