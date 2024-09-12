@@ -1,6 +1,18 @@
-# Angular Shopping Cart Project (Final Project)
+# Shopping Cart Application - Angular Training Final Project
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.2.2.
+This project is a feature-rich Shopping Cart Application developed as the final project for the 7-Day Angular Training. The application allows users to browse and manage products, add them to their shopping cart, and complete orders with ease. Key features include:
+
+1. **Login System**: A user authentication system with login and "forgot password" functionality. The login page validates user credentials and provides error messages for invalid attempts, while the "forgot password" page assists users in recovering their accounts.
+
+2. **Product Management**: The dashboard displays a range of products, filterable by category and price. Users can add items to their cart, specifying quantities, and view detailed product information.
+
+3. **Cart Operations**: A dedicated cart page lets users view, edit, or delete products from their cart.
+
+4. **Profile Management**: Users can view and update their profile details, including personal information and interests.
+
+5. **Order Processing**: A checkout page summarizes the cart's content, allowing users to finalize purchases, while the pending orders page tracks orders in progress.
+
+For admin users, there are additional functionalities, including product management, viewing top-selling items, and managing customer accounts.
 
 ## Development server
 
@@ -15,7 +27,7 @@ Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The appli
 ![register](img/register.png?raw=true)
 
 3. **Forgot Password Page**
-![forgot-password](img/forgot-password.png?raw=true)
+![forgot-password](img/forgot-password1.png?raw=true)
 
 4. **User Credentials Page**
     - Displays the credentials of the user after forgot password
@@ -56,4 +68,35 @@ Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The appli
 10. **My Purchases - Order Summary**
     - Displays order summary of the customer
 ![purchases-summary](img/purchases-order-summary.png?raw=true)
+<br>
 
+11. **Admin Dashboard Page**
+    - Shows the recept purchases, sales analytics, etc.
+![admin](img/admin-dashboard.png?raw=true)
+<br>
+
+12. **Products Page**
+    - Displays all the products in inventory
+    - Ability to manage all products in the inventory
+![products](img/products.png?raw=true)
+<br>
+
+13. **Orders Page**
+    - Displays all the orders of all customers
+    - Can change status of orders
+![orders](img/orders.png?raw=true)
+<br>
+
+14. **Order Summary Receipt**
+    - Displays order summary of chosen order
+![orders-summary](img/orders-summary.png?raw=true)
+
+15. **User Records Page**
+    - Displays the customer records
+    - Ability to add new customer or deactivate customer
+![user-records](img/users.png?raw=true)
+
+<hr>
+Authors:
+    - Juriel Botoy
+    - Dominique Frogoso
