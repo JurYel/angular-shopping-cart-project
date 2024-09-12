@@ -63,7 +63,7 @@ export class DashboardComponent implements OnInit {
 
     this.customerUsername = sessionStorage.getItem('username') as string;
     this.groceryCart  = {
-      username: sessionStorage.getItem('username') as string,
+      username: this.customerUsername,
       item_img: [] as string[],
       item_name: [] as string[],
       category: [] as string[], 

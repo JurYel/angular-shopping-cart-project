@@ -15,6 +15,7 @@ import { AuthUser } from '../../../models/auth-user.interface';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { S3UploadService } from '../../services/s3-upload.service';
 import { OrderService } from '../../../admin/services/order.service';
+import { CartService } from '../../services/cart.service';
 
 @Component({
   selector: 'app-profile',
@@ -36,6 +37,7 @@ export class ProfileComponent implements OnInit, AfterViewChecked {
   timestamp: string;
   s3Folder: string;
   customerName: string;
+  cartItemCount: number = 0;
 
 
   constructor(
@@ -45,6 +47,7 @@ export class ProfileComponent implements OnInit, AfterViewChecked {
     private usernameValidator: UniqueUsernameValidator,
     private awsS3Service: S3UploadService,
     private orderService: OrderService,
+    private cartService: CartService,
     private http: HttpClient
   ) {
     this.profileForm = this.fb.group({
@@ -59,7 +62,7 @@ export class ProfileComponent implements OnInit, AfterViewChecked {
       ]
     });
 
-    this.username = sessionStorage.getItem('username');
+    this.username = sessionStorage.getItem('username') as string;
     this.s3Folder = "assets/users";
     this.profileImgName = (this.f['profile_img'].value) ? this.f['profile_img'].value : `${this.s3Folder}/default_profile_img-100.png`;
     this.imageUrl = `${this.s3Folder}/default_profile_img-100.png`;
@@ -67,6 +70,14 @@ export class ProfileComponent implements OnInit, AfterViewChecked {
     this.timestamp = Date.now().toString();
     this.customerName = `${sessionStorage.getItem('first_name')} ${sessionStorage.getItem('last_name')}`;
     console.log(this.timestamp);
+
+    this.cartService.getCartItems(this.username).subscribe(
+      items => {
+        if(items.length > 0) {
+          this.cartItemCount = items[0].item_name.length;
+        }
+      }
+    )
   }
 
   ngOnInit(): void {

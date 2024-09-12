@@ -4,6 +4,7 @@ import { Order } from '../../../models/order.interface';
 import { OrderService } from '../../../admin/services/order.service';
 import { MessageService } from 'primeng/api';
 import { S3UploadService } from '../../services/s3-upload.service';
+import { CartService } from '../../services/cart.service';
 
 @Component({
   selector: 'app-my-purchases',
@@ -17,6 +18,7 @@ export class MyPurchasesComponent implements OnInit {
   myOrders$: Observable<Order[]>;
   ordersLength: number = 0;
   isSubMenuVisible = false;
+  cartItemCount: number = 0;
 
   // variables for pagination
   paginatedOrders$!: Observable<Order[]>;
@@ -51,12 +53,22 @@ export class MyPurchasesComponent implements OnInit {
 
   constructor(private orderService: OrderService,
               private messageService: MessageService,
-              private awsS3Service: S3UploadService
+              private awsS3Service: S3UploadService,
+              private cartService: CartService
   ) {
 
     this.customerUsername = sessionStorage.getItem('username') as string;
     this.customerName = `${sessionStorage.getItem('first_name')} ${sessionStorage.getItem('last_name')}`;
     this.myOrders$ = this.orderService.getOrdersByUsername(this.customerUsername);
+    // this.cartItemCount = parseInt(sessionStorage.getItem('cartItemCount') as string);
+
+    this.cartService.getCartItems(this.customerUsername).subscribe(
+      items => {
+        if(items.length > 0) {
+          this.cartItemCount = items[0].item_name.length;
+        }
+      }
+    )
 
     this.s3Folder = "assets/users";
     this.profileDefaultImg = `${this.s3Folder}/default_profile_img-100.png`;
@@ -226,27 +238,35 @@ export class MyPurchasesComponent implements OnInit {
   // Method for updating order status
   updateOrderStatus = (index: number, status: string) => {
     this.paginatedOrders$.pipe(map((orders) => orders[index])).subscribe((order) => {
-      order.status = status;
-      this.orderService.updateOrder(order as Order).subscribe(
-        (response) => {
-          console.log('Updated order status: ', response);
-          this.myOrders$ = this.orderService.getOrders();
-          // this.paginateOrders();
-          this.searchOrder();
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Success',
-            detail: 'Updated order status',
-          });
-        },
-        (error) => {
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Error',
-            detail: 'Failed to update order status',
-          });
-        }
-      );
+      if(order.status === 'Pending') {
+        order.status = status;
+        this.orderService.updateOrder(order as Order).subscribe(
+          (response) => {
+            console.log('Updated order status: ', response);
+            this.myOrders$ = this.orderService.getOrders();
+            // this.paginateOrders();
+            this.searchOrder();
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Success',
+              detail: 'Updated order status',
+            });
+          },
+          (error) => {
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error',
+              detail: 'Failed to update order status',
+            });
+          }
+        );
+      } else {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: `Order has already been ${(order.status === 'Shipped') ? 'shipped' : 'delivered'}`,
+        });
+      }
     });
   };
 

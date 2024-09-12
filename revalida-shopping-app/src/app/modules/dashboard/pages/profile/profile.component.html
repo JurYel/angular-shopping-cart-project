@@ -1,5 +1,5 @@
   <section>
-    <app-navbar></app-navbar>
+    <app-navbar [itemCountInput]="cartItemCount"></app-navbar>
     <div class="container mt-4 profile-container">
       <div class="row">
         <!-- Side Menu -->
@@ -17,7 +17,7 @@
             <hr />
             <ul class="nav nav-pills flex-column mb-auto">
               <li class="nav-item">
-                <a class="nav-link" id="my-account" (click)="toggleSubmenu()">
+                <a class="nav-link router-link-active" id="my-account"  (click)="toggleSubmenu()">
                   <i class="bi bi-person-circle"></i>
                   My Account
                 </a>
