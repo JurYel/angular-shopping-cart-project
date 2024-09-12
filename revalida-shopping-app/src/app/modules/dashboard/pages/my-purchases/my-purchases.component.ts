@@ -3,6 +3,7 @@ import { map, Observable } from 'rxjs';
 import { Order } from '../../../models/order.interface';
 import { OrderService } from '../../../admin/services/order.service';
 import { MessageService } from 'primeng/api';
+import { S3UploadService } from '../../services/s3-upload.service';
 
 @Component({
   selector: 'app-my-purchases',
@@ -12,8 +13,10 @@ import { MessageService } from 'primeng/api';
 export class MyPurchasesComponent implements OnInit {
 
   customerUsername: string;
+  customerName: string;
   myOrders$: Observable<Order[]>;
   ordersLength: number = 0;
+  isSubMenuVisible = false;
 
   // variables for pagination
   paginatedOrders$!: Observable<Order[]>;
@@ -38,17 +41,48 @@ export class MyPurchasesComponent implements OnInit {
   statusList: string[] = [];
   selectedLocation: string = "All";
   selectedStatus: string = "Any";
+  truncatedOrders: any[] = [];
+
+  // s3 variables
+  s3Folder: string;
+  imageUrls: string[] = [];
+  profileDefaultImg: string;
+  savedImageUrl: string;
 
   constructor(private orderService: OrderService,
-              private messageService: MessageService
+              private messageService: MessageService,
+              private awsS3Service: S3UploadService
   ) {
 
     this.customerUsername = sessionStorage.getItem('username') as string;
+    this.customerName = `${sessionStorage.getItem('first_name')} ${sessionStorage.getItem('last_name')}`;
     this.myOrders$ = this.orderService.getOrdersByUsername(this.customerUsername);
+
+    this.s3Folder = "assets/users";
+    this.profileDefaultImg = `${this.s3Folder}/default_profile_img-100.png`;
+    this.savedImageUrl = `${this.s3Folder}/default_profile_img-100.png`;
 
     this.myOrders$.subscribe(
       orders => {
         this.ordersLength = orders.length;
+        orders.forEach(async (order) => {
+          if(order.item_name.length > 2) {
+            // this.truncatedOrders.push({
+            //   item_name: order.item_name.slice(0, 3).push('...'),
+            //   quantity: order.quantity.slice(0, 3).map((qty)),
+            //   subtotal: order.subtotal.slice(0, 3).push('...')
+            // });
+            this.truncatedOrders.push({
+              item_name: [...order.item_name.slice(0, 1), '...'],  // For string arrays, directly append '...'
+              
+              quantity: [...order.quantity.slice(0, 1).map(qty => qty.toString()), '...'], // Convert numbers to strings and append '...'
+            
+              subtotal: [...order.subtotal.slice(0, 1).map(sub => sub.toString()), '...'] // Same for subtotal, convert to strings and append '...'
+            });
+          }
+          this.savedImageUrl = await this.awsS3Service.getSignedUrl(`${this.s3Folder}/${order.customer_img}`);
+          this.imageUrls.push(await this.awsS3Service.getSignedUrl(`${this.s3Folder}/${order.customer_img}`));
+        })
       }
     );
 
@@ -97,6 +131,10 @@ export class MyPurchasesComponent implements OnInit {
 
     // Initially show the first page of data
     this.paginateOrders();
+  }
+
+  toggleSubmenu = (): void => {
+    this.isSubMenuVisible = !this.isSubMenuVisible;
   }
 
   // Method to generate page numbers from totalPages

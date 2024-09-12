@@ -1,4 +1,4 @@
-body {
+section {
   background-color: #f8f9fa;
 }
 
@@ -26,6 +26,10 @@ body {
 }
 
 .side-menu a:hover {
+  color: rgba(44, 60, 233, 0.5)
+}
+
+.side-menu a.router-link-active {
   color: rgba(44, 60, 233, 0.5)
 }
 

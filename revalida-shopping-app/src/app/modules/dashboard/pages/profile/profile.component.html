@@ -1,12 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Profile Page</title>
-  </head>
-
-  <body>
+  <section>
     <app-navbar></app-navbar>
     <div class="container mt-4 profile-container">
       <div class="row">
@@ -30,7 +22,7 @@
                   My Account
                 </a>
                 <div class="submenu" *ngIf="isSubMenuVisible">
-                  <a href="#" class="nav-link">Profile</a>
+                  <a routerLink="/home/profile" routerLinkActive="router-link-active" class="nav-link">Profile</a>
                   <a href="#" class="nav-link">Banks & Cards</a>
                   <a href="#" class="nav-link">Addresses</a>
                   <a href="#" class="nav-link">Change Password</a>
@@ -39,7 +31,7 @@
                 </div>
               </li>
               <li>
-                <a href="#" class="nav-link">
+                <a routerLink="/home/purchases" routerLinkActive="router-link-active" class="nav-link">
                   <i class="bi bi-cart"></i>
                   My Purchases
                 </a>
@@ -246,17 +238,4 @@
         </div>
       </div>
     </div>
-
-    <!-- Bootstrap JS -->
-    <script>
-      // function toggleDropdown() {
-      //     var dropdown = document.querySelector('.dropdown-container');
-      //     dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
-      // }
-      // document.getElementById('my-account').addEventListener('click', function () {
-      //     var submenu = document.querySelector('.submenu');
-      //     submenu.style.display = submenu.style.display === 'block' ? 'none' : 'block';
-      // });
-    </script>
-  </body>
-</html>
+  </section>
