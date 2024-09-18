@@ -1,0 +1,1 @@
+This folder was created only to test deployment to AWS Elastic Beanstalk.

@@ -16,7 +16,11 @@ For admin users, there are additional functionalities, including product managem
 
 ## Development server
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+- **Extract environment.zip in src** - this will load the env variables for the AWS S3 bucket
+- **Run `json-server --watch database.json`** for the app to access the json database and load the data necessary.
+- **Run `ng serve` for a dev server**. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+
+
 
 ## Web Pages
 
