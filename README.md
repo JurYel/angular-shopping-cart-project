@@ -21,6 +21,10 @@ For admin users, there are additional functionalities, including product managem
 - **Run `ng serve` for a dev server**. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
 
 
+##
+Below is the flowchart of the Shopping Cart project
+![flowchart](img/flowchart.jpeg?raw=true)
+
 
 ## Web Pages
 
